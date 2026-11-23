@@ -1,0 +1,199 @@
+{
+  "tool": "内置 image_gen 图像编辑",
+  "actorPrompt": "Use case: background-extraction. Edit target: the provided illustration. Produce an aligned foreground animation layer: retain ONLY the exact same main character and objects she is physically holding or wearing, including all hair, head, hands, clothing, limbs, props and any wings/tail. Completely remove ALL environment, floor, sky, furniture and background decoration. Genuine transparent alpha everywhere else, including gaps between limbs/hair. Preserve the original illustration style, identity, face, expression, pose, proportions, colors, exact size and exact x/y location on the full original 1536x1024 canvas; do not center, crop, enlarge, move, repaint or redesign the character. No new halo, lighting, glow, shadow, checkerboard or opaque matte. This is a precision animation cutout, not a new composition. Output 1536x1024 transparent PNG.",
+  "stagePrompt": "Use case: precise-object-edit. Edit target: the provided illustration. Produce an aligned clean background animation plate. Remove the main character completely, including every hair strand, head, hands, outfit, limbs, shoes, wings/tail, held props, floating companions and her cast shadow. Seamlessly fill those holes with the same empty environment: extend floor, sky, architecture and vegetation consistently. Preserve original camera, full 1536x1024 canvas, existing background details, palette, illumination and illustration style. The result must contain NO person, no face, no silhouette, no ghost, no extra character. This is the same scene with the character absent.",
+  "sources": [
+    {
+      "id": "chatgpt-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-20b7cd42-3a5d-4760-b52d-6c4ce9be4982.png"
+    },
+    {
+      "id": "chatgpt-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-1dbc2ec3-6050-413c-a3ba-2572c42ced80.png"
+    },
+    {
+      "id": "chatgpt-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-c7ac94ad-98b0-4ee5-b010-e217f673522e.png"
+    },
+    {
+      "id": "chatgpt-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-3b9ee624-407f-4862-b6af-cb7ebe45a4cf.png"
+    },
+    {
+      "id": "claude-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-ade67843-632e-4a25-8099-205f73c24718.png"
+    },
+    {
+      "id": "claude-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-9fab2024-d26d-4b52-8ef2-69637c2b56ed.png"
+    },
+    {
+      "id": "claude-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-67c90489-e54b-4d30-a15e-63d92cba21a5.png"
+    },
+    {
+      "id": "claude-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-a7ab4165-9939-4137-b5f8-927e949882fa.png"
+    },
+    {
+      "id": "gemini-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-e8b30cb0-8629-4ce3-b31b-adccfdae5d66.png"
+    },
+    {
+      "id": "gemini-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-9714d572-f264-4807-93a2-51144c55763b.png"
+    },
+    {
+      "id": "gemini-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-7adb8252-04de-4d7d-9274-907279c9d957.png"
+    },
+    {
+      "id": "gemini-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-98c63bc8-7154-4651-94a9-bee054c93a69.png"
+    },
+    {
+      "id": "deepseek-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-5d589dbe-f817-43c4-bf82-d245c0a3d165.png"
+    },
+    {
+      "id": "deepseek-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-d8eee697-3a1c-4eaa-81dd-81847f87a8b7.png"
+    },
+    {
+      "id": "deepseek-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-e61baafa-db87-4bec-9b0d-f4bc63c162e1.png"
+    },
+    {
+      "id": "deepseek-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-2b1a4ef7-9572-462c-a05d-c4f0f5760636.png"
+    },
+    {
+      "id": "doubao-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-210d80e4-f427-4ae8-b4a0-24dd9cb65951.png"
+    },
+    {
+      "id": "doubao-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-c114bdc2-31d6-4a79-b096-df226e274ed8.png"
+    },
+    {
+      "id": "doubao-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-e7f01b79-77f8-4ef1-8f13-8bd4a1ff7ad8.png"
+    },
+    {
+      "id": "doubao-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-c8bf38b8-1709-4e49-986f-dcebca7d4bb2.png"
+    },
+    {
+      "id": "qwen-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-1a8a6c11-da33-4047-981c-e253f9eff2c2.png"
+    },
+    {
+      "id": "qwen-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-d760af1b-2c23-4f18-af63-ac8920ed99b8.png"
+    },
+    {
+      "id": "qwen-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-0f51799e-0d52-4318-ab9d-e746d890e559.png"
+    },
+    {
+      "id": "qwen-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-8869cdae-9cee-485e-87f4-d2790acfc2a0.png"
+    },
+    {
+      "id": "kimi-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-ae9d903a-c55f-4a17-961c-cda9946c4410.png"
+    },
+    {
+      "id": "kimi-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-9d756b0f-d86c-4568-90d1-4878fc911055.png"
+    },
+    {
+      "id": "kimi-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-a0d59cfe-0bf5-4170-9bf7-feb59a3f87ec.png"
+    },
+    {
+      "id": "kimi-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-10799d1a-223a-4ba9-90f0-5e9e7924f481.png"
+    },
+    {
+      "id": "grok-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-75d5475d-47f9-42aa-97a3-0237d1bd9640.png"
+    },
+    {
+      "id": "grok-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-3cbccaa6-568f-48ae-a450-b4886988b71f.png"
+    },
+    {
+      "id": "grok-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-0730592a-f932-4c04-86c1-2966a6d17ead.png"
+    },
+    {
+      "id": "grok-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-dc3908d4-aa18-45f2-a4b3-458c11c9fd4c.png"
+    },
+    {
+      "id": "seed-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-4ce134a5-ccd7-4d86-9a19-074c8fadabe7.png"
+    },
+    {
+      "id": "seed-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-86448a33-714b-4308-8390-6337944b1b19.png"
+    },
+    {
+      "id": "seed-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-71348e50-ca6e-4e7e-a915-0f6ff1d6f8c7.png"
+    },
+    {
+      "id": "seed-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-0831577b-43ba-4f64-a34a-dd6ffc09ba16.png"
+    },
+    {
+      "id": "copilot-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-9b36fcd1-5c33-4b4c-96a9-7cb44c5b7347.png"
+    },
+    {
+      "id": "copilot-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-b81f1c00-f2d3-4543-b7b2-0b1d0940f97b.png"
+    },
+    {
+      "id": "copilot-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-9c7ba463-7eed-4373-b1c0-4c11d270b0f3.png"
+    },
+    {
+      "id": "copilot-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-fff82299-3b51-4305-bb45-4821b7386a86.png"
+    },
+    {
+      "id": "perplexity-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-7ee30a4b-7066-4e0a-a735-c7f20880db4f.png"
+    },
+    {
+      "id": "perplexity-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-aa1b468f-e9b5-45fc-b3bf-82ef65e7346a.png"
+    },
+    {
+      "id": "perplexity-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-4ef2558e-7537-4bc3-ae4a-8ba3cf7bf627.png"
+    },
+    {
+      "id": "perplexity-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-fb6730d8-b405-4efb-a360-1ce1bdcf3ed3.png"
+    },
+    {
+      "id": "minimax-art-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-3ffafbca-eb81-4682-b5fd-3cb5ff329570.png"
+    },
+    {
+      "id": "minimax-art-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-13b75fa0-7030-4dde-8879-53cca37a681c.png"
+    },
+    {
+      "id": "minimax-anime-actor",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-ba4f826f-48ac-42f2-8823-16238830630d.png"
+    },
+    {
+      "id": "minimax-anime-stage",
+      "path": "C:\\Users\\admin\\.codex\\generated_images\\01a199f1-9723-79f1-9772-6abc1f8ec6e4\\exec-33636a1f-5bb5-4906-8f59-f43305add688.png"
+    }
+  ]
+}

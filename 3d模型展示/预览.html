@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>白模 + 写实/风格贴图 预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "Microsoft YaHei", sans-serif; background: #ffffff; color: #222; overflow: hidden; }
+  #app { position: fixed; inset: 0; }
+  #sidebar {
+    position: fixed; top: 0; left: 0; width: 240px; height: 100%;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+    border-right: 1px solid #ddd; padding: 18px 14px; z-index: 10; overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0,0,0,.06);
+  }
+  #sidebar h1 { font-size: 15px; margin-bottom: 4px; color: #222; }
+  #sidebar .sub { font-size: 11px; color: #666; margin-bottom: 14px; line-height: 1.5; }
+  .sec-title { font-size: 11px; color: #2e7d5b; letter-spacing: 1px; margin: 14px 0 8px; text-transform: uppercase; }
+  .sec-sub { font-size: 10px; color: #888; margin: 10px 0 6px; padding-left: 4px; border-left: 2px solid #ccc; }
+  .model-btn, .style-btn {
+    display: block; width: 100%; text-align: left; padding: 10px 13px; margin-bottom: 7px;
+    background: #f4f4f6; border: 1px solid #ddd; border-radius: 8px; color: #333;
+    font-size: 13px; cursor: pointer; transition: .15s;
+  }
+  .model-btn:hover, .style-btn:hover { background: #e9e9ec; }
+  .model-btn.active { background: #4a7dff; border-color: #4a7dff; color: #fff; }
+  .style-btn.active { background: #2e7d5b; border-color: #3fae7d; color: #fff; }
+  .model-btn .sz { display: block; font-size: 10px; color: #667; margin-top: 2px; }
+  .model-btn.active .sz { color: #dbe6ff; }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; border: 1px solid rgba(0,0,0,.2); }
+  #info {
+    position: fixed; bottom: 16px; left: 256px; font-size: 11px; color: #555;
+    background: rgba(255,255,255,.85); padding: 8px 12px; border-radius: 6px; z-index: 10;
+    border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  #loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #555; z-index: 20; pointer-events: none;
+  }
+  .toggle { margin-top: 10px; font-size: 12px; color: #555; }
+  .toggle label { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; cursor: pointer; }
+  #texPreview {
+    position: fixed; top: 12px; left: 252px; width: 168px; z-index: 30;
+    background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.1);
+    border-radius: 10px; padding: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    backdrop-filter: blur(8px);
+  }
+  #texPreview .tp-title {
+    font-size: 11px; color: #2e7d5b; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 7px; font-weight: 600;
+  }
+  #tpImg {
+    width: 100%; height: 148px; object-fit: cover; border-radius: 6px;
+    background: #f0f0f2; display: block; border: 1px solid rgba(0,0,0,.08);
+  }
+  #tpLabel { font-size: 11px; color: #555; margin-top: 7px; line-height: 1.45; }
+  #tpLabel b { color: #222; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sidebar">
+  <h1>白模 + 写实/风格贴图 预览</h1>
+  <div class="sub">白模(Draco几何) 与纹理分离<br>运行时在 three.js 中组合换肤</div>
+  <div class="sec-title">模型</div>
+  <div id="list"></div>
+  <div class="sec-title">贴图风格</div>
+  <div id="styles"></div>
+  <div class="toggle">
+    <label><input type="checkbox" id="tglLit"> PBR立体光照</label>
+    <label><input type="checkbox" id="tglRot" checked> 自动旋转</label>
+  </div>
+</div>
+<div id="info"></div>
+<div id="texPreview">
+  <div class="tp-title">当前纹理</div>
+  <img id="tpImg" alt="纹理预览">
+  <div id="tpLabel">—</div>
+</div>
+<div id="loading">加载中…</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const BASE = './3d模型-小程序';
+const app = document.getElementById('app');
+const loadingEl = document.getElementById('loading');
+const infoEl = document.getElementById('info');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xffffff);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.01, 1000);
+camera.position.set(0, 0, 2.5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+app.appendChild(renderer.domElement);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x333344, 0.6));
+const dir = new THREE.DirectionalLight(0xffffff, 1.5);
+dir.position.set(3, 5, 4); scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xffffff, 0.8);
+dir2.position.set(-4, 2, -3); scene.add(dir2);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.2;
+
+const draco = new DRACOLoader();
+draco.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
+const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(draco);
+const texLoader = new THREE.TextureLoader();
+
+let manifest = [];
+let currentModel = null;
+let currentEntry = null;
+let originalTex = { map:null, normalMap:null, metalRoughMap:null };
+let currentStyle = 'none';
+
+// ---------- 卡通/图案风格 (程序化 canvas) ----------
+function makeStyleTexture(style) {
+  const S = 1024;
+  const c = document.createElement('canvas');
+  c.width = c.height = S;
+  const x = c.getContext('2d');
+
+  if (style === 'macaron') {
+    const g = x.createLinearGradient(0, 0, S, S);
+    g.addColorStop(0, '#ff9ec4'); g.addColorStop(.33, '#a0e7e5');
+    g.addColorStop(.66, '#fbe7a1'); g.addColorStop(1, '#b4f8c8');
+    x.fillStyle = g; x.fillRect(0, 0, S, S);
+    x.fillStyle = 'rgba(255,255,255,.28)';
+    for (let i = 0; i < 60; i++) {
+      x.beginPath();
+      x.arc(Math.random()*S, Math.random()*S, 14+Math.random()*40, 0, Math.PI*2);
+      x.fill();
+    }
+  }
+  else if (style === 'chrome') {
+    const g = x.createLinearGradient(0, 0, 0, S);
+    g.addColorStop(0, '#eef3f7'); g.addColorStop(.28, '#9aa6b2');
+    g.addColorStop(.5, '#f6fafe'); g.addColorStop(.72, '#7c8896'); g.addColorStop(1, '#5d6877');
+    x.fillStyle = g; x.fillRect(0, 0, S, S);
+    x.fillStyle = 'rgba(255,255,255,.85)';
+    x.fillRect(0, S*0.47, S, S*0.05);
+    x.fillStyle = 'rgba(255,255,255,.4)';
+    x.fillRect(0, S*0.44, S, 4);
+  }
+  else if (style === 'wood') {
+    x.fillStyle = '#b5803f'; x.fillRect(0, 0, S, S);
+    for (let i = 0; i < 26; i++) {
+      const y0 = Math.random()*S;
+      const amp = 6 + Math.random()*14;
+      const dark = Math.random() > .5;
+      x.strokeStyle = dark ? 'rgba(110,72,34,.55)' : 'rgba(220,170,110,.5)';
+      x.lineWidth = 1 + Math.random()*3;
+      x.beginPath();
+      for (let px = 0; px <= S; px += 8) {
+        const py = y0 + Math.sin((px/S)*Math.PI*4 + i)*amp;
+        px === 0 ? x.moveTo(px, py) : x.lineTo(px, py);
+      }
+      x.stroke();
+    }
+  }
+  else if (style === 'bluewhite') {
+    x.fillStyle = '#f5f3ec'; x.fillRect(0, 0, S, S);
+    x.strokeStyle = '#1b4f9c'; x.fillStyle = '#1b4f9c';
+    const step = S/6;
+    for (let gx = 0; gx < 6; gx++) for (let gy = 0; gy < 6; gy++) {
+      const cx = gx*step + step/2, cy = gy*step + step/2;
+      x.lineWidth = 3;
+      x.beginPath();
+      x.arc(cx, cy, step*0.28, Math.PI*0.15, Math.PI*1.4);
+      x.stroke();
+      for (let a = 0; a < 6; a++) {
+        const ang = a*Math.PI/3;
+        x.beginPath();
+        x.arc(cx + Math.cos(ang)*step*0.34, cy + Math.sin(ang)*step*0.34, step*0.07, 0, Math.PI*2);
+        x.fill();
+      }
+    }
+    x.lineWidth = 14; x.strokeStyle = '#1b4f9c';
+    x.strokeRect(8, 8, S-16, S-16);
+  }
+  else if (style === 'cyber') {
+    const g = x.createRadialGradient(S/2, S/2, 60, S/2, S/2, S*0.7);
+    g.addColorStop(0, '#1a0a2e'); g.addColorStop(1, '#06060f');
+    x.fillStyle = g; x.fillRect(0, 0, S, S);
+    x.lineWidth = 1.5;
+    for (let i = 0; i <= S; i += 48) {
+      x.strokeStyle = 'rgba(0,229,255,.35)';
+      x.beginPath(); x.moveTo(i, 0); x.lineTo(i, S); x.stroke();
+      x.strokeStyle = 'rgba(255,43,214,.30)';
+      x.beginPath(); x.moveTo(0, i); x.lineTo(S, i); x.stroke();
+    }
+    for (let i = 0; i < 40; i++) {
+      const px = Math.random()*S, py = Math.random()*S, r = 3+Math.random()*7;
+      x.fillStyle = Math.random()>.5 ? 'rgba(0,229,255,.9)' : 'rgba(255,43,214,.9)';
+      x.shadowColor = x.fillStyle; x.shadowBlur = 12;
+      x.beginPath(); x.arc(px, py, r, 0, Math.PI*2); x.fill();
+      x.shadowBlur = 0;
+    }
+  }
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.flipY = false;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+// 基础风格：纯白无贴图（默认）
+const BASE_STYLES = [
+  { id:'none', label:'无贴图' },
+];
+
+const STYLES = [
+  { id:'original', label:'原始纹理' },
+  { id:'macaron',  label:'马卡龙糖果' },
+  { id:'chrome',   label:'铬金属' },
+  { id:'wood',     label:'原木' },
+  { id:'bluewhite',label:'青花瓷' },
+  { id:'cyber',    label:'赛博霓虹' },
+];
+
+const REAL_STYLES = [
+  { id:'real_oak', label:'真实橡木', path:'纹理/写实风格/clean/oak.png', metalness:0.0, roughness:0.75 },
+  { id:'real_metal', label:'拉丝不锈钢', path:'纹理/写实风格/clean/metal.png', metalness:0.95, roughness:0.25 },
+  { id:'real_porcelain', label:'哑光白瓷', path:'纹理/写实风格/clean/porcelain.png', metalness:0.05, roughness:0.2 },
+  { id:'real_walnut', label:'深胡桃木', path:'纹理/写实风格/clean/walnut.png', metalness:0.0, roughness:0.7 },
+  { id:'real_brass', label:'做旧黄铜', path:'纹理/写实风格/clean/brass.png', metalness:0.9, roughness:0.35 },
+  { id:'real_marble', label:'卡拉拉大理石', path:'纹理/写实风格/clean/marble.png', metalness:0.0, roughness:0.15 },
+  { id:'real_leather', label:'棕色真皮', path:'纹理/写实风格/clean/leather.png', metalness:0.0, roughness:0.8 },
+  { id:'real_basalt', label:'玄武岩黑石', path:'纹理/写实风格/clean/basalt.png', metalness:0.05, roughness:0.9 },
+];
+
+// 赛博朋克：暗底 + 霓虹发光（emissiveMap 用同一张图，亮线自发光）
+const CYBER_STYLES = [
+  { id:'cyber_circuit', label:'霓虹电路', path:'纹理/写实风格/clean/cyber_circuit.png', emissiveIntensity:1.8, metalness:0.5, roughness:0.45 },
+  { id:'cyber_holo',    label:'全息网格', path:'纹理/写实风格/clean/cyber_holo.png',    emissiveIntensity:1.6, metalness:0.2, roughness:0.5 },
+  { id:'cyber_glitch',  label:'故障紫电', path:'纹理/写实风格/clean/cyber_glitch.png',  emissiveIntensity:1.5, metalness:0.2, roughness:0.6 },
+  { id:'cyber_carbon',  label:'碳纤橙能', path:'纹理/写实风格/clean/cyber_carbon.png',  emissiveIntensity:1.9, metalness:0.7, roughness:0.35 },
+  { id:'cyber_blue',    label:'义体蓝光', path:'纹理/写实风格/clean/cyber_blue.png',    emissiveIntensity:1.7, metalness:0.55, roughness:0.4 },
+];
+
+function loadTexture(url, srgb) {
+  return new Promise((res, rej) => {
+    texLoader.load(url, t => {
+      t.flipY = false;
+      t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      res(t);
+    }, undefined, rej);
+  });
+}
+
+function currentStyleLabel() {
+  return [...BASE_STYLES, ...STYLES, ...REAL_STYLES, ...CYBER_STYLES].find(s => s.id === currentStyle)?.label || currentStyle;
+}
+
+// 左上角纹理预览：显示当前材质的主贴图（baseColor / 写实PNG / 程序化canvas）
+function updateTexPreview(src, labelOverride) {
+  const img = document.getElementById('tpImg');
+  const lbl = document.getElementById('tpLabel');
+  if (!currentEntry) return;
+  if (!src) {
+    img.style.display = 'none';
+    lbl.innerHTML = `<b>${currentEntry.base}</b><br>${labelOverride || '无贴图'}`;
+    return;
+  }
+  img.style.display = 'block';
+  img.src = src;
+  lbl.innerHTML = `<b>${currentEntry.base}</b><br>${labelOverride || currentStyleLabel()}`;
+}
+
+async function setMaterial() {
+  let lit = document.getElementById('tglLit').checked;
+  if (!currentModel) return;
+
+  // 无贴图风格：纯白模型，不加载任何材质贴图
+  if (currentStyle === 'none') {
+    currentModel.traverse(o => {
+      if (!o.isMesh) return;
+      const old = o.material;
+      o.material = new THREE.MeshStandardMaterial({
+        color: 0xffffff, metalness: 0.0, roughness: 1.0, side: THREE.DoubleSide,
+      });
+      old?.dispose();
+    });
+    updateTexPreview(null, '无贴图');
+    return;
+  }
+
+  const real = REAL_STYLES.find(s => s.id === currentStyle);
+  const cyber = CYBER_STYLES.find(s => s.id === currentStyle);
+  if (real || cyber) {
+    document.getElementById('tglLit').checked = true; // 写实/赛博必须PBR
+    lit = true;
+  }
+
+  let map = null, normalMap = null, metalRoughMap = null;
+  let metalness = 0.1, roughness = 0.85;
+  let emissive = 0x000000, emissiveIntensity = 0, emissiveMap = null;
+
+  if (real) {
+    map = await loadTexture(`${BASE}/${real.path}`, true);
+    normalMap = null;
+    metalness = real.metalness; roughness = real.roughness;
+  } else if (cyber) {
+    map = await loadTexture(`${BASE}/${cyber.path}`, true);
+    emissiveMap = map;                       // 同图做发光：亮线自发光，暗底不发光
+    emissive = 0xffffff;
+    emissiveIntensity = cyber.emissiveIntensity;
+    metalness = cyber.metalness; roughness = cyber.roughness;
+  } else if (currentStyle === 'original') {
+    map = originalTex.map; normalMap = originalTex.normalMap;
+    metalRoughMap = originalTex.metalRoughMap;
+    if (metalRoughMap) { metalness = 1.0; roughness = 1.0; }  // 由贴图驱动
+    else { metalness = 0.1; roughness = 0.85; }
+  } else {
+    map = makeStyleTexture(currentStyle);
+    normalMap = originalTex.normalMap;
+    metalness = 0.1; roughness = 0.85;
+  }
+
+  currentModel.traverse(o => {
+    if (!o.isMesh) return;
+    const old = o.material;
+    let m;
+    if (!lit && !real && !cyber) {
+      m = new THREE.MeshBasicMaterial({ color: 0xffffff, map, side: THREE.DoubleSide });
+    } else {
+      m = new THREE.MeshStandardMaterial({
+        map, normalMap, metalnessMap: metalRoughMap, roughnessMap: metalRoughMap,
+        color: 0xffffff, metalness, roughness, side: THREE.DoubleSide,
+        emissive, emissiveIntensity, emissiveMap,
+      });
+    }
+    if (m.map) m.map.flipY = false;
+    if (m.normalMap) m.normalMap.flipY = false;
+    if (m.metalnessMap) m.metalnessMap.flipY = false;
+    if (m.roughnessMap) m.roughnessMap.flipY = false;
+    if (m.emissiveMap) m.emissiveMap.flipY = false;
+    o.material = m;
+    old?.dispose();
+  });
+
+  // 左上角纹理预览
+  let texSrc = null;
+  if (real || cyber) {
+    texSrc = `${BASE}/${real ? real.path : cyber.path}`;
+  } else if (currentStyle === 'original') {
+    if (currentEntry?.textures?.baseColor) {
+      texSrc = `${BASE}/纹理/${currentEntry.base}/${currentEntry.textures.baseColor}`;
+    }
+  } else if (map && map.image && typeof map.image.toDataURL === 'function') {
+    texSrc = map.image.toDataURL('image/png');
+  }
+  updateTexPreview(texSrc);
+}
+
+async function loadModel(entry) {
+  loadingEl.style.display = 'flex';
+  loadingEl.textContent = `加载 ${entry.base} …`;
+  if (currentModel) { scene.remove(currentModel); currentModel = null; }
+  originalTex = { map:null, normalMap:null, metalRoughMap:null };
+
+  const gltf = await gltfLoader.loadAsync(`${BASE}/白模/${entry.base}.glb`);
+  const model = gltf.scene;
+
+  const texDir = `${BASE}/纹理/${entry.base}`;
+  const [map, normalMap, metalRoughMap] = await Promise.all([
+    entry.textures.baseColor ? loadTexture(`${texDir}/${entry.textures.baseColor}`, true) : null,
+    entry.textures.normal ? loadTexture(`${texDir}/${entry.textures.normal}`, false) : null,
+    entry.textures.metalRough ? loadTexture(`${texDir}/${entry.textures.metalRough}`, false) : null,
+  ]);
+  originalTex = { map, normalMap, metalRoughMap };
+  currentEntry = entry;
+
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3()).clone();
+  const scale = 2 / Math.max(...box.getSize(new THREE.Vector3()).toArray());
+  model.position.sub(center);
+  model.scale.setScalar(scale);
+
+  scene.add(model);
+  currentModel = model;
+  await setMaterial();
+
+  let tris = 0;
+  model.traverse(o => { if (o.isMesh && o.geometry.index) tris += o.geometry.index.count/3; });
+  const styleLabel = [...BASE_STYLES, ...STYLES, ...REAL_STYLES, ...CYBER_STYLES].find(s=>s.id===currentStyle)?.label || currentStyle;
+  infoEl.textContent = `${entry.base} · 白模 ${entry.whiteSize.toFixed(2)}MB · ${Math.round(tris).toLocaleString()} 三角面 · 风格：${styleLabel}`;
+  loadingEl.style.display = 'none';
+}
+
+function buildList() {
+  const listEl = document.getElementById('list');
+  manifest.forEach((m, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'model-btn' + (i===0?' active':'');
+    btn.innerHTML = `${m.base}<span class="sz">白模 ${m.whiteSize.toFixed(2)}MB</span>`;
+    btn.onclick = () => {
+      document.querySelectorAll('.model-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      loadModel(m);
+    };
+    listEl.appendChild(btn);
+  });
+}
+
+function buildStyles() {
+  const wrap = document.getElementById('styles');
+
+  const sec0 = document.createElement('div');
+  sec0.className = 'sec-sub'; sec0.textContent = '基础';
+  wrap.appendChild(sec0);
+  BASE_STYLES.forEach((s) => {
+    const btn = document.createElement('button');
+    btn.className = 'style-btn' + (s.id === currentStyle ? ' active' : '');
+    const sw = styleSwatch(s.id);
+    btn.innerHTML = `<span class="swatch" style="background:${sw}"></span>${s.label}`;
+    btn.onclick = async () => {
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = s.id;
+      await setMaterial();
+      const e = manifest.find(m => document.querySelector('.model-btn.active')?.textContent.startsWith(m.base));
+      if (e) infoEl.textContent = `${e.base} · 白模 ${e.whiteSize.toFixed(2)}MB · 风格：${s.label}`;
+    };
+    wrap.appendChild(btn);
+  });
+
+  const sec1 = document.createElement('div');
+  sec1.className = 'sec-sub'; sec1.textContent = '图案';
+  wrap.appendChild(sec1);
+  STYLES.forEach((s) => {
+    const btn = document.createElement('button');
+    btn.className = 'style-btn' + (s.id === currentStyle ? ' active' : '');
+    const sw = styleSwatch(s.id);
+    btn.innerHTML = `<span class="swatch" style="background:${sw}"></span>${s.label}`;
+    btn.onclick = async () => {
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = s.id;
+      await setMaterial();
+      const e = manifest.find(m => document.querySelector('.model-btn.active')?.textContent.startsWith(m.base));
+      if (e) infoEl.textContent = `${e.base} · 白模 ${e.whiteSize.toFixed(2)}MB · 风格：${s.label}`;
+    };
+    wrap.appendChild(btn);
+  });
+
+  const sec2 = document.createElement('div');
+  sec2.className = 'sec-sub'; sec2.textContent = '写实';
+  wrap.appendChild(sec2);
+  REAL_STYLES.forEach((s) => {
+    const btn = document.createElement('button');
+    btn.className = 'style-btn' + (s.id === currentStyle ? ' active' : '');
+    const sw = styleSwatch(s.id);
+    btn.innerHTML = `<span class="swatch" style="background:${sw}"></span>${s.label}`;
+    btn.onclick = async () => {
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = s.id;
+      await setMaterial();
+      const e = manifest.find(m => document.querySelector('.model-btn.active')?.textContent.startsWith(m.base));
+      if (e) infoEl.textContent = `${e.base} · 白模 ${e.whiteSize.toFixed(2)}MB · 风格：${s.label}`;
+    };
+    wrap.appendChild(btn);
+  });
+
+  const sec3 = document.createElement('div');
+  sec3.className = 'sec-sub'; sec3.textContent = '赛博';
+  wrap.appendChild(sec3);
+  CYBER_STYLES.forEach((s) => {
+    const btn = document.createElement('button');
+    btn.className = 'style-btn' + (s.id === currentStyle ? ' active' : '');
+    const sw = styleSwatch(s.id);
+    btn.innerHTML = `<span class="swatch" style="background:${sw}"></span>${s.label}`;
+    btn.onclick = async () => {
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentStyle = s.id;
+      await setMaterial();
+      const e = manifest.find(m => document.querySelector('.model-btn.active')?.textContent.startsWith(m.base));
+      if (e) infoEl.textContent = `${e.base} · 白模 ${e.whiteSize.toFixed(2)}MB · 风格：${s.label}`;
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function styleSwatch(id) {
+  return ({
+    none:'#ffffff',
+    original:'linear-gradient(135deg,#888,#bbb)', macaron:'linear-gradient(135deg,#ff9ec4,#a0e7e5)',
+    chrome:'linear-gradient(135deg,#eef3f7,#7c8896)', wood:'linear-gradient(135deg,#b5803f,#8a5a2b)',
+    bluewhite:'linear-gradient(135deg,#f5f3ec,#1b4f9c)', cyber:'linear-gradient(135deg,#1a0a2e,#00e5ff)',
+    real_oak:'#b5803f', real_metal:'#c0c8d0', real_porcelain:'#f0f0f0',
+    real_walnut:'#5a3825', real_brass:'#b08d57', real_marble:'#e8e6e0', real_leather:'#6b4226', real_basalt:'#2b2b2e',
+    cyber_circuit:'linear-gradient(135deg,#001a2e,#00e5ff)', cyber_holo:'linear-gradient(135deg,#04181c,#18e0ff)',
+    cyber_glitch:'linear-gradient(135deg,#2a0a3a,#ff2bd6)', cyber_carbon:'linear-gradient(135deg,#1a1a1a,#ff7b1a)',
+    cyber_blue:'linear-gradient(135deg,#0a1230,#2b6bff)'
+  })[id] || '#888';
+}
+
+document.getElementById('tglLit').addEventListener('change', () => setMaterial());
+document.getElementById('tglRot').addEventListener('change', e => controls.autoRotate = e.target.checked);
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+(async () => {
+  manifest = await (await fetch(`${BASE}/manifest.json`)).json();
+  buildList();
+  buildStyles();
+  const params = new URLSearchParams(location.search);
+  let mi = 0;
+  if (params.has('mi')) { const n = parseInt(params.get('mi')); if (!isNaN(n) && n>=0 && n<manifest.length) mi = n; }
+  document.querySelectorAll('.model-btn').forEach((b,i)=>b.classList.toggle('active', i===mi));
+  await loadModel(manifest[mi]);
+  const sp = params.get('style');
+  if (sp) {
+    const st = [...BASE_STYLES, ...STYLES, ...REAL_STYLES, ...CYBER_STYLES].find(s=>s.id===sp);
+    if (st) {
+      currentStyle = st.id;
+      document.querySelectorAll('.style-btn').forEach(b=>b.classList.toggle('active', b.textContent.includes(st.label)));
+      await setMaterial();
+      infoEl.textContent = `${manifest[mi].base} · 白模 ${manifest[mi].whiteSize.toFixed(2)}MB · 风格：${st.label}`;
+    }
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agnes AI MCP 测试工具</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 20px; }
+        
+        .card {
+            background: white; border-radius: 16px; padding: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 20px;
+        }
+        
+        .status {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+            padding: 12px; background: #f5f5f5; border-radius: 8px;
+        }
+        .status-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: #ccc;
+        }
+        .status-dot.connected { background: #4caf50; }
+        .status-dot.error { background: #f44336; }
+        
+        .config {
+            display: flex; gap: 10px; margin-bottom: 15px;
+        }
+        input[type="text"] {
+            flex: 1; padding: 12px; border: 2px solid #e0e0e0;
+            border-radius: 8px; font-size: 14px;
+        }
+        input[type="text"]:focus { border-color: #667eea; outline: none; }
+        
+        button {
+            padding: 12px 24px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5a6fd6; }
+        .btn-success { background: #4caf50; color: white; }
+        .btn-success:hover { background: #43a047; }
+        .btn-danger { background: #f44336; color: white; }
+        .btn-danger:hover { background: #e53935; }
+        
+        .tools {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tool-btn {
+            padding: 16px; border: 2px solid #e0e0e0; border-radius: 8px;
+            background: white; cursor: pointer; text-align: center;
+            transition: all 0.3s;
+        }
+        .tool-btn:hover { border-color: #667eea; background: #f8f9ff; }
+        .tool-btn.active { border-color: #667eea; background: #667eea; color: white; }
+        .tool-btn .icon { font-size: 24px; margin-bottom: 5px; }
+        .tool-btn .name { font-weight: 600; }
+        
+        textarea {
+            width: 100%; height: 120px; padding: 12px;
+            border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 14px; resize: vertical; font-family: inherit;
+        }
+        textarea:focus { border-color: #667eea; outline: none; }
+        
+        .param-row {
+            display: flex; gap: 10px; margin: 10px 0;
+        }
+        .param-row input { flex: 1; }
+        
+        .output {
+            background: #1e1e1e; color: #d4d4d4; padding: 16px;
+            border-radius: 8px; min-height: 200px; max-height: 400px;
+            overflow-y: auto; font-family: 'Consolas', monospace;
+            font-size: 13px; white-space: pre-wrap; line-height: 1.5;
+        }
+        
+        .log { margin-top: 10px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Agnes AI MCP 测试工具</h1>
+        
+        <div class="card">
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">未连接</span>
+            </div>
+            
+            <div class="config">
+                <input type="text" id="baseUrl" placeholder="输入 MCP 服务地址" value="http://localhost:3001">
+                <button class="btn-primary" onclick="connect()">连接</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">🛠️ 选择功能</h3>
+            <div class="tools">
+                <div class="tool-btn" onclick="selectTool('chat')">
+                    <div class="icon">💬</div>
+                    <div class="name">聊天对话</div>
+                </div>
+                <div class="tool-btn" onclick="selectTool('image')">
+                    <div class="icon">🎨</div>
+                    <div class="name">生成图片</div>
+                </div>
+                <div class="tool-btn" onclick="selectTool('video')">
+                    <div class="icon">🎬</div>
+                    <div class="name">生成视频</div>
+                </div>
+                <div class="tool-btn" onclick="selectTool('video_status')">
+                    <div class="icon">📋</div>
+                    <div class="name">查询视频</div>
+                </div>
+                <div class="tool-btn" onclick="selectTool('image_chat')">
+                    <div class="icon">🖼️</div>
+                    <div class="name">图片理解</div>
+                </div>
+                <div class="tool-btn" onclick="selectTool('cities')">
+                    <div class="icon">🌍</div>
+                    <div class="name">查城市列表</div>
+                </div>
+            </div>
+            
+            <div id="paramsArea"></div>
+            
+            <button class="btn-success" onclick="callTool()" style="width: 100%; margin-top: 15px;">
+                🚀 执行
+            </button>
+        </div>
+        
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">📤 输出结果</h3>
+            <div class="output" id="output">等待执行...</div>
+        </div>
+        
+        <div class="log" id="log"></div>
+    </div>
+    
+    <script>
+        let sessionId = null;
+        let selectedTool = null;
+        let requestId = 1;
+        
+        function log(msg) {
+            document.getElementById('log').textContent = new Date().toLocaleTimeString() + ': ' + msg;
+        }
+        
+        function setStatus(text, connected) {
+            document.getElementById('statusText').textContent = text;
+            const dot = document.getElementById('statusDot');
+            dot.className = 'status-dot' + (connected ? ' connected' : connected === false ? ' error' : '');
+        }
+        
+        async function connect() {
+            const baseUrl = document.getElementById('baseUrl').value.trim().replace(/\/$/, '');
+            log('连接中...');
+            
+            try {
+                const response = await fetch(`${baseUrl}/sse`);
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                
+                setStatus('连接中...', false);
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const text = decoder.decode(value);
+                    const match = text.match(/session_id=([^&\s]+)/);
+                    if (match) {
+                        sessionId = match[1];
+                        setStatus('已连接', true);
+                        log('Session ID: ' + sessionId);
+                        break;
+                    }
+                }
+            } catch (e) {
+                setStatus('连接失败', false);
+                log('错误: ' + e.message);
+            }
+        }
+        
+        function selectTool(tool) {
+            selectedTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            const paramsArea = document.getElementById('paramsArea');
+            
+            switch(tool) {
+                case 'chat':
+                    paramsArea.innerHTML = `
+                        <textarea id="paramMessage" placeholder="输入聊天内容"></textarea>
+                        <input type="text" id="paramSystem" placeholder="系统提示(可选)" style="margin-top:10px;">
+                    `;
+                    break;
+                case 'image':
+                    paramsArea.innerHTML = `
+                        <textarea id="paramPrompt" placeholder="图片描述"></textarea>
+                        <div class="param-row">
+                            <input type="text" id="paramSize" placeholder="尺寸 (1024x1024)" value="1024x1024">
+                            <input type="number" id="paramN" placeholder="数量 (1)" value="1" style="width:80px;">
+                        </div>
+                    `;
+                    break;
+                case 'video':
+                    paramsArea.innerHTML = `
+                        <textarea id="paramPrompt" placeholder="视频描述"></textarea>
+                        <div class="param-row">
+                            <input type="number" id="paramDuration" placeholder="时长(秒)" value="5" style="width:100px;">
+                            <input type="text" id="paramVideoSize" placeholder="分辨率" value="1024x576">
+                        </div>
+                    `;
+                    break;
+                case 'video_status':
+                    paramsArea.innerHTML = `
+                        <input type="text" id="paramTaskId" placeholder="任务ID">
+                    `;
+                    break;
+                case 'image_chat':
+                    paramsArea.innerHTML = `
+                        <textarea id="paramMessage" placeholder="关于图片的问题"></textarea>
+                        <input type="text" id="paramImageUrl" placeholder="图片URL" style="margin-top:10px;">
+                    `;
+                    break;
+                case 'cities':
+                    paramsArea.innerHTML = '<p style="color:#666;">此工具无需参数，直接点击执行即可</p>';
+                    break;
+            }
+        }
+        
+        async function callTool() {
+            if (!sessionId) {
+                alert('请先连接!');
+                return;
+            }
+            
+            if (!selectedTool) {
+                alert('请选择功能!');
+                return;
+            }
+            
+            const baseUrl = document.getElementById('baseUrl').value.trim().replace(/\/$/, '');
+            const output = document.getElementById('output');
+            output.textContent = '执行中...';
+            
+            try {
+                // 先初始化
+                await fetch(`${baseUrl}/messages/?session_id=${sessionId}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: requestId++,
+                        method: 'initialize',
+                        params: {
+                            protocolVersion: '2024-11-05',
+                            capabilities: {},
+                            clientInfo: {name: 'html-tester', version: '1.0'}
+                        }
+                    })
+                });
+                
+                // 构建参数
+                let name, arguments_data = {};
+                
+                switch(selectedTool) {
+                    case 'chat':
+                        name = 'chat_completion';
+                        arguments_data = {message: document.getElementById('paramMessage').value};
+                        const system = document.getElementById('paramSystem')?.value;
+                        if (system) arguments_data.system_prompt = system;
+                        break;
+                    case 'image':
+                        name = 'generate_image';
+                        arguments_data = {
+                            prompt: document.getElementById('paramPrompt').value,
+                            size: document.getElementById('paramSize').value || '1024x1024',
+                            n: parseInt(document.getElementById('paramN').value) || 1
+                        };
+                        break;
+                    case 'video':
+                        name = 'generate_video';
+                        arguments_data = {
+                            prompt: document.getElementById('paramPrompt').value,
+                            duration: parseInt(document.getElementById('paramDuration').value) || 5,
+                            size: document.getElementById('paramVideoSize').value || '1024x576'
+                        };
+                        break;
+                    case 'video_status':
+                        name = 'check_video_status';
+                        arguments_data = {task_id: document.getElementById('paramTaskId').value};
+                        break;
+                    case 'image_chat':
+                        name = 'chat_with_image';
+                        arguments_data = {
+                            message: document.getElementById('paramMessage').value,
+                            image_url: document.getElementById('paramImageUrl').value
+                        };
+                        break;
+                    case 'cities':
+                        name = 'get_china_cities';
+                        arguments_data = {};
+                        break;
+                }
+                
+                // 调用工具
+                const response = await fetch(`${baseUrl}/messages/?session_id=${sessionId}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: requestId++,
+                        method: 'tools/call',
+                        params: {name, arguments: arguments_data}
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.result) {
+                    output.textContent = result.result;
+                } else {
+                    output.textContent = JSON.stringify(result, null, 2);
+                }
+                
+                log('执行成功');
+            } catch (e) {
+                output.textContent = '错误: ' + e.message;
+                log('执行失败');
+            }
+        }
+    </script>
+</body>
+</html>

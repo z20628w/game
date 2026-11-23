@@ -1,0 +1,37 @@
+export interface ColdStory { name: string; beats: [string,string,string]; exit: number }
+// 每个主题绑定独立分镜；两种画风不再只换素材和颜色。
+export const coldStories: Record<string,ColdStory> = {
+  'chatgpt-art':{name:'织光回路',beats:['光带入场','交织成结','回路通明'],exit:.84},
+  'chatgpt-anime':{name:'星仪启封',beats:['星仪苏醒','三轴校准','星核点亮'],exit:.88},
+  'claude-art':{name:'书阁翻章',beats:['书脊展开','书页翻动','新章落定'],exit:.82},
+  'claude-anime':{name:'长笺来信',beats:['信笺展开','字句落笔','书信签章'],exit:.86},
+  'gemini-art':{name:'流体双生',beats:['双光靠近','能量交换','共振绽放'],exit:.83},
+  'gemini-anime':{name:'棱镜分光',beats:['光束入射','棱镜折射','七色共鸣'],exit:.87},
+  'deepseek-art':{name:'深海探讯',beats:['声呐扫描','回声定位','建立连接'],exit:.86},
+  'deepseek-anime':{name:'鲸游星海',beats:['鲸影游入','穿越水环','潜入远海'],exit:.82},
+  'doubao-art':{name:'对话接力',beats:['一句问候','气泡接答','心意相连'],exit:.82},
+  'doubao-anime':{name:'弹跳奏鸣',beats:['轻球落下','弹簧接力','一起落定'],exit:.85},
+  'qwen-art':{name:'山水开卷',beats:['双轴展卷','远山入墨','朱印落款'],exit:.88},
+  'qwen-anime':{name:'折扇听风',beats:['扇骨铺开','竹影随风','扇面落定'],exit:.83},
+  'kimi-art':{name:'月相巡航',beats:['新月初升','月相盈转','卫星归轨'],exit:.86},
+  'kimi-anime':{name:'月钟报时',beats:['钟摆起行','指针巡行','指针归零'],exit:.89},
+  'grok-art':{name:'引力航道',beats:['星光偏转','盘面加速','引力稳定'],exit:.84},
+  'grok-anime':{name:'黑金映字',beats:['金色字缘','字距合拢','映光定格'],exit:.81},
+  'seed-art':{name:'破土成林',beats:['种子落土','根茎生长','枝叶舒展'],exit:.89},
+  'seed-anime':{name:'折叶新生',beats:['纸面翻折','叶脉对合','新叶迎光'],exit:.83},
+  'copilot-art':{name:'云端航线',beats:['航道点亮','云间穿行','驶向远方'],exit:.85},
+  'copilot-anime':{name:'纸翼启航',beats:['纸翼折成','乘风起飞','绕行归航'],exit:.88},
+  'perplexity-art':{name:'求知星图',beats:['问题点亮','知识传递','路径相通'],exit:.86},
+  'perplexity-anime':{name:'寻星调焦',beats:['星点失焦','镜片对齐','目标确认'],exit:.82},
+  'minimax-art':{name:'唱片启奏',beats:['唱针落下','唱片旋转','余音环绕'],exit:.85},
+  'minimax-anime':{name:'拨弦回响',beats:['琴弦张开','指光拨弦','共鸣回落'],exit:.88},
+  aurora:{name:'极光天幕',beats:['微光起伏','光幕垂落','极夜流转'],exit:.88},
+  sakura:{name:'一枝春信',beats:['花苞初醒','枝头次第开','花瓣乘风'],exit:.85},
+  city:{name:'城市通电',beats:['电流入城','楼宇点亮','街区连通'],exit:.82},
+  ocean:{name:'一滴成潮',beats:['水滴坠落','水冠跃起','涟漪推远'],exit:.87},
+  orbit:{name:'星环会合',beats:['轨道进近','卫星交会','星环成列'],exit:.84},
+  ink:{name:'落笔成山',beats:['主峰起笔','远山叠墨','飞鸟点睛'],exit:.89},
+  forest:{name:'萤路引航',beats:['萤光引路','林间呼应','点亮归途'],exit:.86},
+  crystal:{name:'晶格折光',beats:['晶核转动','棱面相连','光路贯通'],exit:.83}
+}
+

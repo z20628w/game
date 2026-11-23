@@ -1,0 +1,24 @@
+<view class="page">
+  <!-- 摄像头实时预览（原生组件），保持流畅的实时画面 -->
+  <camera class="camera" device-position="back" flash="off" binderror="onCameraError"></camera>
+
+  <!-- 叠加层：必须用 cover-view 才能压在 camera 原生组件之上 -->
+  <cover-view wx:if="{{hasResult}}" class="box" style="{{boxStyle}}"></cover-view>
+
+  <cover-view wx:if="{{hasResult}}" class="tag" style="{{tagStyle}}">{{tagText}}</cover-view>
+
+  <cover-view wx:if="{{hasResult}}" class="info" style="{{infoStyle}}">
+    <cover-view class="info-title">{{result.name}}</cover-view>
+    <cover-view wx:if="{{boxCoord}}" class="info-row">坐标：{{boxCoord}}</cover-view>
+    <cover-view wx:if="{{result.confidence}}" class="info-row">置信度：{{result.confidence}}%</cover-view>
+    <!-- 植物保留本地库字段 -->
+    <cover-view wx:if="{{result.category === 'plant'}}" class="info-row">科属：{{result.info.family}}</cover-view>
+    <cover-view wx:if="{{result.category === 'plant'}}" class="info-row">花期：{{result.info.bloom}}</cover-view>
+    <cover-view wx:if="{{result.category === 'plant'}}" class="info-row">光照：{{result.info.light}}</cover-view>
+    <!-- 百科描述 -->
+    <cover-view wx:if="{{result.description}}" class="info-desc">{{result.description}}</cover-view>
+  </cover-view>
+
+  <cover-view class="status">{{statusText}}</cover-view>
+  <cover-view class="hint">将植物放入框内 · 实时识别中</cover-view>
+</view>

@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"./js/three.module.js"}}</script></head>
+<body><div id="r">START</div>
+<script type="module">
+try{
+ const T=await import('three');
+ document.getElementById('r').textContent='THREE_OK '+T.REVISION;
+ const G=await import('./js/GLTFLoader.js');
+ document.getElementById('r').textContent+=' GLTF_OK';
+ const P=await import('./js/PointerLockControls.js');
+ document.getElementById('r').textContent+=' PLC_OK';
+}catch(e){ document.getElementById('r').textContent='ERR '+e.message; }
+</script></body></html>

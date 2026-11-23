@@ -1,0 +1,6 @@
+duckdb>=1.1.0
+PyYAML>=6.0
+requests>=2.31.0
+
+# 可选：把存储层从 Parquet 换成真正的 Apache Iceberg（详见 docs/03-架构设计.md）
+# pyiceberg[sql-sqlite]>=0.7.0

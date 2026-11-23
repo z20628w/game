@@ -1,0 +1,37 @@
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {createLivingWallpaper} from '../extension/living-wallpaper.mjs';
+const browser=await chromium.launch({headless:true,executablePath:process.env.GPT_PREVIEW_BROWSER});
+try{
+  await mkdir('preview',{recursive:true});
+  const page=await browser.newPage({viewport:{width:1440,height:810}});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.setContent('<!doctype html><html><head><style>body{margin:0;background:#081411}canvas{position:fixed;inset:0;width:100vw;height:100vh}</style></head><body></body></html>');
+  const open='data:image/jpeg;base64,'+(await readFile('assets/artwork.jpg')).toString('base64');
+  const closed='data:image/jpeg;base64,'+(await readFile('assets/artwork-blink.jpg')).toString('base64');
+  await page.evaluate(`window.motion=(${createLivingWallpaper.toString()})(${JSON.stringify(open)},${JSON.stringify(closed)})`);
+  assert.equal(await page.evaluate(()=>window.motion?.ready),true);
+  await page.waitForTimeout(250);
+  await page.screenshot({path:'preview/03-living-open.png'});
+  await page.waitForFunction(()=>window.motion.status().seconds>=3.70);
+  await page.screenshot({path:'preview/04-living-blink.png'});
+  const running=await page.evaluate(()=>window.motion.status());
+  assert(running.frames>30);assert(running.seconds>3);
+  await page.evaluate(()=>window.motion.pause(true));
+  const paused=await page.evaluate(()=>window.motion.status().frames);
+  await page.waitForTimeout(250);
+  assert.equal(await page.evaluate(()=>window.motion.status().frames),paused);
+  await page.evaluate(()=>window.motion.pause(false));
+  await page.waitForTimeout(250);
+  assert((await page.evaluate(()=>window.motion.status().frames))>paused);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.waitForTimeout(100);
+  const reduced=await page.evaluate(()=>window.motion.status().frames);
+  await page.waitForTimeout(200);
+  assert.equal(await page.evaluate(()=>window.motion.status().frames),reduced);
+  await page.evaluate(()=>window.motion.dispose());
+  assert.equal(await page.locator('canvas').count(),0);assert.deepEqual(errors,[]);
+  await writeFile('preview/living-verification.json',JSON.stringify({passed:true,running,checks:['渲染','持续动画','暂停恢复','减少动态效果','资源清理']},null,2));
+  console.log('人物背景测试通过：动画、暂停恢复、减少动态效果、资源清理。');
+}finally{await browser.close();}

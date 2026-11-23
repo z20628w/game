@@ -1,0 +1,161 @@
+{% comment %}
+UI 设计示例页，对应 index.lab-ui.json。每个 ui-* 锚点对应一个模块的设计说明和演示入口。
+顶部 lab-ui-quick-reference 提供速查表，lab-cart-layouts 与 lab.js 配合切换同一购物车的展示形态。
+view 参数选择当前资源的备用模板，示例中的商品、系列和页面需要在店铺后台存在。
+{% endcomment %}
+<section class="lab-shell lab-page lab-ui-guide">
+  <p class="lab-eyebrow">开发 · 产品 · UI 评审</p>
+  <h1>UI 设计速查表</h1>
+  <p class="lab-lead">按模块查看布局、平台限制与实现方式。点击每行的演示入口即可试用。</p>
+  {% render 'lab-ui-quick-reference' %}
+
+  <section class="lab-ui-cart" id="ui-cart">
+    <h2>购物车可以是独立页，也可以从任意一侧打开</h2>
+    <p>本店示例是右侧抽屉。下面四个按钮用同一个真实购物车比较位置和形态，也可以打开独立购物车页。</p>
+    {% comment %}增强按钮由 lab.js 在 Dawn 抽屉可用后启用，独立购物车链接始终可用。{% endcomment %}
+    <lab-cart-layouts class="lab-ui-actions">
+      <button class="lab-save" type="button" data-cart-layout="right" aria-haspopup="dialog" disabled>右侧抽屉</button>
+      <button class="lab-save" type="button" data-cart-layout="left" aria-haspopup="dialog" disabled>左侧抽屉</button>
+      <button class="lab-save" type="button" data-cart-layout="center" aria-haspopup="dialog" disabled>居中弹窗</button>
+      <button class="lab-save" type="button" data-cart-layout="bottom" aria-haspopup="dialog" disabled>底部面板</button>
+      <a href="{{ routes.cart_url }}">独立购物车页 ↗</a>
+    </lab-cart-layouts>
+    {%- if settings.cart_type != 'drawer' -%}
+      <p class="lab-muted">当前主题已切换购物车类型。要体验面板切换，请先在主题编辑器启用购物车抽屉。</p>
+    {%- endif -%}
+    <dl class="lab-ui-rules">
+      <div><dt>编辑器可选</dt><dd>Dawn 的「主题设置 → 购物车 → 类型」提供抽屉、独立页面和加购通知。加购通知是短提示，可以再进入购物车页查看或修改。</dd></div>
+      <div><dt>改主题代码</dt><dd>左开、居中、底部、页内展开、宽度与动效都由主题控制。桌面可右开，手机可底部上滑。设计稿可指定从哪里打开、加购后是否自动打开、关闭后焦点回到哪里。</dd></div>
+      <div><dt>平台处理</dt><dd>商品行、可购数量、折扣与应付金额以 Shopify 为准。主题可以改变购物车的排版和交互，结账页的扩展位置与套餐需要另行确认。</dd></div>
+    </dl>
+    <p class="lab-muted"><a href="https://shopify.dev/docs/api/ajax/reference/cart" target="_blank" rel="noopener">Shopify 购物车接口</a> · <a href="https://shopify.dev/docs/storefronts/themes/architecture/templates/cart" target="_blank" rel="noopener">独立购物车模板</a></p>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-product">
+    <h2>商品详情 · 图片、规格和购买按钮可以换位置</h2>
+    <div class="lab-ui-actions">
+      <a class="lab-save" href="{{ routes.root_url }}products/lab-demo-cup">图片在左 · 规格按钮</a>
+      <a class="lab-save" href="{{ routes.root_url }}products/lab-demo-cup?view=lab-product">图片在右 · 规格下拉</a>
+    </div>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>主题决定图片、价格、规格和购买按钮的位置。选中规格、提交购物车的变体和显示的价格库存要对应同一商品变体。</dd></div>
+      <div><dt>可选设计</dt><dd>左右分栏、上下布局、缩略图或大图切换，规格可用按钮、下拉或色样。购买区可常驻，也可吸附在手机底部。</dd></div>
+      <div><dt>主题编辑器</dt><dd>在「商品模板 → 商品信息」设置媒体位置、画廊、缩放、桌面吸顶，拖动价格、规格、购买按钮等现有区块。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>「产品」维护媒体、规格、价格和库存。尺寸表等额外数据可用元字段。</dd></div>
+      <div><dt>需要开发</dt><dd>新增吸底购买条、自定义规格联动、跨区布局或定制字段。购买条要与主规格和加购状态同步。</dd></div>
+    </dl>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-list">
+    <h2>商品列表 · 列数、卡片结构和加购方式可以选</h2>
+    <div class="lab-ui-actions">
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection">桌面四列 · 手机两列</a>
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection?view=lab-grid">桌面两列 · 手机单列 · 快速加购</a>
+    </div>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>列表无需固定列数、图片比例或按钮位置。集合成员、当前排序和分页结果来自 Shopify。</dd></div>
+      <div><dt>可选设计</dt><dd>多列网格、单列大卡片、图文横排或瀑布流。商品卡可只跳详情，也可快速选规格后加购。</dd></div>
+      <div><dt>主题编辑器</dt><dd>「集合模板 → 商品网格」可调桌面和手机列数、卡片图片、每页数量、排序入口和快速加购。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>「产品 → 产品系列」决定商品归属、默认排序与集合资料。</dd></div>
+      <div><dt>需要开发</dt><dd>横排卡、瀑布流、网格与列表即时切换、加载更多或无限滚动。保留筛选条件和回退位置。</dd></div>
+    </dl>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-filter">
+    <h2>筛选 · 顶部、侧栏、抽屉都能用</h2>
+    <p>三个入口使用同一个真实集合。桌面可对比三种样式，Dawn 在窄屏使用筛选抽屉。</p>
+    <div class="lab-ui-actions">
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection">顶部横排筛选</a>
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection?view=lab-sidebar">左侧筛选栏</a>
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection?view=lab-filter-drawer">抽屉筛选</a>
+    </div>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>主题决定筛选放在哪里。可筛选字段、参数和匹配结果受 Shopify 店面筛选能力及店铺配置约束。</dd></div>
+      <div><dt>可选设计</dt><dd>顶部横排、左右侧栏、抽屉、手机底部面板或页内展开。可以即时更新，也可以点击「应用」后提交。</dd></div>
+      <div><dt>主题编辑器</dt><dd>集合和搜索模板可启用筛选、排序，选择横排、侧栏或抽屉布局。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>在「搜索与发现」中维护库存、价格、规格和可筛选元字段。</dd></div>
+      <div><dt>需要开发</dt><dd>改抽屉方向、做底部面板、定制筛选标签和应用时机。平台无法表达的规则需要评估应用或独立搜索方案。</dd></div>
+    </dl>
+    <a href="https://shopify.dev/docs/storefronts/themes/navigation-search/filtering/storefront-filtering" target="_blank" rel="noopener">官方店面筛选文档 ↗</a>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-navigation">
+    <h2>导航 · 页头、页脚和手机底部都可以放入口</h2>
+    <p>下面两种导航是独立示例，链接指向店铺真实页面。</p>
+    <nav class="lab-ui-actions" aria-label="横向导航示例">
+      <a class="lab-save" href="{{ routes.root_url }}">首页</a>
+      <a class="lab-save" href="{{ routes.collections_url }}/lab-demo-collection">商品集合</a>
+      <a class="lab-save" href="{{ routes.root_url }}pages/lab-demo-contact">联系表单</a>
+    </nav>
+    <details class="lab-ui-disclosure">
+      <summary>展开分组导航</summary>
+      <nav class="lab-ui-actions" aria-label="分组导航示例">
+        <a href="{{ routes.collections_url }}/lab-demo-collection">浏览商品</a>
+        <a href="{{ routes.root_url }}?view=lab-data">自定义数据</a>
+        <a href="{{ routes.root_url }}pages/lab-demo-contact">联系表单</a>
+      </nav>
+    </details>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>菜单、搜索和购物车图标没有主题层的固定位置。商品、集合、购物车等资源仍使用 Shopify 提供的路由。</dd></div>
+      <div><dt>可选设计</dt><dd>横向菜单、下拉、大菜单、抽屉、吸顶导航、页脚或手机底部导航。</dd></div>
+      <div><dt>主题编辑器</dt><dd>Dawn 的页头区块可选菜单、桌面菜单类型、标志位置和吸顶方式。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>在「内容 → 菜单」管理层级和跳转目标。</dd></div>
+      <div><dt>需要开发</dt><dd>手机底部导航、带图文的大菜单或跨区入口。弹层需要键盘开关、焦点管理和手机关闭方式。</dd></div>
+    </dl>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-search">
+    <h2>搜索 · 输入框和结果不必放在同一个页面</h2>
+    <form class="lab-ui-search" action="{{ routes.search_url }}" method="get">
+      <label for="LabUiSearch-{{ section.id }}">搜索词
+        <input id="LabUiSearch-{{ section.id }}" type="search" name="q" value="演示" required>
+      </label>
+      <label for="LabUiSearchType-{{ section.id }}">搜索范围
+        <select id="LabUiSearchType-{{ section.id }}" name="type">
+          <option value="product">仅商品</option>
+          <option value="product,page,article">商品、页面和文章</option>
+        </select>
+      </label>
+      <button type="submit" class="lab-save">查看真实搜索结果</button>
+    </form>
+    <p><a href="{{ routes.search_url }}?q=演示">打开搜索结果页</a>，可继续输入关键词体验预测搜索。也可以点击页头搜索图标体验弹层。</p>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>搜索入口可在任意主题区域。Shopify 的原生搜索结果使用搜索路由，索引、支持的资源和查询行为由平台决定。</dd></div>
+      <div><dt>可选设计</dt><dd>页头弹层、常驻输入框、全屏搜索、输入时建议、分类结果页和无结果推荐。</dd></div>
+      <div><dt>主题编辑器</dt><dd>可开关预测搜索，调整结果列数、卡片显示和筛选排序入口。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>在「搜索与发现」配置适用的同义词、商品提升与筛选。</dd></div>
+      <div><dt>需要开发</dt><dd>更换输入框位置、定制建议和结果分组、接第三方搜索。设计稿需覆盖输入、加载、无结果和错误。</dd></div>
+    </dl>
+    <a href="https://shopify.dev/docs/storefronts/themes/navigation-search/search/predictive-search" target="_blank" rel="noopener">官方预测搜索文档 ↗</a>
+  </section>
+
+  <section class="lab-ui-cart lab-ui-module" id="ui-checkout">
+    <h2>结账 · 平台提供版式和扩展位置</h2>
+    <p>下方用于比较步骤结构。真实结账由店铺的结账配置呈现。</p>
+    <details class="lab-ui-disclosure">
+      <summary>单页结账 · 查看步骤结构</summary>
+      <p>同一页面填写联系信息、配送和付款资料，再提交订单。</p>
+    </details>
+    <details class="lab-ui-disclosure">
+      <summary>三页结账 · 查看步骤结构</summary>
+      <ol><li>信息：填写联系与地址。</li><li>配送：选择适用配送方式。</li><li>付款：填写或选择付款方式。</li></ol>
+    </details>
+    <a href="{{ routes.cart_url }}">从真实购物车查看本店结账入口 ↗</a>
+    <dl class="lab-ui-rules">
+      <div><dt>位置边界</dt><dd>主题控制前往结账的按钮。进入托管结账后，核心表单、订单提交与支付由 Shopify 控制。扩展组件只能放在支持的目标位置。</dd></div>
+      <div><dt>可选设计</dt><dd>结账和账户编辑器提供单页或三页选项，以及可用的品牌标志、字体和颜色设置。</dd></div>
+      <div><dt>主题编辑器</dt><dd>调整购物车页面、结账入口的文字和样式。结账本身在独立的结账和账户编辑器中配置。</dd></div>
+      <div><dt>Shopify 后台</dt><dd>「设置 → 结账」维护版式及可用表单选项。支付、配送和税务由对应后台模块配置。</dd></div>
+      <div><dt>需要开发</dt><dd>额外内容与交互按目标位置使用结账界面扩展。信息、配送与付款步骤中的界面扩展要求 Shopify Plus，感谢页和订单状态页可用符合条件的应用。</dd></div>
+    </dl>
+    <a href="https://help.shopify.com/en/manual/checkout-settings/customize-checkout-configurations/checkout-style" target="_blank" rel="noopener">官方结账样式与版式文档 ↗</a>
+  </section>
+</section>
+
+{% schema %}
+{
+  "name": "实验室 · 界面设计自由度",
+  "settings": [],
+  "presets": [{ "name": "实验室 · 界面设计自由度" }]
+}
+{% endschema %}

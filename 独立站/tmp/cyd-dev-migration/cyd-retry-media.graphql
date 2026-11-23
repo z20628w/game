@@ -1,0 +1,13 @@
+mutation {
+  productSet(input: {
+    id: "gid://shopify/Product/8205189775438",
+    files: [
+      {id: "gid://shopify/MediaImage/41500311912526"},
+      {id: "gid://shopify/MediaImage/41500311945294"},
+      {originalSource: "https://file.cyd-live.com/20260821/1787280237272_000_87a630a39e65_1787280236848.jpg", contentType: IMAGE, filename: "cyd-cuiying-c12-detail.jpg", alt: "Cuiying C12"}
+    ]
+  }, synchronous: true) {
+    product { id media(first: 10) { nodes { id status mediaErrors { code message } ... on MediaImage { image { url } } } } }
+    userErrors { field message }
+  }
+}

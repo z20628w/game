@@ -1,0 +1,4 @@
+mutation($id0:ID!,$t0:[TranslationInput!]!,$id1:ID!,$t1:[TranslationInput!]!,$id2:ID!,$t2:[TranslationInput!]!,$id3:ID!,$t3:[TranslationInput!]!){r0:translationsRegister(resourceId:$id0,translations:$t0){translations{key value outdated} userErrors{field message}}
+r1:translationsRegister(resourceId:$id1,translations:$t1){translations{key value outdated} userErrors{field message}}
+r2:translationsRegister(resourceId:$id2,translations:$t2){translations{key value outdated} userErrors{field message}}
+r3:translationsRegister(resourceId:$id3,translations:$t3){translations{key value outdated} userErrors{field message}}}

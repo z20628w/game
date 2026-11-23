@@ -1,0 +1,42 @@
+# ============================================================
+# 全局配置：路径、运行参数、存储后端
+# 这份文件回答一个问题：整个管道「在哪跑、按什么标准判定」
+# ============================================================
+
+project:
+  name: 酒店经营数据自动化
+  hotel: 江门酒店                 # 对应简报 P3「01 内网数据源 · 江门酒店」
+  timezone: Asia/Shanghai
+
+# 各层数据的落盘位置（相对项目根目录）
+paths:
+  raw: data/raw             # 原始层：只读，任何加工都不得回写
+  staging: data/staging     # 清洗层：可重跑的中间结果
+  marts: data/marts         # 报表层：财务/客源/销售/新媒体/OTA 成品
+  review: data/review       # 审核闸门：待复核清单 + 审批凭证
+  outbox: data/outbox       # 交付区：企微归档目录 + 通知载荷
+  logs: data/logs           # 审计日志：凭证与日志留痕
+  db: data/db/hotel_dw.duckdb
+
+run:
+  # 金额勾稽容差（元）：含税 = 不含税 + 税额 允许的误差
+  amount_tolerance: 0.01
+  # 环比偏离阈值（%）：超过即判为「偏离」，进人工复核
+  deviation_pct: 30
+  # 原始层保护开关：True 时任何写 raw 的行为都会直接报错（对应落地原则「原始数据只读」）
+  read_only_raw: true
+  # 允许缺失的渠道比例（%）：渠道实际到数数量低于应有数量的比例上限
+  channel_missing_pct: 10
+  # mock 默认生成多少天。取 28 天是有原因的：
+  # 周报只出「完整周」，要凑出 2 个以上完整周才能让环比规则真正跑起来。
+  mock_days: 28
+
+# 存储后端：先用 Parquet 跑通，再按需换成真正的 Apache Iceberg
+lakehouse:
+  backend: parquet          # parquet | iceberg
+  parquet:
+    compression: zstd
+  iceberg:
+    warehouse: data/lakehouse
+    catalog_uri: sqlite:///data/lakehouse/catalog.db
+    namespace: hotel

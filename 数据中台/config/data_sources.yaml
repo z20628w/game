@@ -1,0 +1,111 @@
+# ============================================================
+# 数据来源接入配置
+# 直接对应简报 P2「业务数据类型与人工处理现状」表格
+#
+# mode 说明（对应接入原则：能自动取数的逐步对接，暂不具备条件的保留人工导出、统一导入）：
+#   auto   = 已具备自动取数能力，将来由自建专网的 Connector 直连
+#   manual = 暂不具备条件，保留人工导出、统一导入（落到 data/raw/）
+#
+# files 说明：每个来源声明「输出哪几张表、对应 raw 目录下什么文件」。
+#   一张表可能由多个文件汇成（每天一个导出文件是常态），所以这里用通配符。
+#   抽取层会把 files.glob 命中的全部 CSV 登记成 DuckDB 只读视图 raw_<table>，
+#   并在每行附上 filename 血缘列 —— 这是「凭证与日志留痕」的第一道痕迹。
+# ============================================================
+
+sources:
+  - key: pms
+    name: WedaSys · PMS
+    business: [财务, 客源]
+    mode: auto
+    # 平台／账号数：1（PMS 单系统）
+    expected_accounts: 1
+    frequency: [daily, weekly]
+    note: 酒店内网系统，需经自建专网接入，客户机隔离、不接触数据服务器
+    files:
+      - table: pms_revenue
+        glob: pms/revenue_*.csv
+        desc: 收入明细（科目级）：部门 / 科目 / 含税 / 不含税 / 税额
+      - table: pms_room
+        glob: pms/room_*.csv
+        desc: 房态：房型 / 可供房 / 已售房 / 房费收入
+
+  - key: member
+    name: WedaSys · 会员
+    business: [客源, 销售]
+    mode: auto
+    expected_accounts: 1
+    frequency: [weekly]
+    note: 与 PMS 同源，属「双数据源接入中台」的第二路
+    files:
+      - table: member_daily
+        glob: member/member_*.csv
+        desc: 会员消费：等级 / 会员数 / 消费金额
+
+  - key: ota
+    name: 传统 OTA 后台
+    business: [传统OTA]
+    mode: manual
+    # 平台／账号数：2（携程、booking、trip 等后台）
+    expected_accounts: 2
+    channels: [携程, booking, trip]
+    frequency: [weekly]
+    note: 取数方式待确认；booking / trip 为境外平台，账号获取与数据合规需单独评估
+    files:
+      - table: channel_daily
+        glob: manual/channel_*.csv
+        desc: 渠道结算：订单 / 间夜 / 房费 / 佣金 / 结算金额
+
+  - key: new_media
+    name: 新媒体平台后台
+    business: [新媒体平台]
+    mode: manual
+    # 平台／账号数：2（抖音、美团）
+    expected_accounts: 2
+    channels: [抖音, 小红书, 美团]
+    frequency: [weekly]
+    note: 平台间字段口径不一致，导入前需先套表统一列名（见 columns_map.yaml）
+    files:
+      - table: channel_daily
+        glob: manual/channel_*.csv
+        desc: 渠道投放：订单 / 间夜 / 房费 / 投放费用 / 线索数
+
+  - key: manual_finance
+    name: 人工导出财务套表
+    business: [财务]
+    mode: manual
+    expected_accounts: 1
+    frequency: [daily]
+    note: 上游尚未提供接口，先按「人工导出 + 统一模板导入」过渡
+    files:
+      - table: manual_finance
+        glob: manual/finance_*.csv
+        desc: 财务套表：部门级不含税 / 税额 / 含税，用于与 PMS 交叉核对
+
+# 统一导入约定：任何人工导出的文件都必须先满足这几条，才能丢进 data/raw
+import_conventions:
+  encoding: utf-8-sig          # 支持 Excel 另存的带 BOM CSV
+  delimiter: ","
+  header: 第一行为列名，与 columns_map.yaml 的目标列名一致
+  date_format: "%Y-%m-%d"
+  amount: 两位小数的数值字符串，不带千分位、不带货币符号
+  naming: "<业务>_<YYYYMMDD>.csv"    # 便于按日期切片重跑
+
+# 每日 / 每周报表的发送对象（对应简报 P1「报表与发送规则」）
+cadence:
+  daily:
+    - business: 财务
+      sheets: 3            # 去掉税后汇总成 3 张表
+      recipients: [财务负责人]
+  weekly:
+    - business: 客源
+      sheets: 1
+      recipients: [会员运营]
+    - business: 销售
+      sheets: 1
+      recipients: [销售负责人]
+    - business: 新媒体平台
+      sheets: 1
+      recipients: [新媒体运营]
+    - business: 传统OTA
+      sheets: 1
+      recipients: [渠道负责人]

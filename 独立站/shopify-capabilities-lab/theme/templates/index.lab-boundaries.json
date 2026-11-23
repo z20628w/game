@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-boundaries",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

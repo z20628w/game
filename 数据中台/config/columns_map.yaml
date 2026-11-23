@@ -1,0 +1,136 @@
+# ============================================================
+# 套表：把各平台五花八门的列名，映射到中台统一列名
+#
+# 对应简报「平台间字段口径不一致，导入前需先套表统一列名」。
+# 这份文件是「人工导出 → 统一导入」这条过渡路线能否成立的关键：
+# 运营从抖音后台导出的表叫「成交金额」，从美团导出的叫「交易额」，
+# 到了中台必须是同一个 amount_net，否则每周都要手工对一次。
+#
+# 用法：人工导出后，先把列名改成本文件 right 侧的列名，再丢进 data/raw/。
+# 后续要接自动取数时，这份映射表可以直接变成 Connector 的字段转换配置，
+# 不用重写。
+# ============================================================
+
+# 中台统一列名（canonical）：这些列名是 stg_* 表认的名字，不可随意改
+canonical:
+  pms_revenue:        [biz_date, dept, item, amount_with_tax, amount_net, tax_amount]
+  pms_room:           [biz_date, room_type, total_rooms, sold_rooms, room_revenue]
+  member_daily:       [biz_date, level, member_count, consume_amount]
+  channel_daily:      [biz_date, source_key, channel, orders, room_nights,
+                       room_revenue, commission, settle_amount, media_spend, leads]
+  manual_finance:     [biz_date, dept, amount_net, tax_amount, amount_with_tax]
+
+# 各来源的「平台列名 → 统一列名」对照
+mappings:
+
+  - source: pms
+    platform: WedaSys PMS 导出
+    mode: auto
+    table: pms_revenue
+    columns:
+      营业日期: biz_date
+      营业部门: dept
+      收入项目: item
+      价税合计: amount_with_tax
+      不含税金额: amount_net
+      税额: tax_amount
+    note: 与财务口径一致，不做价税分离以外的调整
+
+  - source: member
+    platform: WedaSys 会员导出
+    mode: auto
+    table: member_daily
+    columns:
+      日期: biz_date
+      会员等级: level
+      会员数: member_count
+      消费金额: consume_amount
+    note: 等级取值需与运营口径对齐（黑金/金卡/银卡/普通）
+
+  - source: ota
+    platform: 携程后台
+    mode: manual
+    table: channel_daily
+    columns:
+      日期: biz_date
+      门店: channel
+      订单量: orders
+      间夜数: room_nights
+      房费总额: room_revenue
+      佣金: commission
+      结算金额: settle_amount
+    fixed:
+      source_key: ota
+    note: 携程导出默认含「门店」列，需确认是否只有江门一家，避免跨店混入
+
+  - source: ota
+    platform: booking / trip 后台
+    mode: manual
+    table: channel_daily
+    columns:
+      Check-in Date: biz_date
+      Channel: channel
+      Reservations: orders
+      Room Nights: room_nights
+      Room Revenue: room_revenue
+      Commission: commission
+      Net Amount: settle_amount
+    fixed:
+      source_key: ota
+    note: 境外平台，币种与合规需单独评估；金额列先确认是否已折算为 CNY
+
+  - source: new_media
+    platform: 抖音来客
+    mode: manual
+    table: channel_daily
+    columns:
+      统计日期: biz_date
+      渠道: channel
+      成交订单数: orders
+      核销间夜: room_nights
+      成交金额: room_revenue
+      投放消耗: media_spend
+      线索数: leads
+    fixed:
+      source_key: new_media
+    note: 抖音「成交金额」是支付口径，与房费口径的差异要在复核时留意
+
+  - source: new_media
+    platform: 小红书 / 美团
+    mode: manual
+    table: channel_daily
+    columns:
+      日期: biz_date
+      平台: channel
+      订单数: orders
+      间夜: room_nights
+      交易额: room_revenue
+      投放费用: media_spend
+      留资数: leads
+    fixed:
+      source_key: new_media
+    note: 小红书以留资为主，room_revenue 可能为 0，属正常，不要当作缺失
+
+  - source: manual_finance
+    platform: 财务人工套表
+    mode: manual
+    table: manual_finance
+    columns:
+      日期: biz_date
+      部门名称: dept
+      不含税收入: amount_net
+      税额: tax_amount
+      含税收入: amount_with_tax
+    note: 用于与 PMS 系统口径交叉核对（CON-004），一旦自动化接入即可退役
+
+# 统一导入的硬性约定（与 data_sources.yaml → import_conventions 一致）
+conventions:
+  encoding: utf-8-sig
+  delimiter: ","
+  date_format: "%Y-%m-%d"
+  amount: 两位小数，无千分位、无货币符号
+  file_naming: "<业务>_<YYYYMMDD>.csv"
+  forbid:
+    - 合并单元格
+    - 合计行（合计由中台算，上游只给明细）
+    - 空行 / 空列

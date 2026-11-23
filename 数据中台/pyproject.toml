@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hotel-dw"
+version = "0.1.0"
+description = "酒店经营数据自动化 · 轻量数据中台（DuckDB 单计算引擎）"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "duckdb>=1.1.0",
+    "PyYAML>=6.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+# 想换成真正的 Apache Iceberg 时再装（settings.lakehouse.backend=iceberg）
+iceberg = ["pyiceberg[sql-sqlite]>=0.7.0"]
+
+[project.scripts]
+hotel-dw = "hotel_dw.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

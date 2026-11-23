@@ -1,0 +1,1 @@
+query { shop { name } blogs(first:20) { nodes { id title handle articlesCount { count } } } }

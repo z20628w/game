@@ -1,0 +1,45 @@
+{% comment %}
+元字段和元对象演示，对应 index.lab-data.json。
+优先读取编辑器选择的商品，留空时使用 all_products 中的 lab-demo-cup。
+metafields.lab_demo 下的字段绑定商品额外资料，引用字段 guide 的 value 返回元对象条目。
+shop.metaobjects 按类型 lab_demo_guide 与条目标识 lab-demo-care 读取共享数据。页面中的 raw 区域只展示示例代码。
+{% endcomment %}
+{% comment %}同一元对象分别通过全局 handle 与商品引用读取。引用型元字段取 .value 后才得到条目。{% endcomment %}
+{% liquid
+  assign demo_product = section.settings.product
+  if demo_product == blank
+    assign demo_product = all_products['lab-demo-cup']
+  endif
+  assign shared_guide = shop.metaobjects.lab_demo_guide['lab-demo-care']
+  assign product_guide = demo_product.metafields.lab_demo.guide.value
+%}
+<section class="lab-shell lab-page">
+  <p class="lab-eyebrow">真实店铺数据</p><h1>数据结构，由后台定义。</h1>
+  <p class="lab-lead">主题通过 Liquid 读取数据。下面显示当前店铺的真实字段；没有配置时明确显示空态。</p>
+  <div class="lab-grid lab-grid--two">
+    <article class="lab-panel"><span class="lab-badge lab-badge--config">元字段</span><h2>商品的自定义字段</h2>
+      {% if demo_product != blank %}
+        <p><a href="{{ demo_product.url }}">{{ demo_product.title | escape }}</a></p>
+        <dl class="lab-definition"><dt>材质</dt><dd>{{ demo_product.metafields.lab_demo.material.value | default: '尚未填写 lab_demo.material' | escape }}</dd><dt>特点列表</dt><dd><ul>{% for feature in demo_product.metafields.lab_demo.features.value %}<li>{{ feature | escape }}</li>{% else %}<li>尚未填写 lab_demo.features</li>{% endfor %}</ul></dd></dl>
+      {% else %}<p class="lab-empty">尚未找到演示商品。请运行数据准备脚本，或在主题编辑器选择商品。</p>{% endif %}
+      <pre class="lab-code"><code>{% raw %}{{ product.metafields.lab_demo.material.value }}{% endraw %}</code></pre>
+      <p>后台：设置 → 自定义数据 → 商品。定义字段后，在商品编辑页面填写值。</p>
+    </article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--config">元对象</span><h2>通过商品引用一个结构</h2>
+      {% if product_guide != blank %}<h3>{{ product_guide.title.value | escape }}</h3><p>{{ product_guide.body.value | escape | newline_to_br }}</p><p class="lab-muted">条目：{{ product_guide.system.handle | escape }}</p>
+      {% else %}<p class="lab-empty">商品尚未关联可公开读取的保养指南。</p>{% endif %}
+      <pre class="lab-code"><code>{% raw %}{% assign guide = product.metafields.lab_demo.guide.value %}
+{{ guide.title.value }}{% endraw %}</code></pre><p>引用字段储存关系，指南的标题与正文只维护一份，可由多个商品复用。</p>
+    </article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--theme">全局读取</span><h2>按类型与标识读取条目</h2>
+      {% if shared_guide != blank %}<h3>{{ shared_guide.title.value | escape }}</h3><p>{{ shared_guide.body.value | escape | newline_to_br }}</p>
+      {% else %}<p class="lab-empty">未找到 lab_demo_guide / lab-demo-care。检查条目是否存在、是否为 Active、是否允许店面读取。</p>{% endif %}
+      <pre class="lab-code"><code>{% raw %}{% assign guide = shop.metaobjects.lab_demo_guide['lab-demo-care'] %}
+{{ guide.body.value }}{% endraw %}</code></pre>
+    </article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--theme">数据关系</span><h2>建立一次，反复使用</h2><ol class="lab-steps"><li>定义元对象类型 lab_demo_guide：标题、正文、材料。</li><li>在后台创建条目，填写字段并设为可公开访问。</li><li>为商品定义 metaobject_reference 字段 lab_demo.guide。</li><li>商品选择条目，主题读取引用的 .value。</li></ol><p>UI 可以设计材质表、FAQ、设计师介绍等模块；数据结构先按需求确定，再由主题展示。</p></article>
+  </div>
+</section>
+{% schema %}
+{"name":"实验室 · 自定义数据","settings":[{"type":"product","id":"product","label":"演示商品"}],"presets":[{"name":"实验室 · 自定义数据"}]}
+{% endschema %}

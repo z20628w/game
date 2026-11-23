@@ -1,0 +1,197 @@
+{
+  "generator": "scripts/prepare-classic.cjs",
+  "themes": [
+    {
+      "theme": "chatgpt-art",
+      "source": "chatgpt-art.png",
+      "sourceSHA256": "23b6f98107440016360cc5192fad1e452e19d944fc54e39629f533749734f52d",
+      "paths": 1200
+    },
+    {
+      "theme": "chatgpt-anime",
+      "source": "chatgpt-anime.png",
+      "sourceSHA256": "297b9a625e2deab665bbe5a80ba6f96f2fb4eb124ea7b4d9d4aa1f93828f3977",
+      "paths": 1200
+    },
+    {
+      "theme": "claude-art",
+      "source": "claude-art.png",
+      "sourceSHA256": "b849222afd000ab35deb60c2d250979d44738cc667fe044590cdc029eacf659d",
+      "paths": 1200
+    },
+    {
+      "theme": "claude-anime",
+      "source": "claude-anime.png",
+      "sourceSHA256": "78533389719bb5387582481c9734d3fabe9752fe4e4fc6ab8e04dc9de8d9314f",
+      "paths": 1200
+    },
+    {
+      "theme": "gemini-art",
+      "source": "gemini-art.png",
+      "sourceSHA256": "92079ee98d420f4db0ac6612786f0ee6b76ff089e2e473794de22144acaf3bfc",
+      "paths": 1200
+    },
+    {
+      "theme": "gemini-anime",
+      "source": "gemini-anime.png",
+      "sourceSHA256": "d054a4e6bcdfadb578c7be15353b1ad8daf5380a6df0835f1e5457f7f2057155",
+      "paths": 1200
+    },
+    {
+      "theme": "deepseek-art",
+      "source": "deepseek-art.png",
+      "sourceSHA256": "f4252e791a5eaa4f4b46b59a2db291540c7693c78909dcb34f10c9b801ce66bd",
+      "paths": 1200
+    },
+    {
+      "theme": "deepseek-anime",
+      "source": "deepseek-anime.png",
+      "sourceSHA256": "40d96962081e0c470c1b294977dec7a47fb51b7bb38ec0c7e830a23d7e3e920a",
+      "paths": 1200
+    },
+    {
+      "theme": "doubao-art",
+      "source": "doubao-art.png",
+      "sourceSHA256": "0d28c957a1a5979e6aeb4c9db37f903f2dde6746864a310a2449ec583caac903",
+      "paths": 1200
+    },
+    {
+      "theme": "doubao-anime",
+      "source": "doubao-anime.png",
+      "sourceSHA256": "3abd64b62426ec4984e0ea6375c1f24e3872bdf08d2cd370133410ef5e0254c3",
+      "paths": 200
+    },
+    {
+      "theme": "qwen-art",
+      "source": "qwen-art.png",
+      "sourceSHA256": "009092bf9f4ea6412643ca2d50b0916b130c2fd30df1e55366b04c97ec060c9a",
+      "paths": 1200
+    },
+    {
+      "theme": "qwen-anime",
+      "source": "qwen-anime.png",
+      "sourceSHA256": "9782702bf53ed2fb2707099eb7a011d0b874aac0823761969e667f64399e62d6",
+      "paths": 1200
+    },
+    {
+      "theme": "kimi-art",
+      "source": "kimi-art.png",
+      "sourceSHA256": "4a6f9f4c43b05422db71123c73f2b448cda4f6f6308d6292615308673e69ed68",
+      "paths": 1200
+    },
+    {
+      "theme": "kimi-anime",
+      "source": "kimi-anime.png",
+      "sourceSHA256": "83f02bbbf04816a5aef8b57df926c7eeb919e268ec57ad0401d543163ee0f026",
+      "paths": 1200
+    },
+    {
+      "theme": "grok-art",
+      "source": "grok-art.png",
+      "sourceSHA256": "1294cc7a7429335d014d3f029b925535aba3e9399f5062c98fb7b9f6c8249c77",
+      "paths": 1200
+    },
+    {
+      "theme": "grok-anime",
+      "source": "grok-anime.png",
+      "sourceSHA256": "e0ffb85d30e4c5f2ad8788909d3087234a9bb45b43b50fc1e87dc0156ae5b99c",
+      "paths": 1200
+    },
+    {
+      "theme": "seed-art",
+      "source": "seed-art.png",
+      "sourceSHA256": "7e9c2e4121f00539511bbd89d5acf43ce452092b2cbe4f96360b09c595806e08",
+      "paths": 1200
+    },
+    {
+      "theme": "seed-anime",
+      "source": "seed-anime.png",
+      "sourceSHA256": "be7e0dd847196f00e03a4675beea51030805b9d8db736a77ee3a2ea5cad78a41",
+      "paths": 1200
+    },
+    {
+      "theme": "copilot-art",
+      "source": "copilot-art.png",
+      "sourceSHA256": "796956408769aba8e18725da5638613fdcb74e58bb2af24825d19ac620493f60",
+      "paths": 1200
+    },
+    {
+      "theme": "copilot-anime",
+      "source": "copilot-anime.png",
+      "sourceSHA256": "8c65ebd326630633c5df0c2910660301d64735251b8d051b2b302c22e93b9ea1",
+      "paths": 1200
+    },
+    {
+      "theme": "perplexity-art",
+      "source": "perplexity-art.png",
+      "sourceSHA256": "343a5f1a52015eb52cf6f12c0bab38a1431d20706b7a589697e94decf6bd8463",
+      "paths": 1200
+    },
+    {
+      "theme": "perplexity-anime",
+      "source": "perplexity-anime.png",
+      "sourceSHA256": "51dfdd62abc5b441f17cfc6bcaa3f8ce2f727d91c0dcc2f33f2b43e2cd9f85e0",
+      "paths": 1200
+    },
+    {
+      "theme": "minimax-art",
+      "source": "minimax-art.png",
+      "sourceSHA256": "8d4b466b9a0a65212565a650c5b60fe7f55884ececb568d59515fcc4eeabc59b",
+      "paths": 1200
+    },
+    {
+      "theme": "minimax-anime",
+      "source": "minimax-anime.png",
+      "sourceSHA256": "7deb7345173c761de77b1657c794a2bc4db8e8b7032d855b6f90a65921cdd224",
+      "paths": 1200
+    },
+    {
+      "theme": "aurora",
+      "source": "aurora-thumb.png",
+      "sourceSHA256": "c5ed57b37aabebd71614ba47f7ca06534f78cfde2f06b9e36221653d86a53d3d",
+      "paths": 15
+    },
+    {
+      "theme": "sakura",
+      "source": "sakura-thumb.png",
+      "sourceSHA256": "c3cb6287766bc7ece274a0763c01a01bf36428fac6c5be91f7c98bb4d6ed08f9",
+      "paths": 197
+    },
+    {
+      "theme": "city",
+      "source": "city-thumb.png",
+      "sourceSHA256": "126bd9f8a4e135154400b6441aa1c2bb40bf5e7cac965b540652504a8db6202c",
+      "paths": 1200
+    },
+    {
+      "theme": "ocean",
+      "source": "ocean-thumb.png",
+      "sourceSHA256": "3d5b48ff0559fa8e0a66481a696c66967e3dcc280c16df2040aae96836b57e9b",
+      "paths": 651
+    },
+    {
+      "theme": "orbit",
+      "source": "orbit-thumb.png",
+      "sourceSHA256": "85a9f215a4e17ebe3b650997a7b65587449654e3017b54a423128122ef8876c0",
+      "paths": 131
+    },
+    {
+      "theme": "ink",
+      "source": "ink-thumb.png",
+      "sourceSHA256": "60aacf0e42b0a5777e56c54f900a27447db470d31ece5b9ef8843698cd0aeca2",
+      "paths": 11
+    },
+    {
+      "theme": "forest",
+      "source": "forest-thumb.png",
+      "sourceSHA256": "e515a16229bcb51fa2b7729d5ae7a5af11d2b5c67f658fe9d6629cdc09712bc1",
+      "paths": 69
+    },
+    {
+      "theme": "crystal",
+      "source": "crystal-thumb.png",
+      "sourceSHA256": "e8dbc0862bacc11b9d886deb22fe7ca24cbf39d9ff535969937fb4d45a5f4c1b",
+      "paths": 206
+    }
+  ]
+}

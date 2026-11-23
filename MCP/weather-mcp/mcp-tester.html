@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>MCP 天气工具测试</title>
+<style>
+  body { font-family: Arial; max-width: 700px; margin: 40px auto; padding: 20px; background: #f5f5f5; }
+  h1 { color: #333; }
+  .info { background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px; font-size: 14px; }
+  .status { padding: 10px; border-radius: 5px; margin: 10px 0; font-size: 14px; }
+  .connected { background: #c8e6c9; }
+  .error { background: #ffcdd2; }
+  .result { background: white; padding: 15px; border-radius: 5px; white-space: pre-wrap; margin: 10px 0; border: 1px solid #ddd; font-size: 14px; line-height: 1.6; }
+  input, select, button { padding: 8px 12px; font-size: 14px; border-radius: 4px; border: 1px solid #ccc; }
+  button { background: #1976d2; color: white; border: none; cursor: pointer; }
+  button:hover { background: #1565c0; }
+  button:disabled { background: #ccc; cursor: not-allowed; }
+  .log { background: #263238; color: #aed581; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; margin: 10px 0; }
+  .log div { margin: 2px 0; }
+  .tools { background: #fff8e1; padding: 10px; border-radius: 5px; margin: 10px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+  <h1>🌤️ MCP 天气工具测试</h1>
+
+  <div class="info">
+    <strong>📡 MCP 服务:</strong> <span id="serviceUrl">https://70c18436.r16.vip.cpolar.cn</span><br>
+    <strong>🔗 状态:</strong> <span id="connStatus">未连接</span>
+  </div>
+
+  <div>
+    <label>服务器地址: </label>
+    <input type="text" id="serverUrl" value="https://70c18436.r16.vip.cpolar.cn" size="50">
+    <button onclick="connect()">连接</button>
+    <button onclick="disconnect()">断开</button>
+  </div>
+
+  <div class="tools">
+    <strong>可用工具:</strong>
+    <ul>
+      <li><strong>get_current_weather</strong> — 当前天气（参数: city）</li>
+      <li><strong>get_weather_forecast</strong> — 天气预报（参数: city, days）</li>
+      <li><strong>get_weather_summary</strong> — 天气简报（参数: city）</li>
+    </ul>
+  </div>
+
+  <div>
+    <label>工具名:</label>
+    <select id="toolName">
+      <option value="get_current_weather">get_current_weather（当前天气）</option>
+      <option value="get_weather_forecast">get_weather_forecast（天气预报）</option>
+      <option value="get_weather_summary">get_weather_summary（天气简报）</option>
+    </select>
+  </div>
+  <div style="margin-top: 10px;">
+    <label>城市: </label>
+    <input type="text" id="city" value="东莞" placeholder="输入城市名，如：东莞、北京、上海">
+    <label style="margin-left: 15px;">天数: </label>
+    <input type="number" id="days" value="3" min="1" max="3" style="width: 60px;">
+    <button onclick="callTool()" id="callBtn" disabled>调用工具</button>
+  </div>
+
+  <div id="status" class="status" style="display:none;"></div>
+  <div id="result" class="result" style="display:none;"></div>
+
+  <h3>📋 通信日志</h3>
+  <div id="log" class="log" style="display:none;"></div>
+
+<script>
+let sessionId = null;
+let eventSource = null;
+let msgId = 1;
+let pendingRequests = {};
+
+function log(msg, type='info') {
+  const el = document.getElementById('log');
+  el.style.display = 'block';
+  const div = document.createElement('div');
+  const time = new Date().toLocaleTimeString();
+  const color = {info:'#aed581', send:'#81d4fa', recv:'#ce93d8', error:'#ef9a9a'}[type] || '#aed581';
+  div.innerHTML = `<span style="color:#78909c">[${time}]</span> <span style="color:${color}">${msg}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function setStatus(text, isError=false) {
+  const el = document.getElementById('status');
+  el.style.display = 'block';
+  el.className = 'status ' + (isError ? 'error' : 'connected');
+  el.textContent = text;
+  document.getElementById('connStatus').textContent = text;
+}
+
+function showResult(text) {
+  const el = document.getElementById('result');
+  el.style.display = 'block';
+  el.textContent = text;
+}
+
+async function connect() {
+  const baseUrl = document.getElementById('serverUrl').value.trim();
+  if (!baseUrl) { alert('请输入服务器地址'); return; }
+
+  log(`连接 SSE: ${baseUrl}/sse`, 'info');
+  setStatus('连接中...');
+
+  try {
+    // 建立 SSE 连接
+    eventSource = new EventSource(`${baseUrl}/sse`);
+
+    eventSource.onopen = () => {
+      log('✅ SSE 连接已建立', 'info');
+      setStatus('已连接，等待 endpoint...');
+    };
+
+    eventSource.onmessage = (event) => {
+      log(`📥 SSE message: ${event.data.substring(0, 100)}`, 'recv');
+
+      if (event.data.includes('session_id=')) {
+        sessionId = event.data.split('session_id=')[1];
+        log(`✅ 获得 session_id: ${sessionId}`, 'info');
+        setStatus('已连接 ✅');
+        document.getElementById('callBtn').disabled = false;
+        initialize(baseUrl);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      log('❌ SSE 错误: ' + JSON.stringify(err), 'error');
+      setStatus('连接错误', true);
+    };
+
+  } catch (e) {
+    log('❌ 连接失败: ' + e.message, 'error');
+    setStatus('连接失败: ' + e.message, true);
+  }
+}
+
+async function initialize(baseUrl) {
+  log('发送 initialize...', 'send');
+  const currentMsgId = msgId++;
+  pendingRequests[currentMsgId] = 'initialize';
+
+  try {
+    const resp = await fetch(`${baseUrl}/messages/?session_id=${sessionId}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: currentMsgId,
+        method: "initialize",
+        params: {
+          protocolVersion: "2024-11-05",
+          capabilities: {},
+          clientInfo: { name: "html-client", version: "1.0" }
+        }
+      })
+    });
+    log(`initialize 状态: ${resp.status}`, resp.ok ? 'info' : 'error');
+
+    // 工具列表
+    setTimeout(() => listTools(baseUrl), 500);
+  } catch (e) {
+    log('❌ initialize 失败: ' + e.message, 'error');
+  }
+}
+
+async function listTools(baseUrl) {
+  log('发送 tools/list...', 'send');
+  const currentMsgId = msgId++;
+  pendingRequests[currentMsgId] = 'tools/list';
+
+  try {
+    const resp = await fetch(`${baseUrl}/messages/?session_id=${sessionId}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: currentMsgId,
+        method: "tools/list"
+      })
+    });
+    log(`tools/list 状态: ${resp.status}`, resp.ok ? 'info' : 'error');
+  } catch (e) {
+    log('❌ tools/list 失败: ' + e.message, 'error');
+  }
+}
+
+async function callTool() {
+  if (!sessionId) { alert('请先连接'); return; }
+
+  const baseUrl = document.getElementById('serverUrl').value.trim();
+  const toolName = document.getElementById('toolName').value;
+  const city = document.getElementById('city').value.trim();
+  const days = parseInt(document.getElementById('days').value) || 3;
+
+  if (!city) { alert('请输入城市名'); return; }
+
+  document.getElementById('result').style.display = 'none';
+  log(`调用工具: ${toolName}('${city}')`, 'send');
+
+  const currentMsgId = msgId++;
+  pendingRequests[currentMsgId] = toolName;
+
+  const arguments = { city: city };
+  if (toolName === 'get_weather_forecast') {
+    arguments.days = days;
+  }
+
+  try {
+    const resp = await fetch(`${baseUrl}/messages/?session_id=${sessionId}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: currentMsgId,
+        method: "tools/call",
+        params: {
+          name: toolName,
+          arguments: arguments
+        }
+      })
+    });
+
+    log(`${toolName} POST 状态: ${resp.status}`, resp.ok ? 'info' : 'error');
+    log('等待 SSE 推送结果...', 'info');
+
+    // 继续等待 SSE 推送结果
+    // SSE 推送会通过 eventSource.onmessage 接收
+  } catch (e) {
+    log('❌ 调用失败: ' + e.message, 'error');
+  }
+}
+
+function disconnect() {
+  if (eventSource) {
+    eventSource.close();
+    eventSource = null;
+    sessionId = null;
+  }
+  setStatus('未连接');
+  document.getElementById('callBtn').disabled = true;
+  log('已断开', 'info');
+}
+
+// 页面加载后自动连接
+window.onload = () => {
+  document.getElementById('log').style.display = 'block';
+  connect();
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+query {
+  shopLocales { locale primary published }
+  products(first: 50) { nodes { id title handle status } pageInfo { hasNextPage } }
+  collections(first: 50) { nodes { id title handle } pageInfo { hasNextPage } }
+  pages(first: 50) { nodes { id title handle body isPublished } pageInfo { hasNextPage } }
+  menus(first: 25) { nodes { id title handle items { id title items { id title items { id title } } } } }
+  blogs(first: 25) { nodes { id title handle articles(first: 25) { nodes { id title handle body summary tags isPublished image { altText url } } pageInfo { hasNextPage } } } }
+  shop { id name }
+}
+

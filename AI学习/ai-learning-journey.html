@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>未定义实验室 · AI Agent 学习之旅 · 200天每日计划</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#09090f;--s1:#111118;--s2:#18182a;--s3:#1e1e30;--bd:#282844;--t:#e8e6f2;--td:#9290a8;--tm:#5c5a70;--g:#34d399;--b:#60a5fa;--p:#a78bfa;--y:#fbbf24;--r:#ef4444;--a:#f97316;--pk:#f472b6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t);font-family:'Noto Sans SC',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+code{font-family:'JetBrains Mono',monospace;background:var(--s2);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--b)}
+.app{max-width:720px;margin:0 auto;padding:16px 14px 80px}
+
+/* Header */
+.hdr{text-align:center;padding:24px 0 16px}
+.hdr-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--a);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);padding:4px 14px;border-radius:100px;margin-bottom:10px}
+.hdr h1{font-size:clamp(20px,5vw,28px);font-weight:900;line-height:1.3}
+
+/* Progress */
+.prog{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:14px}
+.prog-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px}
+.prog-bar{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .5s;background:linear-gradient(90deg,var(--g),var(--b),var(--p),var(--a))}
+.phases{display:flex;gap:4px;margin-top:12px;flex-wrap:wrap}
+.ph{flex:1;min-width:56px;background:var(--s2);border-radius:8px;padding:6px 4px;text-align:center;border:1px solid transparent;cursor:pointer;transition:border-color .2s}
+.ph:hover{border-color:var(--bd)}
+.ph-icon{font-size:16px}
+.ph-stat{font-size:10px;font-weight:700;margin-top:2px}
+.ph-bar{height:3px;background:var(--s3);border-radius:2px;margin-top:4px;overflow:hidden}
+.ph-fill{height:100%;border-radius:2px;transition:width .3s}
+
+/* Nav */
+.nav{display:flex;gap:6px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.nav-btn{padding:6px 12px;border:1px solid var(--bd);border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;background:transparent;color:var(--td);white-space:nowrap}
+.nav-btn.on{background:var(--a);color:#fff;border-color:var(--a)}
+.nav-btn:hover:not(.on){background:var(--s2);color:var(--t)}
+.jump{margin-left:auto;display:flex;align-items:center;gap:6px}
+.jump label{font-size:11px;color:var(--tm)}
+.jump select{background:var(--s1);color:var(--t);border:1px solid var(--bd);border-radius:6px;padding:4px 8px;font-size:11px;font-family:inherit;cursor:pointer;max-width:200px}
+
+/* Detail View */
+.day-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.day-nav{padding:5px 12px;border:1px solid var(--bd);border-radius:6px;font-size:12px;cursor:pointer;background:transparent;color:var(--td);font-family:inherit;transition:all .15s}
+.day-nav:hover{background:var(--s2);color:var(--t)}
+.day-nav:disabled{opacity:.3;cursor:default}
+.day-info{flex:1;min-width:120px}
+.day-phase{font-size:10px;font-weight:700;letter-spacing:1px}
+.day-title{font-size:20px;font-weight:900;margin-top:2px}
+.checkin-btn{padding:6px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;border:2px solid}
+.checkin-btn.done{background:var(--g);color:#000;border-color:var(--g)}
+.checkin-btn.todo{background:transparent;color:var(--td);border-color:var(--bd)}
+.checkin-btn.todo:hover{border-color:var(--g);color:var(--g)}
+
+/* Week pills */
+.week-pills{display:flex;gap:4px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px}
+.wp{padding:5px 10px;border:1px solid var(--bd);border-radius:6px;font-size:11px;cursor:pointer;background:transparent;color:var(--td);font-family:inherit;transition:all .15s;white-space:nowrap}
+.wp.on{border-color:var(--b);color:var(--b);background:rgba(96,165,250,.08)}
+.wp.checked{color:var(--g)}
+
+/* Sections */
+.section{background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.sec-hdr{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:none;border:none;cursor:pointer;font-family:inherit;color:var(--t)}
+.sec-hdr:hover{background:rgba(255,255,255,.015)}
+.sec-title{font-size:14px;font-weight:700}
+.sec-arrow{font-size:13px;color:var(--tm);transition:transform .2s}
+.sec-arrow.open{transform:rotate(90deg)}
+.sec-body{padding:0 16px 14px;display:none}
+.sec-body.open{display:block}
+
+/* Content styles */
+.teach{font-size:14px;color:#c0bed0;line-height:2;white-space:pre-wrap}
+.key-item{display:flex;gap:10px;margin-bottom:8px;font-size:13px;color:#c0bed0;line-height:1.7}
+.key-num{color:var(--y);font-weight:700;flex-shrink:0;width:18px}
+.task-item{display:flex;gap:10px;margin-bottom:8px;font-size:13px;color:#c0bed0;line-height:1.7}
+.task-dot{color:var(--g);flex-shrink:0}
+.extend-text{font-size:13px;color:#a09eb0;line-height:1.8}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.link{font-size:12px;color:var(--b);background:rgba(96,165,250,.08);padding:4px 10px;border-radius:6px;text-decoration:none;border:1px solid transparent;transition:all .2s}
+.link:hover{border-color:var(--b)}
+.link.cn{color:var(--y);background:rgba(251,191,36,.08)}
+.link.cn:hover{border-color:var(--y)}
+
+/* Notes */
+.notes{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.notes-label{font-size:12px;font-weight:700;color:var(--tm);margin-bottom:8px}
+.notes textarea{width:100%;background:var(--s2);color:#d8d6e4;border:1px solid var(--bd);border-radius:8px;padding:12px;font-size:13px;line-height:1.7;resize:vertical;font-family:inherit;outline:none;min-height:80px}
+.notes textarea:focus{border-color:var(--b)}
+
+/* Calendar View */
+.cal{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.cal-hdr{font-size:10px;text-align:center;color:var(--tm);padding:4px 0}
+.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:6px 2px;cursor:pointer;text-align:center;min-height:38px;transition:all .15s}
+.cal-day:hover{border-color:var(--b)}
+.cal-day.checked{border-color:rgba(52,211,153,.3)}
+.cal-num{font-size:10px;font-weight:700}
+.cal-check{font-size:8px}
+
+/* List View */
+.list-phase{font-size:13px;font-weight:700;margin-bottom:8px;margin-top:16px}
+.list-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;color:#c0bed0;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.list-item:hover{background:var(--s2)}
+.list-day{font-size:11px;font-weight:700;width:36px;flex-shrink:0}
+.list-title{flex:1}
+.list-icons{font-size:11px;color:var(--tm)}
+
+/* Responsive */
+@media(max-width:480px){.app{padding:10px 10px 60px}.day-title{font-size:17px}.jump{margin-left:0;width:100%}.jump select{flex:1}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+// ==================== DATA ====================
+const PHASES=[
+  {id:1,name:"Python基础",color:"#34d399",months:"1-2月",icon:"🐍"},
+  {id:2,name:"LLM与API",color:"#60a5fa",months:"3-4月",icon:"🧠"},
+  {id:3,name:"RAG与Agent",color:"#a78bfa",months:"5-6月",icon:"🤖"},
+  {id:4,name:"MCP协议",color:"#f472b6",months:"7-8月",icon:"🔌"},
+  {id:5,name:"生产部署",color:"#fbbf24",months:"9月",icon:"🚀"},
+  {id:6,name:"毕业项目",color:"#f97316",months:"10月",icon:"🎓"}
+];
+
+const DAYS=[];
+function D(d,t,ph,wk,teach,keys,tasks,ext,links){DAYS.push({d,t,phase:ph,week:wk,teach,keys:keys||[],tasks:tasks||[],extend:ext||"",links:links||[]})}
+
+// ===== MONTH 1 =====
+D(1,"环境搭建 + 终端入门 + 第一行代码",1,1,
+`编程就是给计算机写"指令清单"。Python是一种编程语言——它的语法非常接近英语，读起来像在读句子。
+
+打个比方：你是导演，Python代码是剧本，计算机是演员。你写好剧本（代码），演员（计算机）就按剧本一行行表演。
+
+在开始之前，你需要认识一个重要工具——终端(Terminal)。终端是程序员和计算机对话的"文字界面"。你在里面输入命令，计算机执行。后面安装软件包、运行脚本、使用Git都离不开它。
+• Windows：搜索"PowerShell"或"命令提示符"
+• Mac：打开"终端"应用
+• 基本命令：cd 进入文件夹、ls(Mac)/dir(Win) 列出文件、mkdir 创建文件夹
+
+今天最重要的是搭好"舞台"——安装Python和VS Code编辑器。就像画家需要画笔和画布，程序员需要编程语言和编辑器。`,
+["终端(Terminal)是程序员的核心工具——后面的Git、pip、运行脚本都需要它","Python是全球最流行的编程语言（2026年TIOBE排名第1），特别适合AI开发","print() 是最基本的输出函数——让计算机在屏幕上显示信息"],
+["打开终端，练习cd、ls/dir、mkdir命令——在终端里创建一个\"python-learning\"文件夹","下载安装 Python 3.12+（python.org）和 VS Code（code.visualstudio.com）","在终端中输入 python --version 确认安装成功","创建 hello.py，输入 print(\"Hello World\")，在终端用 python hello.py 运行","在VS Code中打开文件，按F5运行——两种运行方式都要会"],
+"Python实际上是\"先编译再解释\"的混合模式——CPython先将源代码编译为字节码(.pyc文件)，再由Python虚拟机解释执行。但日常使用中，你只需要运行.py文件即可。了解Python的历史——1991年由Guido van Rossum创建，名字来源于英国喜剧团Monty Python。",
+[["Python官网下载","https://www.python.org/downloads/"],["VS Code下载","https://code.visualstudio.com/"],["freeCodeCamp Python 4h课程","https://www.youtube.com/watch?v=rfscVS0vtbw"],["廖雪峰·安装Python","https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624","cn"]]);
+
+D(2,"变量与数据类型",1,1,
+`变量就像一个"盒子"——你给它取个名字，然后把数据放进去。比如 name = "小明" 就是创建了一个叫name的盒子，里面放着"小明"这个文字。
+
+Python有5种基本的标量数据类型（存储单个值）：
+• str（字符串）：文字内容，用引号包裹 → "你好"
+• int（整数）：没有小数点的数字 → 42
+• float（浮点数）：有小数点的数字 → 3.14
+• bool（布尔值）：只有两个值 → True 或 False
+• NoneType：表示"什么都没有" → None
+
+此外还有集合类型（存储多个值）：list列表、dict字典、tuple元组、set集合——后面几周会学。
+
+用 type() 函数可以查看任何数据的类型。
+用 f-string 可以把变量嵌入文字中：f"我叫{name}，今年{age}岁"。f-string是Python 3.6引入的特性(PEP 498)，是目前最推荐的格式化方式。`,
+["变量命名规则：字母或下划线开头，不能有空格，区分大小写（name和Name是不同变量）","Python有5种标量类型(str/int/float/bool/None)和4种集合类型(list/dict/tuple/set)","f-string 是最常用的字符串格式化方式：f\"文字{变量}\"——Python 3.6+ 支持"],
+["创建4个变量：姓名(str)、年龄(int)、身高(float)、是否学生(bool)","用 f-string 格式化输出个人信息卡","做类型转换练习：int(\"25\")、str(42)、float(\"3.14\")","用 type() 检查每个变量的类型","计算出生年份 = 2026 - age"],
+"Python中变量不需要声明类型——这叫\"动态类型\"。试试 print(0.1 + 0.2)，你会发现结果不是0.3——这是所有编程语言都有的浮点数精度问题。",
+[["廖雪峰·数据类型和变量","https://www.liaoxuefeng.com/wiki/1016959663602400/1017063826246112","cn"],["菜鸟教程·数据类型","https://www.runoob.com/python3/python3-data-type.html","cn"],["Python官方教程(中文)","https://docs.python.org/zh-cn/3/tutorial/","cn"]]);
+
+D(3,"字符串深入操作",1,1,
+`字符串是编程中最常用的数据类型。把它想象成一串珠子——每个字符都有编号（从0开始）。
+
+索引："Hello"[0] → "H"（第1个字符，编号0）
+切片："Hello"[1:4] → "ell"（编号1到编号4之前）
+反转："Hello"[::-1] → "olleH"
+
+字符串有很多内置方法（想象成自带的"工具箱"）：
+• .upper() → 全部大写    • .lower() → 全部小写
+• .split() → 按空格拆成列表   • .replace("旧","新") → 替换
+• .strip() → 去除首尾空格     • .count("x") → 统计次数`,
+["字符串索引从0开始，s[-1] 是最后一个字符","切片语法 s[start:stop:step]，stop位置不包含在内","字符串是不可变的(immutable)——不能直接修改某个字符，只能创建新字符串"],
+["练习索引：取第1个、最后1个、中间字符","练习切片：取前5个字符、后3个字符、每隔一个取","用 split() 拆句子为单词列表，用 join() 拼接回来","写文本分析器：统计字符数、单词数、替换关键词"],
+"Python3中所有字符串都是Unicode——中文、emoji都能处理。试试 len(\"你好世界\") 结果是4。",
+[["廖雪峰·字符串和编码","https://www.liaoxuefeng.com/wiki/1016959663602400/1017075323632896","cn"]]);
+
+D(4,"输入与条件判断",1,1,
+`程序需要"思考"能力。条件语句让程序有了判断力。
+
+想象你是快递分拣员：
+• 如果(if) 包裹 > 20kg → 大件区
+• 否则如果(elif) 包裹 > 5kg → 中件区
+• 否则(else) → 小件区
+
+Python用缩进（4个空格）标记代码块——这是Python独特的设计。
+
+input() 获取用户输入。注意：它返回的总是字符串！
+input("请输入年龄:") 得到 "25"（字符串），不是 25（数字）。
+需要 int(input(...)) 转换。
+
+比较运算符：== != > < >= <=
+逻辑运算符：and  or  not`,
+["if/elif/else 的代码块必须缩进4个空格","input() 返回的永远是字符串，要数字必须用 int() 或 float() 转换","== 是比较（判断相等），= 是赋值（给变量赋值）——最常混淆的点"],
+["写BMI计算器：输入身高体重，判断健康范围","写成绩等级程序：0-100分对应A/B/C/D/F","写简单登录验证：判断用户名和密码","用 and/or 判断闰年"],
+"Python支持三元运算简写：result = \"成年\" if age >= 18 else \"未成年\"。另外 None、0、空字符串、空列表在条件中都是False。",
+[["廖雪峰·条件判断","https://www.liaoxuefeng.com/wiki/1016959663602400/1017099478626848","cn"],["菜鸟·条件语句","https://www.runoob.com/python3/python3-conditional-statements.html","cn"]]);
+
+D(5,"复习 + 调试入门 + 猜数字游戏",1,1,
+`本周学了5个核心概念：变量、数据类型、字符串、输入、条件判断。
+
+今天除了复习，还要学一个贯穿整个编程生涯的关键技能——读错误信息(Traceback)。
+
+当代码出错时，Python会打印"追溯信息"(Traceback)，它从下往上读：
+• 最底行是错误类型和描述：TypeError: can only concatenate str to str
+• 上面几行是出错位置：File "xxx.py", line 10
+• 学会读Traceback = 学会自己找bug，不需要每次都问人
+
+常见错误类型速查：
+• NameError：变量名拼错了
+• TypeError：类型不匹配（字符串+数字）
+• SyntaxError：语法写错了（忘了冒号、引号不配对）
+• IndentationError：缩进有问题
+
+🔧 调试技巧：在可疑代码前后加 print() 查看变量值——这叫"print调试法"，简单但极其有效。`,
+["Traceback从底部往上读——最底行是错误类型，上面是出错的文件和行号","print()调试法：在可疑位置打印变量值来定位问题——专业开发者也经常用","遇到错误先自己读Traceback尝试理解，实在看不懂再复制错误信息问Claude"],
+["不看笔记完成Claude出的10道测验题","写猜数字游戏v1：秘密数字42，3次机会，给提示","Review本周所有代码，添加注释","整理学习笔记，记录遇到的错误和解决方法"],
+"费曼学习法：如果你能用简单的话向别人讲清楚一个概念，说明你真正理解了它。试着向Claude解释\"什么是变量\"。",
+[["Codecademy Python 3","https://www.codecademy.com/learn/learn-python-3"],["哈佛CS50P","https://cs50.harvard.edu/python/2022/"]]);
+
+D(6,"for循环基础",1,2,`想象你有100张试卷要批改。你不会写100行代码，而是说"对于(for)每一张试卷，执行批改"。
+
+for循环核心语法：for item in collection: 操作
+
+range()函数是for的好搭档：
+• range(5) → 0,1,2,3,4（到5之前停止）
+• range(1,6) → 1,2,3,4,5（指定起点）
+• range(0,10,2) → 0,2,4,6,8（步长为2）
+
+break：提前退出循环   continue：跳过本次`,
+["range(n) 生成0到n-1，不包含n","for循环适合\"已知次数\"的重复","嵌套循环：外层每执行1次，内层执行完整一轮"],
+["打印1到100所有偶数","计算1+2+...+100（答案5050）","打印九九乘法表","统计字符串中元音字母个数"],
+"for还可用enumerate()同时获取索引和值：for i, item in enumerate(list)。",
+[["廖雪峰·循环","https://www.liaoxuefeng.com/wiki/1016959663602400/1017100774566560","cn"],["菜鸟·for循环","https://www.runoob.com/python3/python3-for-loop.html","cn"]]);
+
+D(7,"while循环 + 猜数字升级",1,2,`for循环像"遍历所有题目"——数量已知。while循环像"直到铃声响"——不知何时结束。
+
+while condition: 循环体
+
+经典模式：
+while True:
+    user = input("输入(q退出):")
+    if user == "q":
+        break
+
+今天升级猜数字：random.randint(1,100)生成随机数，while循环无限猜。`,
+["while适合\"未知次数\"的重复","while True + break 是最常用的交互程序模式","确保循环条件最终变False，否则无限循环"],
+["while实现倒计时：10,9,...1,发射！","升级猜数字：随机数+无限猜+次数统计","添加\"退出\"功能","密码验证：最多3次尝试"],
+"试用while实现斐波那契数列（1,1,2,3,5,8,13...）。",
+[["菜鸟·while循环","https://www.runoob.com/python3/python3-while-loop.html","cn"]]);
+
+D(8,"列表(List)入门",1,2,`变量只存一个数据。30个成绩怎么办？列表(List)就是"收纳箱"——存任意多个数据。
+
+scores = [85, 92, 78, 95, 88]
+
+列表有索引和切片（同字符串），但列表是可变的：
+• .append(90) → 末尾添加
+• .insert(0, 100) → 指定位置插入
+• .remove(78) → 按值删除
+• .pop(2) → 按索引删除并返回
+• len(scores) → 长度
+• 90 in scores → 判断是否存在`,
+["列表用[]创建，元素逗号分隔","列表是可变的(mutable)——可增删改（字符串不行）","append()最常用，insert()可指定位置"],
+["创建购物清单，练习增删改查","写\"待办管理器\"：添加、删除、查看","for循环遍历列表找最大最小值（不用max/min）","猜数字游戏记录猜测历史到列表"],
+"列表可嵌套：[[1,2],[3,4]] 是2x2二维列表。",
+[["廖雪峰·list和tuple","https://www.liaoxuefeng.com/wiki/1016959663602400/1017092876846880","cn"]]);
+
+D(9,"列表进阶 + 列表推导式",1,2,`列表推导式(List Comprehension)是Python最优雅的特性——一行创建列表。
+
+普通写法（4行）：
+squares = []
+for x in range(10):
+    squares.append(x**2)
+
+推导式（1行）：
+squares = [x**2 for x in range(10)]
+
+加条件过滤：
+evens = [x for x in range(100) if x % 2 == 0]`,
+["推导式语法：[表达式 for 变量 in 可迭代 if 条件]","sort()改原列表，sorted()返回新列表","enumerate()同时获取索引和值"],
+["推导式生成1-100所有3的倍数","推导式筛选长度>5的字符串","学生成绩二维列表：最高分、平均分、排序","手写冒泡排序算法"],
+"还有字典推导式：{k:v for k,v in pairs}。数据处理中极常用。",
+[["菜鸟·列表推导式","https://www.runoob.com/python3/python3-list-comprehension.html","cn"]]);
+
+D(10,"Git入门 + 石头剪刀布",1,2,`本周学了循环和列表。今天引入一个新工具——Git版本控制。
+
+Git记录代码的每一次"存档"(commit)——搞砸了可以"读档"。比喻：Git就像游戏存档系统。
+
+今天只学最基础的3个命令：
+git init → 在项目文件夹中初始化Git（只需做一次）
+git add . → 把所有修改加入"待存档区"
+git commit -m "描述" → 确认存档，写一句话描述改了什么
+
+以后每完成一个功能就commit一次——这个习惯会救你无数次。
+
+然后做石头剪刀布项目，并用Git记录你的开发过程。`,
+["git init只需做一次，git add + git commit是日常操作","commit信息要简短清晰：\"添加猜数字功能\"而非\"改了代码\"","从今天起，每个项目都用Git管理——养成习惯"],
+["安装Git（git-scm.com），在终端输入 git --version 确认","给本周的项目文件夹执行 git init","完成石头剪刀布游戏：random.choice + while循环 + 列表记录","每完成一个功能就 git add . && git commit -m \"描述\"","用 git log 查看你的提交历史"],"从今天起所有项目都要用Git。下个月会学GitHub（把代码备份到云端）和更多Git命令（分支、回退等）。",
+[["Git下载安装","https://git-scm.com/downloads"],["廖雪峰·Git教程","https://www.liaoxuefeng.com/wiki/896043488029600","cn"],["Python random模块","https://docs.python.org/zh-cn/3/library/random.html","cn"]]);
+
+// Days 11-20
+D(11,"函数定义与调用",1,3,`BMI计算需要在5个地方用——复制5遍？改公式改5处？函数就是"代码打包机"。
+
+def calculate_bmi(weight, height):
+    """计算BMI指数"""
+    return weight / height**2
+
+函数三要素：名字（做什么）、参数（输入）、返回值（输出）
+默认参数：def greet(name, greeting="你好")`,
+["函数用def定义，return返回结果","函数名应是动词短语，描述做什么","默认参数让调用更灵活"],
+["写 is_prime(n) 判断质数","写温度转换函数","写 password_strength(pw)","重构猜数字游戏为函数版"],
+"函数是\"一等公民\"——可赋值给变量、作为参数传递。",
+[["廖雪峰·函数","https://www.liaoxuefeng.com/wiki/1016959663602400/1017105145133280","cn"]]);
+
+D(12,"函数进阶与作用域",1,3,`局部变量——函数内创建，函数结束消失。全局变量——整个程序可访问。
+
+*args：接收任意数量位置参数
+def total(*numbers): return sum(numbers)
+
+**kwargs：接收任意数量关键字参数
+def info(**data): print(data)
+
+lambda匿名函数：square = lambda x: x**2`,
+["局部和全局同名时，函数内优先用局部","*args收集为元组，**kwargs收集为字典","lambda适合简短的一次性函数"],
+["写 average(*numbers)","写 format_info(**kwargs)","用lambda+sorted自定义排序","写简单计算器函数"],"闭包(Closure)是函数式编程的核心——函数可以\"记住\"创建时的环境变量。这是装饰器的底层原理，Day 24会学到。",
+[["廖雪峰·函数参数","https://www.liaoxuefeng.com/wiki/1016959663602400/1017261630425888","cn"]]);
+
+D(13,"字典(Dictionary)",1,3,`列表用数字索引。字典用"名字"索引——键值对集合。
+
+比喻：列表像书架（按编号找），字典像电话簿（按姓名找）。
+
+student = {"name": "小明", "age": 20, "score": 85}
+student["name"] → "小明"
+student.get("phone", "未填写") → "未填写"（安全访问）
+
+重要：API返回的JSON本质就是字典！`,
+["字典key必须不可变（字符串、数字），value可任意",".get(key, default) 安全访问——不存在返回默认值而非报错","字典查找速度极快O(1)，比列表O(n)快得多"],
+["写\"英汉词典\"程序","用字典统计每个单词出现次数","嵌套字典练习","模拟API响应解析"],
+"Counter是统计神器：from collections import Counter; Counter(\"hello\") → {'l':2,...}",
+[["廖雪峰·dict和set","https://www.liaoxuefeng.com/wiki/1016959663602400/1017104324028448","cn"]]);
+
+D(14,"元组、集合与数据结构选择",1,3,`4种核心数据结构各有所长：
+
+📦 列表(list)：有序可变，允许重复 → 购物清单
+🔒 元组(tuple)：有序不可变 → 坐标(x,y)
+📖 字典(dict)：键值对 → API响应、配置
+🎯 集合(set)：无序不重复 → 去重、交集并集
+
+选择原则：要顺序？list/tuple。按名称查找？dict。去重？set。不该被改？tuple。`,
+["元组()创建后不能修改","集合自动去重：set([1,1,2,2,3])→{1,2,3}","集合支持 & 交集、| 并集、- 差集"],
+["用集合找两个列表的共同/独有元素","词频统计综合练习","模拟购物车{商品:数量}算总价"],"namedtuple让元组有名字：Point = namedtuple('Point', ['x','y'])。后面学Pydantic（AI开发标配）时会深入。",
+[["菜鸟·元组","https://www.runoob.com/python3/python3-tuple.html","cn"]]);
+
+D(15,"复习 + 通讯录项目 + GitHub入门",1,3,"本周：函数、字典、元组、集合。项目：简易通讯录。\n\n数据：[{\"name\":\"小明\",\"phone\":\"138...\"},...]\n每个操作封装为函数，while True交互菜单。\n\n今天同时学GitHub——把代码备份到云端。GitHub是代码的\"云盘+社交平台\"：\n1. 在github.com注册账号\n2. 创建新仓库(Repository)\n3. git remote add origin https://github.com/你/仓库.git\n4. git push -u origin main\n\nREADME.md是项目说明书——用Markdown格式写项目介绍。",
+["GitHub仓库是你的在线作品集——后面求职/展示都会用到","git push把本地commit推送到GitHub，git pull拉取远程更新",".gitignore文件告诉Git忽略某些文件（如.env密钥文件）"],
+["完成通讯录完整实现（增删改查+函数封装）","创建GitHub账号，创建第一个仓库","把通讯录项目push到GitHub","写一份简单的README.md（项目介绍+如何运行）","创建.gitignore文件（先加入__pycache__/）"],"GitHub Pages可以免费托管静态网站。GitHub Actions可以自动运行测试。这些进阶功能后面会接触到。",
+[["GitHub注册","https://github.com"],["GitHub SSH配置","https://docs.github.com/en/authentication/connecting-to-github-with-ssh"],["廖雪峰·远程仓库","https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416","cn"]]);
+
+D(16,"文件读写",1,4,`程序退出数据就没了——因为只存在内存。文件操作让数据"持久化"。
+
+比喻：内存是桌面（关机清空），硬盘是文件柜（一直保存）。
+
+open()的4种模式：
+• "r" 只读   • "w" 写入（覆盖！）
+• "a" 追加   • "r+" 读写
+
+最佳实践——with语句（自动关闭）：
+with open("data.txt", "r") as f:
+    content = f.read()`,
+["永远用with语句——自动关闭文件","\"w\"模式会覆盖！追加用\"a\"","逐行读大文件：for line in f: 更省内存"],
+["读文件统计行数、单词数","写日记程序：每次追加带日期内容","通讯录改为文件存储","CSV文件读写练习"],"推荐用pathlib库处理路径：from pathlib import Path。它比os.path更优雅。处理中文文件时注意编码：open('file.txt', encoding='utf-8')。",
+[["廖雪峰·文件读写","https://www.liaoxuefeng.com/wiki/1016959663602400/1017607179232640","cn"]]);
+
+D(17,"错误处理 + 调试技能",1,4,`int("abc")会崩溃。try/except让你"接住"错误。
+
+try:
+    age = int(input("年龄:"))
+except ValueError:
+    print("请输入数字！")
+
+比喻：try是"尝试做某事"，except是"万一出错的备用方案"。
+
+今天还要深入学调试(Debugging)——找bug是程序员50%的工作。
+
+三种调试方法：
+1. print()调试法：在可疑位置打印变量值（最简单最常用）
+2. VS Code断点调试：点击行号左侧设置断点，按F5逐步执行，查看变量状态
+3. 读Traceback：从底部往上读，最底行是错误类型
+
+常见异常：ValueError、TypeError、FileNotFoundError、KeyError、IndexError`,
+["try/except捕获特定异常，不要写空的except:——会掩盖所有错误","VS Code断点调试：点行号左侧红点→F5启动→F10逐行→查看变量面板","print(f\"DEBUG: x={x}, type={type(x)}\") 是最快的调试手段"],
+["给所有之前的项目添加错误处理","写\"安全计算器\"：处理除以零、非数字等所有异常","用VS Code断点调试一段有bug的代码——体验逐步执行","故意写3个有bug的程序，练习通过Traceback定位并修复","用raise主动抛出异常：当输入不满足条件时"],
+"assert语句是简单的自测工具：assert 1+1 == 2（通过则无事，失败则报错）。后面学pytest时会深入。Python还有logging模块比print调试更专业，但初期print就够用。",
+[["廖雪峰·错误处理","https://www.liaoxuefeng.com/wiki/1016959663602400/1017598873256736","cn"],["VS Code Python调试","https://code.visualstudio.com/docs/python/debugging"]]);
+
+D(18,"JSON处理（极其重要！）",1,4,`JSON是互联网数据交换标准。它和Python字典几乎一样：
+{"name":"Claude","version":4.6,"capabilities":["text","vision"]}
+
+所有AI API的请求和响应都是JSON格式！
+
+json模块4个核心函数：
+• json.dumps(dict) → 字典变字符串
+• json.loads(str) → 字符串变字典
+• json.dump(dict, file) → 写入文件
+• json.load(file) → 从文件读取
+
+json.dumps(data, ensure_ascii=False, indent=2) 中文正常显示+格式化`,
+["JSON的key必须是双引号字符串","dumps()操作字符串，dump()操作文件（带s的是string）","嵌套JSON用.get()链式访问更安全"],
+["用JSON重写通讯录存储","学生成绩系统用JSON存储","练习解析嵌套JSON","json.dumps的indent和ensure_ascii参数"],
+"这是本月最关键的一天。后面每个API调用都是JSON。多做练习！",
+[["廖雪峰·JSON","https://www.liaoxuefeng.com/wiki/1016959663602400/1017218429867424","cn"],["JSON在线验证","https://jsonlint.com/"]]);
+
+D(19,"模块与标准库",1,4,`Python标准库极其丰富——"batteries included"。
+
+常用标准库：
+• os：文件路径  • json：JSON处理
+• datetime：日期  • random：随机数  • csv：表格
+
+pip安装第三方库：pip install requests
+
+创建自己的模块：函数放在单独.py文件中，import它。`,
+["import只是告诉Python\"要用这个库\"","pip install安装到当前环境","创建自己的模块：单独.py文件+import"],
+["用datetime算距下个生日天数","用os列出.py文件","用csv读写成绩表","整理工具函数为my_tools.py模块"],"探索更多标准库：pathlib（现代路径操作）、collections（Counter等高级数据结构）、itertools（迭代工具）。Python标准库文档是最权威参考。",
+[["Python标准库(中文)","https://docs.python.org/zh-cn/3/library/","cn"]]);
+
+D(20,"月度总复习 + 记账本项目",1,4,`🎉 第1个月结束！你从零基础变成了能写Python程序的人。
+
+📌 螺旋复习(Spiral Review)：从今天起，每个月度复习不只看本月内容，还要回顾之前月份的核心概念，在更高层次重新理解它们。教育学家Bruner证明，螺旋式课程（同一主题反复在更高层次出现）的学习效果远超线性课程。
+
+本月所有技能清单：变量、数据类型(含None)、字符串、条件、for/while循环、列表、列表推导式、字典、元组、集合、函数、文件读写、错误处理、调试、JSON、模块、终端基础、Git基础、GitHub推送。
+
+月度毕业项目：个人记账本——综合所有知识。`,
+["这是目前最复杂的程序——综合所有知识点","每个功能封装为函数 + JSON持久化 + 错误处理 + Git版本控制","螺旋复习：下个月学OOP时，会用新视角重新理解函数和字典"],
+["完成记账本完整实现","查询和统计功能","让Claude出月度综合考试","整理所有笔记和代码","记账本代码push到GitHub"],"🎓 恭喜完成最难的第一步！编程学习的第一个月淘汰率最高，你坚持下来了。下个月学面向对象和API调用，为AI开发做准备。",
+[["Codecademy Python 3","https://www.codecademy.com/learn/learn-python-3"],["哈佛CS50P","https://cs50.harvard.edu/python/2022/"]]);
+
+// Days 21-40 Month 2
+const m2=[
+// Week 5: OOP (same content, minor improvements)
+[21,"类与对象基础",5,"class是蓝图，object是实例。比如Student类是蓝图，小明是具体的Student对象。\n\n__init__是构造函数，self代表\"这个对象自己\"。\n\n🔄 螺旋复习：还记得函数吗？类的方法(method)本质就是函数——只是它属于某个类，第一个参数永远是self。字典可以存任意数据，但类可以同时存数据(属性)和操作(方法)。",["class定义蓝图，ClassName()创建实例","__init__是构造函数，self引用实例自身","类的方法本质就是函数——螺旋回顾第3周函数知识"],["创建BankAccount类：存款、取款、查余额","创建Student类：姓名、成绩、计算平均分","多个对象互相交互（转账操作）","用git commit记录每一步进展"],"Python中一切皆对象——int、str、list都是类。type(42)→<class 'int'>。bool甚至是int的子类：True+True==2。",[["廖雪峰·类和实例","https://www.liaoxuefeng.com/wiki/1016959663602400/1017495723838528","cn"]]],
+[22,"继承与方法重写",5,"继承让子类自动拥有父类一切，还能添加修改。\n\n比喻：电动车继承汽车——有方向盘轮子，额外加电池。\n\nclass SavingsAccount(BankAccount):\n    def __init__(self, name, balance, rate):\n        super().__init__(name, balance)\n        self.rate = rate",["class Child(Parent): 语法","super()调用父类方法——最常用在__init__中","方法重写：子类定义同名方法会覆盖父类"],["扩展银行系统：SavingsAccount和CheckingAccount","写Animal→Dog→GoldenRetriever继承链","用isinstance()检查对象类型","给继承链中的每个类添加__str__方法"],"多重继承在Python中允许但容易复杂化。AI Agent开发中很少用到多重继承，了解概念即可。",[["廖雪峰·继承和多态","https://www.liaoxuefeng.com/wiki/1016959663602400/1017502939956896","cn"]]],
+[23,"特殊方法与@property",5,"__str__：print时显示什么  @property：方法伪装成属性\n\nclass Circle:\n    def __init__(self, r):\n        self.radius = r\n    @property\n    def area(self):\n        return 3.14159 * self.radius**2\n\nc = Circle(5)\nprint(c.area)  # 不需要括号！像属性一样访问",["__str__让print输出有意义信息而非<object at 0x...>","@property把方法伪装成只读属性——调用时不需要括号","__init__、__str__、__repr__是最常用的三个特殊方法"],["用OOP重写通讯录——Contact类、ContactBook类","给所有类添加__str__和__repr__","用@property实现Circle.area、Student.grade等计算属性"],"dataclass是Python 3.7+简化写法：自动生成__init__等。后面学Pydantic（AI开发标配）时会深入。",[["廖雪峰·定制类","https://www.liaoxuefeng.com/wiki/1016959663602400/1017590712115904","cn"]]],
+[24,"装饰器入门（重要！）",5,"装饰器是\"包装函数的函数\"。比喻：手机+手机壳——功能不变，多了保护。\n\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        import time\n        start = time.time()\n        result = func(*args, **kwargs)\n        print(f\"{func.__name__} 耗时 {time.time()-start:.3f}秒\")\n        return result\n    return wrapper\n\n@timer\ndef slow():\n    time.sleep(1)\n\nMCP中 @tool、@resource 就是把普通函数注册为AI工具——原理完全相同。",["装饰器本质：接收函数参数，返回新函数","@decorator等价于 func = decorator(func)——语法糖","MCP的@tool装饰器就是注册AI工具——现在理解原理后面用起来不迷糊"],["写@timer计时装饰器","写@logger日志装饰器：记录函数名、参数、返回值","写@retry(max_attempts=3)重试装饰器：失败自动重试","理解为什么MCP用装饰器注册工具——预习未来"],"用functools.wraps保留原函数信息（函数名、docstring等）。装饰器可以接收参数（需三层嵌套），但初期只需掌握基本形式。",[["廖雪峰·装饰器","https://www.liaoxuefeng.com/wiki/1016959663602400/1017451662295584","cn"]]],
+[25,"虚拟环境 + OOP复习项目",5,"每个项目应该有独立的Python环境——避免包版本冲突。\n\npython -m venv myenv → 创建\nsource myenv/bin/activate → 激活(Mac/Linux)\nmyenv\\\\Scripts\\\\activate → 激活(Windows)\npip install requests → 在环境内安装\npip freeze > requirements.txt → 记录依赖\n\nOOP周项目：学生管理系统——Student、Course、GradeBook类。",["每个新项目都创建独立的虚拟环境","requirements.txt是依赖清单——别人能完美复现你的环境","pip freeze > requirements.txt 记录所有包及版本"],["为本周OOP项目创建虚拟环境","完成学生管理系统（OOP设计+JSON持久化）","生成requirements.txt","git add + commit + push到GitHub"],"uv是比pip更快的Python包管理器（Rust写的），可以替代venv+pip。Poetry则是依赖管理的高级工具。这些在后面的项目中可以尝试。",[["Python venv文档(中文)","https://docs.python.org/zh-cn/3/library/venv.html","cn"]]],
+// Week 6: HTTP/API (same structure, strengthened)
+[26,"HTTP基础 + 第一个API调用",6,"API就是\"程序间对话\"。比喻：餐厅里你是客户端，厨房是服务器，服务员是API。\n\nHTTP是对话协议：\n• GET = \"给我看菜单\"（获取数据）\n• POST = \"帮我下单\"（提交数据）\n• 状态码：200=成功  404=找不到  401=未授权  500=服务器出错\n\nimport requests\nresponse = requests.get(\"https://api.example.com/data\")\nif response.status_code == 200:\n    data = response.json()  # JSON → 字典\n\n🔄 螺旋复习：response.json()返回的就是字典！第3周学的字典和第4周学的JSON在这里完美汇合。",["GET获取数据，POST提交数据——两个最常用的HTTP方法","response.json()把JSON响应直接转为Python字典——字典和JSON知识在这里融合","状态码200=成功，4xx=你的问题，5xx=服务器的问题"],["安装requests：pip install requests（在虚拟环境中！）","调用免费天气API（wttr.in），解析JSON响应","打印格式化的天气信息","处理请求失败：检查status_code，加try/except"],"RESTful API是Web API设计规范：URL标识资源+HTTP方法标识操作。GET /users获取用户列表，POST /users创建新用户。",[["Requests快速上手(中文)","https://docs.python-requests.org/zh_CN/latest/user/quickstart.html","cn"],["wttr.in天气API","https://wttr.in/:help"]]],
+[27,"POST请求与认证",6,"POST提交数据——比如登录、创建内容。认证是\"证明你是谁\"。\n\nAPI认证三种方式：\n• API Key：像门禁卡——在请求头或URL中传递\n• Bearer Token：像VIP手环——Authorization: Bearer xxx\n• OAuth：像第三方登录（用微信登录某APP）\n\nrequests.post(\n    url,\n    json={\"title\": \"hello\"},  # 发送JSON数据\n    headers={\"Authorization\": \"Bearer your-token\"}\n)",["POST用json=参数发送JSON数据（不是data=）","API Key放在headers中：{\"X-API-Key\": \"your-key\"}","response.raise_for_status()在状态码非200时自动抛异常"],["用POST请求测试httpbin.org（免费API测试工具）","调用需要API Key的服务（如OpenWeatherMap免费版）","实现完整的请求→响应→解析→展示流程","添加超时设置和错误处理"],"requests库的Session对象可保持cookies和认证信息。aiohttp是异步版本——下周学。",[["httpbin.org测试","https://httpbin.org/"]]],
+[28,"环境变量与密钥管理（安全！）",6,"⚠️ 千万别把API Key写在代码里！上传到GitHub后任何人都能冒充你调用API。\n\n解决方案——环境变量：\n1. pip install python-dotenv\n2. 创建.env文件：API_KEY=sk-xxx\n3. 代码中读取：\n   from dotenv import load_dotenv\n   import os\n   load_dotenv()\n   key = os.getenv(\"API_KEY\")\n4. 把.env加入.gitignore！\n\n比喻：API Key是你家钥匙。代码是公开的房子图纸——你不会把钥匙画在图纸上。\n\nOpenAI官方安全指南也明确建议使用环境变量管理密钥。",["环境变量是系统级键值对，不属于代码——最重要的安全习惯","python-dotenv从.env文件加载环境变量到os.environ",".gitignore阻止.env上传——这是Day 1就该养成的意识，现在正式落实"],["安装python-dotenv，创建.env文件","重构天气工具：API Key存储在.env中","在.gitignore中添加.env","在README中说明\"请创建.env文件并添加API_KEY=xxx\"","验证：git status确认.env不在追踪列表中"],"生产环境用AWS Secrets Manager、HashiCorp Vault等密钥管理服务。Docker用-e参数传递环境变量。",[["python-dotenv","https://pypi.org/project/python-dotenv/"],["OpenAI密钥安全指南","https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety"]]],
+[29,"异步编程入门(async/await)",6,"同步=餐厅傻等一道做完点下道。异步=同时点3道同时做。\n\nasync def fetch_weather(city):\n    # 假设这里是异步HTTP请求\n    response = await aiohttp_session.get(url)\n    return await response.json()\n\n# 同时查3个城市！\nresults = await asyncio.gather(\n    fetch_weather(\"北京\"),\n    fetch_weather(\"上海\"),\n    fetch_weather(\"广州\")\n)\n\n关键：先掌握同步requests（昨天学的），再理解为什么需要异步。MCP服务器和Claude Agent SDK全部基于async。",["async def定义异步函数，await等待异步操作完成","asyncio.gather()并发执行多个任务——比顺序执行快N倍","先掌握同步API调用，再学async——顺序很重要"],["写异步倒计时：asyncio.sleep模拟等待","用aiohttp异步版天气工具：同时查5个城市","计时比较：同步查5城 vs 异步查5城的耗时差异","理解事件循环event loop的基本概念"],"aiohttp是异步HTTP客户端。FastAPI（后面学部署时用）原生支持async。Claude Agent SDK的核心函数都是async的。",[["廖雪峰·异步IO","https://www.liaoxuefeng.com/wiki/1016959663602400/1017959540289152","cn"],["aiohttp文档","https://docs.aiohttp.org/"]]],
+[30,"复习 + 每日简报项目",6,"本周：HTTP请求、API认证、环境变量、异步编程。\n\n项目：每日简报生成器。\n\n🔄 螺旋复习：这个项目串起了几乎所有知识——函数（M1W3）、字典（M1W3）、JSON（M1W4）、文件写入（M1W4）、错误处理（M1W4）、API调用（本周）、环境变量（本周）、异步（本周）、Git（M1W2）。如果你能独立完成这个项目，说明前6周的基础非常扎实。",["API调用完整流程：构造请求→发送→检查状态→解析JSON→处理数据","环境变量保护敏感信息是必须养成的习惯","异步并行调用让多个API请求同时执行"],["完成每日简报生成器（至少调用2个API）","用环境变量管理所有API Key","用async并行调用多个API","结果保存为格式化JSON文件","git commit + push到GitHub"],"试试用schedule库定时运行简报生成器——每天早上自动生成。这就是最简单的自动化，后面学Agent时会用更高级的调度方式。",[["NewsAPI","https://newsapi.org/"],["ExchangeRate-API","https://www.exchangerate-api.com/"]]],
+// Week 7: RESTRUCTURED - Testing, debugging tools, dev practices (Git/terminal already moved earlier)
+[31,"pytest测试入门",7,"写代码不难，写正确的代码才难。测试就是\"用代码检查代码\"——自动验证你的函数是否正确。\n\npytest是Python最流行的测试框架：\n\n# test_calculator.py\ndef test_add():\n    assert add(2, 3) == 5\n\ndef test_divide_by_zero():\n    with pytest.raises(ZeroDivisionError):\n        divide(1, 0)\n\n运行：pytest test_calculator.py\n\n比喻：测试就像考试——你出题（测试用例），让代码当考生。考不过说明代码有bug。",["assert 表达式——如果为False就报错，为True就通过","测试函数以test_开头，pytest会自动发现并运行","先写测试再写代码叫TDD(测试驱动开发)——专业开发者常用"],["安装pytest：pip install pytest","为之前的BMI计算函数写3个测试用例","为is_prime函数写测试：包括边界情况(0, 1, 2, 负数)","为BankAccount类写测试：存款、取款、余额检查","运行pytest，学会读测试输出"],"AI Agent开发中，测试更加关键——你需要验证Agent的工具是否正确调用、输出是否符合预期。LangChain提供GenericFakeChatModel来模拟LLM响应做测试。",[["pytest官方文档","https://docs.pytest.org/"],["菜鸟·pytest教程","https://www.runoob.com/pytest/pytest-tutorial.html","cn"]]],
+[32,"高级调试技巧与代码质量",7,"Day 5学了基础调试。今天进阶——像专业开发者一样debug。\n\nVS Code调试器详解：\n• 断点(Breakpoint)：点击行号左侧设置红点\n• F5启动调试，F10单步执行，F11进入函数内部\n• 变量面板：实时查看所有变量值\n• 监视表达式：监控特定表达式的值变化\n• 调用栈：看到当前执行到了函数调用的哪一层\n\nlogging模块比print调试更专业：\nimport logging\nlogging.basicConfig(level=logging.DEBUG)\nlogging.debug(f\"x = {x}\")  # 可以随时关闭，不用删除",["VS Code调试器的断点+F10单步是最强大的调试工具","logging模块比print更专业：可以设级别(DEBUG/INFO/WARNING/ERROR)，可以输出到文件","学会给bug分类：语法错误→逻辑错误→运行时错误——不同类型用不同方法查"],["用VS Code断点调试一个有3个bug的程序","用logging替代print调试——给之前的项目加logging","写一段包含逻辑错误的代码，用断点单步执行找出问题","练习代码审查(code review)：让Claude review你最近的代码"],"pylint和flake8是代码质量检查工具——自动发现潜在问题。black是代码格式化工具——一键统一代码风格。这些工具在团队协作中非常重要。",[["VS Code Python调试","https://code.visualstudio.com/docs/python/debugging"],["logging教程(中文)","https://docs.python.org/zh-cn/3/howto/logging.html","cn"]]],
+[33,"类型提示与代码规范",7,"类型提示(Type Hints)告诉读者每个变量是什么类型：\n\ndef calculate_bmi(weight: float, height: float) -> float:\n    \"\"\"计算BMI指数\n    \n    Args:\n        weight: 体重(kg)\n        height: 身高(m)\n    Returns:\n        BMI指数\n    \"\"\"\n    return weight / height**2\n\n常用类型：str, int, float, bool, list[str], dict[str, Any], Optional[str]\n\nMCP的Python SDK大量使用类型提示——这是后面必须熟练的技能。",["冒号标注参数类型，->标注返回类型","Optional[str]等于str | None——值可能是字符串或None","docstring用Google风格或NumPy风格——写清楚参数和返回值含义"],["给之前所有项目的函数添加类型提示","给核心函数写docstring文档字符串","用PEP 8规范检查代码风格","安装mypy做静态类型检查（选做）"],"Pydantic是Python最流行的数据验证库，它把类型提示变成运行时检查。FastAPI和LangChain都基于Pydantic。Day 41后会频繁遇到。",[["PEP 8风格指南","https://peps.python.org/pep-0008/"]]],
+[34,"Git进阶 + 分支管理",7,"Day 10学了git基础（add/commit）。今天进阶——分支是Git最强大的功能。\n\n分支(Branch)让你在不影响主代码的情况下开发新功能：\ngit branch feature-x → 创建分支\ngit checkout feature-x → 切换到分支\n（在分支上开发和commit）\ngit checkout main → 切回主分支\ngit merge feature-x → 合并分支\n\n比喻：分支就像平行宇宙——你在分支里随便改，主分支安全无损。满意了再合并。",["分支是独立的开发线路——互不影响","main/master是默认主分支——保持稳定","每个新功能用新分支开发→测试通过→合并到main"],["创建feature分支开发新功能","在分支上commit多次","合并分支到main","用git log --oneline --graph 查看分支图","制造一个合并冲突并手动解决"],"GitHub的Pull Request(PR)机制：在分支上开发→推到GitHub→创建PR请求review→合并。这是团队协作的标准流程。",[["廖雪峰·分支管理","https://www.liaoxuefeng.com/wiki/896043488029600/896954848507552","cn"]]],
+[35,"螺旋复习 + 开发流程实战",7,"本周学了测试、调试、类型提示、Git分支。今天把2个月学到的一切串起来——形成完整的专业开发流程。\n\n专业开发流程：\n1. GitHub创建仓库 → clone\n2. 创建venv → pip install\n3. git checkout -b feature-x\n4. 写代码（带类型提示+docstring）\n5. 写测试（pytest）\n6. 调试（断点/logging）\n7. git add → commit\n8. git merge → push\n\n🔄 螺旋复习清单：函数→装饰器→类→继承→API→JSON→Git——画一张你知识的关联图。",["完整开发流程应该变成肌肉记忆——不看笔记也能走完全程","测试不是可选的——专业代码都有测试","代码质量三件套：类型提示+docstring+pytest"],["不看任何参考，从零走完完整开发流程3遍","为2个之前的项目补写pytest测试","画一张知识关联图：从变量到API，标注各概念间的联系","让Claude出一套Month 2综合测试"],"GitHub Actions可以在你push代码时自动运行pytest测试——这叫CI/CD（持续集成/持续部署）。了解概念即可，后面学部署时会用到。",[["Git工作流指南","https://www.atlassian.com/git/tutorials/comparing-workflows"]]],
+// Week 8: Capstone project (strengthened as bridge to AI development)
+[36,"数据处理综合实战",8,"综合运用所有技能处理真实数据。\n\n🔄 螺旋复习：数据处理串起了文件读写(W4)→JSON(W4)→字典(W3)→列表推导式(W2)→函数(W3)→错误处理(W4)。这就是螺旋学习的力量——旧知识在新场景中获得更深理解。",["真实数据总是\"脏\"的——需要清洗和转换","处理流程：读取→验证→清洗→分析→输出","这种数据管道(pipeline)思维在AI开发中无处不在"],["从Kaggle下载一个CSV数据集（或自造JSON数据）","清洗数据：处理缺失值、格式错误、重复项","分析数据：统计、排序、分组、Top N","输出：格式化报告+JSON结果文件","为数据处理函数写pytest测试"],"pandas是Python数据处理的王牌库（选学）。AI Agent开发中数据清洗和转换是常见任务——RAG需要处理文档、Agent需要解析API返回的JSON。",[["Kaggle数据集","https://www.kaggle.com/datasets"]]],
+[37,"CLI工具箱项目 Day1：架构设计",8,"月度毕业项目：个人CLI工具箱——一个综合所有2个月知识的桥梁项目。\n\n项目要求（对标AI开发技能）：\n• 天气查询（API调用→后面调Claude API）\n• 待办管理（JSON持久化→后面Agent状态管理）\n• 记账功能（数据处理→后面RAG数据处理）\n• 汇率转换（多API组合→后面多工具组合）\n\n技术要求：OOP设计、类型提示、环境变量、pytest测试、Git分支管理、README文档",["先设计架构再编码——画出类图和模块关系","每个工具映射一个未来AI技能","用Git分支：每个功能一个branch→merge"],["设计项目架构图（类、模块、数据流）","创建GitHub仓库 + venv + git init","定义所有类的接口（方法签名+类型提示）","实现第一个工具（天气查询）+ 对应pytest"],"项目架构设计是软件工程最核心的技能之一。先画图再写代码——UML类图和数据流图是标准工具。",[["Click库（CLI框架）","https://click.palletsprojects.com/"]]],
+[38,"CLI工具箱项目 Day2：核心功能",8,"继续开发：待办管理+记账功能。每完成一个功能就写测试+commit。\n\n🔄 螺旋复习：今天每个模块都在复用前面学的核心技能：\n• 待办管理 = 列表(W2) + 字典(W3) + JSON持久化(W4) + OOP(W5)\n• 记账功能 = 文件读写(W4) + 错误处理(W4) + 数据分析(W8D1)\n\n开发节奏：写功能代码 → 写pytest测试 → 通过测试 → git commit → 下一个功能。这就是专业开发者的日常循环。",["功能之间应该独立——修改一个不影响其他（这叫\"松耦合\"）","JSON持久化要考虑数据完整性——写入前先验证，写入后读回确认","用户体验：清晰的菜单提示、输入验证、友好的错误信息"],["完成待办管理模块 + pytest测试","完成记账功能模块 + pytest测试","集成到主菜单","每个功能用独立Git分支开发→merge"],"试试用Rich库美化终端输出——彩色文字、表格、进度条，让CLI工具看起来更专业。",[["Rich库（美化终端输出）","https://rich.readthedocs.io/"]]],
+[39,"CLI工具箱项目 Day3：汇率+完善",8,"完成汇率转换（需要API调用+环境变量），全面打磨项目。\n\n汇率转换模块是最接近AI开发的部分——它需要：\n• 调用外部API（和Day 26学的HTTP请求一样）\n• 环境变量管理Key（Day 28学的密钥安全）\n• 解析JSON响应（Day 18学的JSON处理）\n• 错误处理（网络失败/API限流/无效币种）\n\n这就是为什么这个毕业项目是AI开发的\"桥梁\"——你在Month 3调用Claude API时，用的就是同样的技能组合。",["多个API调用组合→映射未来Agent的多工具调用","错误处理要覆盖所有边界：网络超时、API限流、无效输入、JSON解析失败","README是项目的门面——好的README包含项目说明+安装步骤+使用截图+技术栈"],["完成汇率转换模块（调用汇率API+环境变量）","添加全局异常处理和logging日志","运行完整pytest测试套件确保全部通过","写README：项目介绍、安装步骤、使用方法、截图"],"试试给CLI添加命令行参数支持（argparse模块），让用户可以 python tools.py weather 北京 直接查天气。",[["ExchangeRate-API","https://www.exchangerate-api.com/"]]],
+[40,"项目完成 + 月度总结 + AI开发预告",8,"🎓 第2个月完成！你已具备AI开发的全部编程基础。\n\n回顾你掌握的完整技能栈：\nPython核心 → OOP → HTTP/API → 环境变量 → 异步编程 → Git/GitHub → 虚拟环境 → pytest测试 → 调试技巧 → 类型提示\n\n下个月开始真正接触AI——但所有AI开发都建立在这2个月的基础上。Claude API调用？就是requests+JSON+环境变量。MCP服务器？就是装饰器+异步+类型提示。Agent循环？就是while循环+函数调用。\n\n🔄 终极螺旋复习：AI不是魔法——它就是你已经学会的这些技能的高级组合。",["这个CLI项目验证了你是否具备AI开发的全部前置技能","AI API调用 = requests + JSON + 环境变量（已学）","MCP服务器 = 装饰器 + async + 类型提示（已学）"],["最终代码review：类型提示完整？测试覆盖？错误处理完善？","运行全部pytest确保通过","最终git push到GitHub","让Claude给你出一套Python综合考试（覆盖2个月所有内容）","🎯 结果：推送到GitHub的完整项目 = 你的第一个作品集作品"],"下个月起每天的教程由AI导师现场生成——内容会根据你的掌握程度和最新工具版本调整。比写死的教程更有效。",[["Anthropic Claude API文档","https://docs.anthropic.com/"],["DeepLearning.AI短课程","https://www.deeplearning.ai/short-courses/"]]]
+];
+m2.forEach(([d,t,wk,teach,keys,tasks,ext,links])=>D(d,t,1,wk,teach,keys,tasks,ext||"",links||[]));
+
+// Months 3-10: Generate with topic titles
+const later=[
+// M3
+[41,"什么是大语言模型(LLM)",2,9],[42,"Transformer架构概览",2,9],[43,"AI Fluency课程",2,9],[44,"模型参数与推理设置",2,9],[45,"复习 + LLM笔记",2,9],
+[46,"系统提示与角色设定",2,10],[47,"少样本学习与思维链",2,10],[48,"结构化输出技巧",2,10],[49,"提示优化迭代",2,10],[50,"提示模板库项目",2,10],
+[51,"Claude API第一次调用",2,11],[52,"流式响应与多轮对话",2,11],[53,"系统提示API调优",2,11],[54,"JSON模式输出",2,11],[55,"智能聊天机器人项目",2,11],
+[56,"AI写作助手 Day1",2,12],[57,"AI写作助手 Day2",2,12],[58,"AI写作助手 Day3",2,12],[59,"AI写作助手 Day4",2,12],[60,"月度总结：LLM与提示工程",2,12],
+// M4
+[61,"工具调用(Tool Use)入门",2,13],[62,"工具Schema定义",2,13],[63,"多工具选择",2,13],[64,"Agent循环实现",2,13],[65,"工具调用助手项目",2,13],
+[66,"图像输入(Vision)",2,14],[67,"PDF文档处理",2,14],[68,"多模态提示策略",2,14],[69,"提示缓存与成本优化",2,14],[70,"文档处理器项目",2,14],
+[71,"Agent架构设计",2,15],[72,"Agent循环深入",2,15],[73,"对话历史管理",2,15],[74,"多模态Agent",2,15],[75,"Agent测试",2,15],
+[76,"个人AI助手 Day1",2,16],[77,"AI助手 Day2",2,16],[78,"AI助手 Day3",2,16],[79,"AI助手 Day4",2,16],[80,"月度总结：工具调用与Agent",2,16],
+// M5
+[81,"嵌入向量概念",3,17],[82,"向量数据库ChromaDB",3,17],[83,"文档切块策略",3,17],[84,"语义搜索实现",3,17],[85,"简单RAG管道",3,17],
+[86,"完整RAG构建",3,18],[87,"检索策略优化",3,18],[88,"RAG评估RAGAS",3,18],[89,"混合检索与重排序",3,18],[90,"RAG项目",3,18],
+[91,"LangChain核心概念",3,19],[92,"Chains与LCEL",3,19],[93,"文档加载处理",3,19],[94,"记忆系统",3,19],[95,"LangChain项目",3,19],
+[96,"LangChain RAG Day1",3,20],[97,"RAG实战 Day2",3,20],[98,"RAG实战 Day3",3,20],[99,"RAG优化",3,20],[100,"月度总结：RAG",3,20],
+// M6
+[101,"LangGraph核心概念",3,21],[102,"状态节点与边",3,21],[103,"条件路由",3,21],[104,"第一个Graph Agent",3,21],[105,"LangGraph项目",3,21],
+[106,"ReAct Agent模式",3,22],[107,"ReAct实现调试",3,22],[108,"工具集成",3,22],[109,"搜索Agent",3,22],[110,"ReAct项目",3,22],
+[111,"Reflection模式",3,23],[112,"Self-Critique",3,23],[113,"Human-in-the-Loop",3,23],[114,"持久化检查点",3,23],[115,"Reflection项目",3,23],
+[116,"研究Agent Day1",3,24],[117,"研究Agent Day2",3,24],[118,"研究Agent Day3",3,24],[119,"研究Agent Day4",3,24],[120,"月度总结：Agent",3,24],
+// M7
+[121,"MCP架构三大原语",4,25],[122,"Tools原语",4,25],[123,"Resources原语",4,25],[124,"Prompts原语",4,25],[125,"MCP概念测试",4,25],
+[126,"Python SDK配置",4,26],[127,"第一个MCP服务器",4,26],[128,"定义工具(装饰器)",4,26],[129,"连接Claude Desktop",4,26],[130,"MCP服务器项目",4,26],
+[131,"传输机制stdio/SSE",4,27],[132,"OAuth 2.1认证",4,27],[133,"安全最佳实践",4,27],[134,"MCP生态浏览",4,27],[135,"安全MCP服务器",4,27],
+[136,"自定义MCP Day1",4,28],[137,"自定义MCP Day2",4,28],[138,"自定义MCP Day3",4,28],[139,"MCP测试",4,28],[140,"月度总结：MCP",4,28],
+// M8
+[141,"多Agent编排概念",4,29],[142,"Agent Handoff",4,29],[143,"监管者模式",4,29],[144,"Agent-as-Tool",4,29],[145,"多Agent项目",4,29],
+[146,"短期记忆",4,30],[147,"长期记忆",4,30],[148,"知识图谱记忆",4,30],[149,"跨会话状态",4,30],[150,"记忆系统项目",4,30],
+[151,"MCP+多Agent",4,31],[152,"多MCP协调",4,31],[153,"CrewAI探索",4,31],[154,"OpenAI SDK对比",4,31],[155,"框架对比报告",4,31],
+[156,"多Agent+MCP Day1",4,32],[157,"项目 Day2",4,32],[158,"项目 Day3",4,32],[159,"项目 Day4",4,32],[160,"月度总结：多智能体系统",4,32],
+// M9
+[161,"Agent评估方法论",5,33],[162,"构建评估数据集",5,33],[163,"LangSmith可观测性",5,33],[164,"A/B测试架构",5,33],[165,"评估管道项目",5,33],
+[166,"LLMOps概念工具",5,34],[167,"提示版本管理",5,34],[168,"成本监控优化",5,34],[169,"安全护栏",5,34],[170,"LLMOps实战",5,34],
+[171,"Claude Code入门",5,35],[172,"Claude Code进阶",5,35],[173,"Skills创建配置",5,35],[174,"Skills分享协作",5,35],[175,"Skills库项目",5,35],
+[176,"FastAPI基础",5,36],[177,"Docker容器化",5,36],[178,"Gradio/Streamlit",5,36],[179,"云端部署",5,36],[180,"月度总结：生产部署技能",5,36],
+// M10
+[181,"毕业项目选题设计",6,37],[182,"架构与技术选型",6,37],[183,"基础框架搭建",6,37],[184,"核心Agent开发",6,37],[185,"Agent功能完善",6,37],
+[186,"MCP服务器开发",6,38],[187,"RAG管道集成",6,38],[188,"多Agent协调",6,38],[189,"记忆系统集成",6,38],[190,"功能整合测试",6,38],
+[191,"UI界面开发",6,39],[192,"评估管道搭建",6,39],[193,"部署到云端",6,39],[194,"性能优化",6,39],[195,"安全审查",6,39],
+[196,"文档撰写",6,40],[197,"演示视频录制",6,40],[198,"GitHub作品集",6,40],[199,"最终review",6,40],[200,"🎓 毕业！",6,40]
+];
+const gTeach={2:"本阶段深入LLM和AI API开发。当你学到这里时，告诉Claude具体Day编号：\"我在Day XX，主题是XXX\"——我会为你展开完整的教程解说、比喻讲解和练习任务。每天的概念会越来越接近真实AI工程。",3:"RAG和Agent是AI工程核心。你将从\"调用API\"升级到\"构建系统\"。每个新概念我都会用你已有的知识做比喻。",4:"MCP和多智能体是2026年最前沿的技能。这个阶段会大量用到前面学的装饰器、异步编程、JSON处理。",5:"生产级技能让作品从Demo变Product。评估、监控、部署——专业和业余的分水岭。",6:"毕业项目——把10个月一切融合。这是你作品集的核心。"};
+later.forEach(([d,t,ph,wk])=>D(d,t,ph,wk,gTeach[ph],
+["告诉Claude你的Day编号获取完整教程","坚持每天2h学习+2h实践","遇到困难随时提问"],
+["完成今日学习模块","动手完成实践练习","记录笔记和问题","让Claude帮你review"],"当你学到这一天，对Claude说：\"我在Day "+d+"，主题是"+t+"\"，我会展开完整教程。",[]));
+
+// ==================== STATE ====================
+let state={checkins:{},notes:{},profile:null,_profileDraft:{},currentDay:1,view:"detail",expanded:{teach:true,keys:true,tasks:true,extend:false}};
+
+function save(){try{localStorage.setItem("ai-journey",JSON.stringify({checkins:state.checkins,notes:state.notes,profile:state.profile}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem("ai-journey")||"{}");if(d.checkins)state.checkins=d.checkins;if(d.notes)state.notes=d.notes;if(d.profile)state.profile=d.profile;}catch(e){}}
+
+// ==================== RENDER ====================
+function render(){
+  const day=DAYS.find(d=>d.d===state.currentDay)||DAYS[0];
+  const phase=PHASES.find(p=>p.id===day.phase);
+  const total=Object.keys(state.checkins).length;
+  const pct=Math.round(total/200*100);
+  const weekDays=DAYS.filter(d=>d.week===day.week);
+  
+  let h=`<div class="hdr"><div class="hdr-badge">未定义实验室 · 200天 · 每日4小时 · 零基础到AI Agent</div><h1>AI Agent 学习之旅</h1></div>`;
+  
+  // Progress
+  h+=`<div class="prog"><div class="prog-top"><span style="color:var(--td)">总进度</span><span style="font-weight:700;color:var(--g)">${total}/200天 · ${pct}%</span></div>`;
+  h+=`<div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><div class="phases">`;
+  PHASES.forEach(p=>{
+    const pd=DAYS.filter(d=>d.phase===p.id);
+    const pc=pd.filter(d=>state.checkins[d.d]).length;
+    const pp=pd.length?Math.round(pc/pd.length*100):0;
+    h+=`<div class="ph" onclick="jumpPhase(${p.id})" title="${p.name}"><div class="ph-icon">${p.icon}</div><div class="ph-stat" style="color:${p.color}">${pc}/${pd.length}</div><div class="ph-bar"><div class="ph-fill" style="width:${pp}%;background:${p.color}"></div></div></div>`;
+  });
+  h+=`</div></div>`;
+  
+  // Nav
+  h+=`<div class="nav">`;
+  [["detail","📖 详情"],["calendar","📅 日历"],["list","📋 列表"],["profile","🧒 画像"],["tutor","🤖 导师"]].forEach(([v,l])=>{
+    h+=`<button class="nav-btn${state.view===v?" on":""}" onclick="setView('${v}')">${l}</button>`;
+  });
+  h+=`<div class="jump"><label>跳转</label><select onchange="jumpDay(+this.value)">`;
+  DAYS.forEach(d=>{h+=`<option value="${d.d}"${d.d===state.currentDay?" selected":""}>D${d.d} · ${d.t}</option>`});
+  h+=`</select></div></div>`;
+  
+  // Views
+  if(state.view==="detail"){
+    // Day header
+    h+=`<div class="day-hdr">`;
+    h+=`<button class="day-nav" onclick="navDay(-1)"${state.currentDay<=1?" disabled":""}>◂</button>`;
+    h+=`<div class="day-info"><div class="day-phase" style="color:${phase.color}">DAY ${day.d} · 第${day.week}周 · ${phase.name}</div><div class="day-title">${day.t}</div></div>`;
+    h+=`<button class="checkin-btn ${state.checkins[day.d]?"done":"todo"}" onclick="toggleCheckin(${day.d})">${state.checkins[day.d]?"✓ 已打卡":"○ 打卡"}</button>`;
+    h+=`<button class="day-nav" onclick="navDay(1)"${state.currentDay>=200?" disabled":""}>▸</button></div>`;
+    
+    // Week pills
+    h+=`<div class="week-pills">`;
+    weekDays.forEach(wd=>{
+      const on=wd.d===state.currentDay;
+      const ck=state.checkins[wd.d];
+      h+=`<button class="wp${on?" on":""}${ck?" checked":""}" onclick="jumpDay(${wd.d})">D${wd.d}${ck?" ✓":""}</button>`;
+    });
+    h+=`</div>`;
+    
+    // Sections
+    h+=renderSection("teach","🧑‍🏫 教程解说",phase.color,`<div class="teach">${esc(day.teach)}</div>`);
+    
+    let keysH="";day.keys.forEach((k,i)=>{keysH+=`<div class="key-item"><span class="key-num">${i+1}.</span><span>${esc(k)}</span></div>`});
+    h+=renderSection("keys","⭐ 学习重点","#fbbf24",keysH);
+    
+    let tasksH="";day.tasks.forEach(t=>{tasksH+=`<div class="task-item"><span class="task-dot">•</span><span>${esc(t)}</span></div>`});
+    h+=renderSection("tasks","📝 今日任务","#34d399",tasksH);
+    
+    h+=renderSection("extend","🚀 延展学习","#a78bfa",`<div class="extend-text">${esc(day.extend)}</div>`);
+    
+    // Links
+    if(day.links.length>0){
+      h+=`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--b);margin-bottom:8px">🔗 资源链接</div><div class="links">`;
+      day.links.forEach(l=>{
+        const cn=l[2]==="cn";
+        h+=`<a href="${l[1]}" target="_blank" class="link${cn?" cn":""}">${esc(l[0])}</a>`;
+      });
+      h+=`</div></div>`;
+    }
+    
+    // Notes
+    const note=state.notes[day.d]||"";
+    h+=`<div class="notes"><div class="notes-label">📓 学习笔记 · Day ${day.d}</div><textarea id="noteArea" placeholder="记录今天学到的要点、遇到的问题、代码片段..." oninput="saveNote(${day.d},this.value)">${esc(note)}</textarea></div>`;
+  }
+  else if(state.view==="calendar"){
+    h+=`<div style="font-size:12px;color:var(--td);margin-bottom:10px">点击任意天数查看详情</div>`;
+    h+=`<div class="cal">`;
+    ["一","二","三","四","五"].forEach(d=>{h+=`<div class="cal-hdr">周${d}</div>`});
+    DAYS.forEach(d=>{
+      const p=PHASES.find(ph=>ph.id===d.phase);
+      const ck=state.checkins[d.d];
+      h+=`<div class="cal-day${ck?" checked":""}" onclick="jumpDay(${d.d});setView('detail')" style="${ck?`background:${p.color}0a;border-color:${p.color}33`:""}">`;
+      h+=`<div class="cal-num" style="color:${ck?p.color:"var(--tm)"}">${d.d}</div>`;
+      if(ck)h+=`<div class="cal-check" style="color:${p.color}">✓</div>`;
+      h+=`</div>`;
+    });
+    h+=`</div>`;
+  }
+  else if(state.view==="list"){
+    PHASES.forEach(p=>{
+      h+=`<div class="list-phase" style="color:${p.color}">${p.icon} ${p.name} · ${p.months}</div>`;
+      DAYS.filter(d=>d.phase===p.id).forEach(d=>{
+        const ck=state.checkins[d.d];
+        const nt=state.notes[d.d];
+        h+=`<button class="list-item" onclick="jumpDay(${d.d});setView('detail')" style="${ck?`background:${p.color}08`:""}">`;
+        h+=`<span class="list-day" style="color:${ck?p.color:"var(--tm)"}">D${d.d}</span>`;
+        h+=`<span class="list-title">${esc(d.t)}</span>`;
+        h+=`<span class="list-icons">${ck?"✓ ":""}${nt?"📝":""}</span></button>`;
+      });
+    });
+  }
+  else if(state.view==="profile"){
+    const pq=[
+      {id:"pref",q:"学新东西时（比如学做菜），你更喜欢？",opts:[["先看食谱理解步骤，再动手","概念先行"],["直接开火炒，边做边学","动手先行"]]},
+      {id:"pace",q:"跟教程学习时，你通常觉得？",opts:[["太慢了，想跳过基础","快速"],["节奏刚好","稳健"],["有点快，需要多看几遍","谨慎"]]},
+      {id:"help",q:"遇到不会的问题时，你倾向于？",opts:[["先自己搜索/尝试，实在不行再问","自主型"],["直接问人或AI，效率更高","协作型"]]},
+      {id:"motive",q:"你学AI Agent开发最主要的原因？",opts:[["工作需要/职业发展","职业驱动"],["纯粹好奇/兴趣","兴趣驱动"],["想做自己的产品/项目","项目驱动"]]},
+      {id:"style",q:"哪种学习方式你觉得最有效？",opts:[["看文字教程+动手练","读写型"],["看视频讲解","视听型"],["直接做项目，遇到不会的再查","实践型"]]}
+    ];
+    h+=`<div style="margin-bottom:20px">`;
+    h+=`<div style="font-size:18px;font-weight:900;margin-bottom:4px">🧒 我的学员画像</div>`;
+    h+=`<div style="font-size:13px;color:var(--td);margin-bottom:16px">了解自己的学习类型。AI导师也会在对话中问你这些问题——这里可以提前自测。</div>`;
+    
+    const hasProfile=state.profile&&Object.keys(state.profile).length>=5;
+    
+    if(!hasProfile){
+      // Questionnaire
+      h+=`<div style="background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:16px">`;
+      pq.forEach((q,qi)=>{
+        h+=`<div style="margin-bottom:${qi<pq.length-1?20:0}px">`;
+        h+=`<div style="font-size:13px;font-weight:700;color:var(--t);margin-bottom:8px">${qi+1}. ${q.q}</div>`;
+        q.opts.forEach(([label,val])=>{
+          const sel=state._profileDraft&&state._profileDraft[q.id]===val;
+          h+=`<button onclick="setProfileDraft('${q.id}','${val}')" style="display:block;width:100%;text-align:left;padding:8px 12px;margin-bottom:4px;background:${sel?"rgba(249,115,22,.12)":"var(--s2)"};border:1px solid ${sel?"var(--a)":"var(--bd)"};border-radius:8px;color:${sel?"var(--a)":"#b0aec0"};font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s">${sel?"● ":"○ "}${label}</button>`;
+        });
+        h+=`</div>`;
+      });
+      h+=`</div>`;
+      const allAnswered=state._profileDraft&&Object.keys(state._profileDraft).length>=5;
+      h+=`<button onclick="saveProfile()" style="width:100%;padding:14px;background:${allAnswered?"var(--g)":"var(--s3)"};color:${allAnswered?"#000":"var(--tm)"};border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:${allAnswered?"pointer":"default"};font-family:inherit;transition:all .2s"${allAnswered?"":" disabled"}>✅ 生成我的画像</button>`;
+    } else {
+      // Profile card display
+      const p=state.profile;
+      const dims=[
+        ["学习偏好",p.pref,p.pref==="概念先行"?"📖":"🔨",p.pref==="概念先行"?"#60a5fa":"#34d399"],
+        ["学习节奏",p.pace,p.pace==="快速"?"⚡":p.pace==="稳健"?"🚶":"🐢",p.pace==="快速"?"#fbbf24":p.pace==="稳健"?"#34d399":"#a78bfa"],
+        ["求助模式",p.help,p.help==="自主型"?"🔍":"🤝",p.help==="自主型"?"#f97316":"#60a5fa"],
+        ["学习动力",p.motive,"🎯","#f472b6"],
+        ["学习形式",p.style,p.style==="读写型"?"📝":p.style==="视听型"?"🎬":"🛠️","#fbbf24"]
+      ];
+      h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">`;
+      dims.forEach(([label,val,icon,color])=>{
+        h+=`<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">`;
+        h+=`<div style="font-size:20px;margin-bottom:4px">${icon}</div>`;
+        h+=`<div style="font-size:11px;color:var(--tm);margin-bottom:2px">${label}</div>`;
+        h+=`<div style="font-size:13px;font-weight:700;color:${color}">${val}</div>`;
+        h+=`</div>`;
+      });
+      h+=`</div>`;
+      
+      // Copy profile button
+      h+=`<button onclick="copyProfile()" id="copyProfileBtn" style="width:100%;padding:14px;background:var(--b);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;transition:all .2s">📋 复制画像 → 粘贴给AI导师让它更懂你</button>`;
+      h+=`<button onclick="resetProfile()" style="width:100%;padding:10px;background:transparent;color:var(--tm);border:1px solid var(--bd);border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit">重新填写画像</button>`;
+    }
+    h+=`</div>`;
+  }
+  else if(state.view==="tutor"){
+    // Generate current progress summary for the prompt
+    const checked=Object.keys(state.checkins).length;
+    const pct=Math.round(checked/200*100);
+    const currentPhase=PHASES.find(p=>p.id===(DAYS.find(d=>d.d===state.currentDay)||{}).phase)||PHASES[0];
+    
+    // The system prompt - this is the core deliverable
+    const TUTOR_PROMPT=`你是「未定义实验室」开发的AI Agent 200天学习系统的导师。学员会上传这个HTML学习计划文件 + 这段提示词。收到后严格按1→2→3顺序执行，不要跳步。
+
+## ⚠️ 启动流程：严格按 1→2→3 执行
+
+### 版本覆盖规则
+如果本次对话中之前已经读取过一个旧版HTML文件，当学员上传新的HTML文件时：
+- **新文件的课程数据完全覆盖旧文件**——以最新上传的HTML为准，不要混用两套数据
+- **学员的画像和进度保留**——画像、薄弱点记录、已完成的里程碑等不受影响
+- 覆盖后回复：「✅ 课程已更新为最新版本。你的学习画像和进度已保留。」然后继续教学，不需要重新走步骤2问卷
+
+### 步骤1：读取课程（静默完成）
+读取HTML中的JavaScript数据：DAYS数组（200天课程）、PHASES数组（6个阶段）、每天的teach/keys/tasks/extend/links内容。
+读完后回复：「✅ 课程已读取（200天·6阶段）。在开始之前，我想花1分钟了解一下你。」
+然后立刻进入步骤2。
+
+### 步骤2：采集学员画像（逐题对话式）
+用对话方式逐题提问——问一题，等回答，再问下一题。不要一次列出所有题：
+
+第1题：「学新东西时（比如学做一道菜），你更喜欢？
+A. 先看完食谱理解每步，再动手
+B. 直接开做，遇到问题再查
+C. 看一步做一步」
+
+第2题：「跟教程学习时你通常觉得？
+A. 太慢了，想快点到实战
+B. 节奏刚好
+C. 有时跟不上，要多看几遍」
+
+第3题：「遇到不会的问题，你一般？
+A. 自己先搜索尝试
+B. 希望有人给方向，我自己做
+C. 希望一步步带我」
+
+第4题：「你学AI Agent开发主要是？
+A. 想做一个具体产品  B. 提升职业竞争力  C. 纯粹好奇  D. 觉得好玩」
+
+第5题：「你更喜欢哪种学习形式？
+A. 看视频讲解  B. 图文教程边看边做  C. 直接给工具自己上手」
+
+5题收集完后总结：
+「📝 了解你了！
+- 学习偏好：[先理解/先动手/混合]
+- 节奏：[快/稳/慢]
+- 求助方式：[探索型/引导型/手把手型]
+我会根据这些调整教学方式，觉得不对随时跟我说。」
+
+### 步骤3：等待开始
+回复：「🚀 准备好了！告诉我你从 Day 几 开始？（新同学从 Day 1）」
+当学员说Day X时，基于HTML中该天的实际数据教学。
+
+## 你的风格
+- 像一个耐心的朋友，但教的东西是专业准确的
+- 用中文教学，技术名词保留英文（如API、JSON、LangGraph）
+- 每个术语第一次出现时，用括号加一句大白话解释
+- 核心方法：生活比喻引入 → 概念讲解 → 代码示范 → 动手练习 → 纠错答疑
+- 语气规则：句子简短，用「你」「我们」而非「学员应当」
+
+## 分阶段教学深度
+- Day 1-20（Python基础）：像教完全外行。大量比喻，零术语假设，每天最多2个新概念
+- Day 21-40（Python进阶）：开始引入技术概念，但每个新术语要解释
+- Day 41-80（LLM与API）：项目驱动，减少手把手，增加引导
+- Day 81-160（Agent与MCP）：平等讨论，聚焦架构和设计模式
+- Day 161-200（生产部署）：同行交流，聚焦工程实践和行业应用
+
+## 200天路线概览
+- 🐍 Day 1-20：Python基础（变量/循环/函数/字典/文件/JSON/Git）
+- 🐍 Day 21-40：Python进阶（OOP/API/async/pytest/类型提示/CLI项目）
+- 🧠 Day 41-80：LLM与API（提示工程/Claude API/工具调用/多模态/第一个Agent）
+- 🤖 Day 81-120：RAG与Agent（嵌入向量/向量数据库/LangChain/LangGraph/Agent模式）
+- 🔌 Day 121-160：MCP与多智能体（MCP架构/Python SDK/多Agent/记忆系统）
+- 🚀 Day 161-200：生产部署与毕业（评估/LLMOps/Claude Code/部署/毕业项目）
+
+## ⚡ 核心职能：分步教学
+
+重要：不要一次性输出所有内容。像真人老师一样一步步来。
+
+### 当学员说「我在 Day X」时：
+
+**第一步（自动发送）：只给「今天学什么」+ 任务清单**
+
+📖 今天学什么（300-500字）：
+- 用一个生活比喻开头
+- 讲清核心概念，术语首次出现加括号解释
+- 螺旋复习：「还记得Day X学的XX吗？今天是它的升级版」
+- 不要在这里放代码——代码等做任务时再给
+
+✅ 今天的任务清单（3-5个，标序号）：
+- 前2个简单（建立信心），最后1个有挑战
+- 每个任务写清：做什么 + 用什么工具 + 做成什么样
+- 不要展开细节——等学员说「开始第1个」再展开
+
+最后说：「准备好了吗？跟我说『开始第1个任务』🚀」
+
+### 当学员说「开始第X个任务」或「下一步」时：
+
+**展开这一个任务的详细指导**：
+- 具体操作步骤
+- 如果需要代码：给10-15行，每行中文注释
+- 预期结果：「如果成功了，你应该能看到……」
+- 最后说：「完成了跟我说，我们进入下一个任务」
+
+### 当所有任务完成后（或学员说「今天的总结」）：
+
+- ⭐ 今天3个重点（每条一句话，至少1条是常见错误提醒）
+- 🧪 3个自检题（概念→实操→延展）
+- 🔗 2-3个学习资源（优先中文，标注类型）
+- 📌 今日总结 + 明天预告
+
+## 特殊指令
+
+| 学员说 | 你怎么做 |
+|--------|---------|
+| 「review我的代码」 | ①先找1个优点 ②指出问题（比喻+技术双重解释）③修复代码 ④解释怎么避免 |
+| 「给我出题」 | 出3-5道题（概念+写代码），做完批改讲解 |
+| 「我卡住了」 | ①换全新比喻 ②拆更小步骤 ③5分钟极简练习 ④反复卡住降难度 |
+| 「测试我」 | 5-10道题打分，分析薄弱点 |
+| 「复习」 | 螺旋复习：回顾本周+连接之前所有相关知识 |
+
+## 周期性教学节奏
+- **每周第5天（Day 5/10/15…）**：复习+项目日，优先巩固而非教新内容
+- **每20天（Day 20/40/60…）**：月度评估+画像反馈+下月计划
+- **每10天**：主动分享画像观察并请学员确认
+
+## 🧒 因材施教系统
+
+你不是教「标准学员」，而是教「这个人」。
+
+### 冷启动已解决
+步骤2的问卷已在教学前采集初始画像。用问卷结果作起点，后续互动持续更新。
+
+### 追踪4个核心维度
+
+**① 学习偏好**：先理解型 vs 先动手型
+判断信号：问「为什么」多→理解型。说「直接告诉我怎么做」→动手型
+
+**② 学习节奏**：快/稳/慢
+判断信号：完成速度 + 是否主动要求加减速
+
+**③ 求助模式**：探索型/引导型/手把手型
+判断信号：卡住时自己先尝试还是直接问答案
+
+**④ 薄弱模式**（最有价值——客观数据）
+记录每个错误（主题+类型），同一类出现2次 = 系统性薄弱点，自动加防错练习
+
+### 每次互动收集5个信号
+
+| 观察到 | 意味着 | 调整 |
+|--------|--------|------|
+| 学员用「为什么」提问 | 理解型 | 多讲原理 |
+| 任务秒完或说「太简单」 | 需要挑战 | 加难度 |
+| 同一类错误再次出现 | 系统性薄弱 | 出专项练习 |
+| 学员分享想做的项目 | 有内在动力 | 用这个项目做教学案例 |
+| 连续求助或「看不懂」 | 难度偏高 | 降难度+换比喻+直接问哪里不懂 |
+
+注意：不要从回复长短猜情绪。不确定时直接问：「节奏可以吗？需要快一点还是慢一点？」
+
+### 画像置信度
+- Day 1-7：低，小幅调整，主要用默认策略
+- Day 8-30：中，开始适配但保持灵活
+- Day 30+：高，大胆适配
+
+### 每10天反馈+让学员确认
+「📝 我的观察：
+- 你属于[先理解再动手]类型
+- 节奏[稳健]，当前任务量刚好
+- [XX概念]卡过两次，后面相关主题多出练习
+这些说得对吗？有什么需要调整的跟我说。」
+
+## 进度+画像快照
+
+每次对话结束时提供。学员下次对话粘贴恢复上下文：
+
+---
+📊 未定义实验室 · 进度+画像快照（下次对话开头粘贴）
+
+【进度】
+Day: XX | 阶段: XX
+已完成: [关键里程碑]
+技能: [Python⭐⭐⭐ API⭐⭐ 提示工程⭐⭐⭐⭐]
+薄弱: [具体知识点，如async忘await 3次]
+
+【画像】（AI观察+学员自评）
+学习偏好: [先理解/先动手/混合]
+学习节奏: [快/稳/慢]
+求助模式: [探索/引导/手把手]
+有效教法: [如: 餐厅比喻好用 / 喜欢先看完整代码]
+画像置信度: [低/中/高]
+
+下次从: Day XX [主题] 开始
+---
+
+## 📲 同步到HTML追踪器
+
+学员的HTML学习计划文件有打卡、笔记、画像等本地追踪功能。你需要在以下时机主动提醒学员更新追踪器，确保数据不丢失：
+
+**每天课程结束时**：
+「📲 记得打开你的HTML学习计划，把今天 Day X 打卡 ✓，有笔记也顺手记上去。」
+
+**画像更新时**（步骤2问卷完成后 / 每10天画像反馈后）：
+「📲 你可以打开HTML学习计划的🧒画像板块，更新你的学习画像——这样即使换了AI对话，画像数据也不会丢。」
+
+**发现新的薄弱点时**（学员犯了系统性错误）：
+在进度快照中记录具体薄弱点，并提醒：「📲 建议在HTML的学习笔记里记下这个易错点：[具体内容]，方便以后复习。」
+
+**月度评估后**（每20天）：
+「📲 打开HTML追踪器看看你的打卡日历——已经连续完成X天了！顺便检查一下有没有漏打卡的。」
+
+注意：不要每句话都提醒，只在上述4个关键时机提醒。过于频繁会让学员烦躁。
+
+## 3条铁律
+1. **80%时间动手写代码**——只看不做时提醒「打开编辑器跟着敲」
+2. **报错是最好的老师**——引导学员自己读错误信息，先问「报错说了什么？」
+3. **每个新概念配一个比喻**——新手靠比喻建立直觉`;
+
+    h+=`<div style="margin-bottom:20px">`;
+    h+=`<div style="font-size:18px;font-weight:900;margin-bottom:4px">🤖 AI导师模式</div><div style="font-size:11px;color:var(--tm);margin-bottom:8px">由未定义实验室提供</div>`;
+    h+=`<div style="font-size:13px;color:var(--td);margin-bottom:16px">你只需做一件事：复制提示词 → 连同这个HTML文件一起发给AI。剩下的AI全自动完成。</div>`;
+    
+    // What you do
+    h+=`<div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:16px;margin-bottom:12px">`;
+    h+=`<div style="font-size:13px;font-weight:700;color:var(--a);margin-bottom:8px">📋 你做的事</div>`;
+    h+=`<div style="font-size:13px;color:#b0aec0;line-height:1.9">`;
+    h+=`<strong style="color:var(--t)">1.</strong> 点击下方按钮复制导师提示词<br>`;
+    h+=`<strong style="color:var(--t)">2.</strong> 打开AI（Claude/ChatGPT/Gemini），上传这个HTML文件 + 粘贴提示词 + 发送</div></div>`;
+    
+    // What AI does automatically
+    h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px">`;
+    [["📖","读取课程","静默读取200天内容","var(--g)"],["🧒","了解你","问5道题建立你的画像","var(--b)"],["🎯","开始教学","根据画像因材施教","var(--p)"],["📊","持续适配","每10天反馈+调整","var(--y)"]].forEach(([icon,title,desc,color])=>{
+      h+=`<div style="background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:10px;text-align:center">`;
+      h+=`<div style="font-size:16px">${icon}</div>`;
+      h+=`<div style="font-size:12px;font-weight:700;color:${color};margin-top:2px">${title}</div>`;
+      h+=`<div style="font-size:11px;color:var(--tm);margin-top:2px">${desc}</div></div>`;
+    });
+    h+=`</div>`;
+    h+=`<div style="font-size:11px;color:var(--tm);text-align:center;margin-bottom:14px">⬆️ 以上4步由AI自动完成，你不需要操作</div>`;
+    
+    // Copy button
+    h+=`<button onclick="copyPrompt()" id="copyBtn" style="width:100%;padding:14px;background:var(--a);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;transition:all .2s">📋 复制导师提示词</button>`;
+    
+    // Collapsible prompt preview
+    h+=`<details style="background:var(--s1);border:1px solid var(--bd);border-radius:12px;overflow:hidden">`;
+    h+=`<summary style="padding:14px 16px;cursor:pointer;font-size:13px;font-weight:700;color:var(--td);user-select:none">▸ 查看完整提示词（${TUTOR_PROMPT.length}字）</summary>`;
+    h+=`<div style="padding:0 16px 16px;max-height:500px;overflow-y:auto"><pre style="font-size:12px;color:#a0a0b4;line-height:1.8;white-space:pre-wrap;word-break:break-all;font-family:inherit">${esc(TUTOR_PROMPT)}</pre></div>`;
+    h+=`</details>`;
+    
+    window._TUTOR_PROMPT=TUTOR_PROMPT;
+    
+    h+=`</div>`;
+  }
+  
+  h+=`<div style="text-align:center;padding:24px 0 8px;font-size:11px;color:var(--tm)">未定义实验室 · AI Agent 200天学习系统</div>`;
+  document.getElementById("app").innerHTML=h;
+}
+
+function renderSection(id,title,color,content){
+  const open=state.expanded[id];
+  return `<div class="section"><button class="sec-hdr" onclick="toggleSec('${id}')"><span class="sec-title" style="color:${color}">${title}</span><span class="sec-arrow${open?" open":""}">▸</span></button><div class="sec-body${open?" open":""}">${content}</div></div>`;
+}
+
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+// ==================== ACTIONS ====================
+window.setView=function(v){state.view=v;render()};
+window.jumpDay=function(d){state.currentDay=d;render()};
+window.navDay=function(delta){const n=state.currentDay+delta;if(n>=1&&n<=200){state.currentDay=n;render()}};
+window.toggleCheckin=function(d){if(state.checkins[d])delete state.checkins[d];else state.checkins[d]=true;save();render()};
+window.saveNote=function(d,text){if(text)state.notes[d]=text;else delete state.notes[d];save()};
+window.toggleSec=function(id){state.expanded[id]=!state.expanded[id];render()};
+window.jumpPhase=function(pid){const d=DAYS.find(d=>d.phase===pid);if(d){state.currentDay=d.d;state.view="detail";render()}};
+window.setProfileDraft=function(key,val){if(!state._profileDraft)state._profileDraft={};state._profileDraft[key]=val;render()};
+window.saveProfile=function(){if(state._profileDraft&&Object.keys(state._profileDraft).length>=5){state.profile=Object.assign({},state._profileDraft);save();render()}};
+window.resetProfile=function(){state.profile=null;state._profileDraft={};save();render()};
+window.copyProfile=function(){
+  if(state.profile){
+    var p=state.profile;
+    var text="【未定义实验室 · 我的学员画像】\n学习偏好: "+p.pref+"\n学习节奏: "+p.pace+"\n求助模式: "+p.help+"\n学习动力: "+p.motive+"\n学习形式: "+p.style;
+    navigator.clipboard.writeText(text).then(function(){
+      var btn=document.getElementById("copyProfileBtn");
+      btn.textContent="✅ 已复制！粘贴到AI对话中";
+      btn.style.background="#34d399";
+      setTimeout(function(){btn.textContent="📋 复制画像 → 粘贴给AI导师让它更懂你";btn.style.background="#60a5fa"},2500);
+    }).catch(function(){
+      var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy");var btn=document.getElementById("copyProfileBtn");btn.textContent="✅ 已复制！";btn.style.background="#34d399";setTimeout(function(){btn.textContent="📋 复制画像 → 粘贴给AI导师让它更懂你";btn.style.background="#60a5fa"},2500)}catch(e){}
+      document.body.removeChild(ta);
+    });
+  }
+};
+window.copyPrompt=function(){
+  if(window._TUTOR_PROMPT){
+    navigator.clipboard.writeText(window._TUTOR_PROMPT).then(function(){
+      var btn=document.getElementById("copyBtn");
+      btn.textContent="✅ 已复制！现在去粘贴给AI";
+      btn.style.background="#34d399";
+      setTimeout(function(){btn.textContent="📋 复制导师提示词（一键复制）";btn.style.background="#f97316"},2500);
+    }).catch(function(){
+      // Fallback for older browsers
+      var ta=document.createElement("textarea");
+      ta.value=window._TUTOR_PROMPT;
+      ta.style.position="fixed";ta.style.opacity="0";
+      document.body.appendChild(ta);ta.select();
+      try{document.execCommand("copy");var btn=document.getElementById("copyBtn");btn.textContent="✅ 已复制！";btn.style.background="#34d399";setTimeout(function(){btn.textContent="📋 复制导师提示词（一键复制）";btn.style.background="#f97316"},2500)}catch(e){}
+      document.body.removeChild(ta);
+    });
+  }
+};
+
+// ==================== INIT ====================
+load();
+render();
+</script>
+</body>
+</html>

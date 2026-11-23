@@ -1,0 +1,12 @@
+query {
+  shopLocales { locale primary published marketWebPresences { id } }
+  shop { primaryDomain { host marketWebPresence { id defaultLocale { locale } alternateLocales { locale } } } }
+  markets(first: 25) {
+    nodes {
+      id name handle status
+      conditions { regionsCondition { regions(first: 25) { nodes { name ... on MarketRegionCountry { code } } } } }
+      webPresences(first: 10) { nodes { id defaultLocale { locale } alternateLocales { locale } } }
+    }
+  }
+  pages(first: 5, query: "handle:cyd-localization-test") { nodes { id handle title isPublished } }
+}

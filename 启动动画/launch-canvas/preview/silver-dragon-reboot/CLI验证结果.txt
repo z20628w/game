@@ -1,0 +1,39 @@
+WorkBuddy CLI 视频能力验证
+日期：2026-11-04
+
+已完成
+1. 通过 WorkBuddy 2.165.0 内置精简 CLI 正常启动命令行。
+2. Miora MCP 的 initialize 与 tools/list 成功，返回真实工具清单。
+3. CLI 会话初始化成功，Miora 状态 connected，清单包含首尾帧生视频、参考图生视频、视频任务查询，以及内置 VideoGen。
+
+阻塞
+实际模型请求返回：Authentication required. Please use /login command to sign in to your account。
+CLI 可运行、工具可注册，不代表已取得生成权限。
+桌面端 Miora 的临时授权由 connect_cloud_service 获取；独立进程当前未接入该宿主连接。
+
+本次范围
+未提交生成任务，未上传人物参考素材，未调用支付或充值工具。
+未修改 WorkBuddy 安装目录；未读取或复制用户登录令牌。
+诊断使用产品自己的正常配置机制，相关缓存由 CLI 自行管理。
+
+产物
+miora-tool-catalog.json：通过真实 MCP 握手取得的完整工具参数。
+workbuddy-capability-report.json：去除网址和敏感令牌的 CLI 检查结果。
+probe-miora.cjs：仅执行 MCP 握手和工具列举。
+probe-workbuddy.cjs：仅请求能力检查，不生成或上传素材。
+
+下一步
+确认用户已有 WorkBuddy CLI 的启动方式与正常登录路径，使用官方登录/宿主连接完成认证后继续样片。
+
+后续验证
+用户所指命令为 codebuddy（未发现 codebuddyy 别名）。全局正式入口正在被包管理器替换，因此没有更改安装，使用其完整 2.134.0 旧目录并禁用该诊断进程自动更新。
+独立 CodeBuddy CLI 的现有登录可正常调用 hy3。将 VideoGen 加入检查会话的工具范围后，ToolSearch 成功取得真实定义。
+注意：首次仅开放 ToolSearch 的检查不会找到被工具范围排除的 VideoGen，不能据此判断产品不支持。
+此独立 CLI 的内置 VideoGen 支持本地 image、last_image、seconds、resolution、output_dir，不依赖 Miora 的桌面临时授权。
+当前已通过内置 VideoGen 发起单条冷启动样片调用，状态见 cold-generation-report.json。并未宣称独立 WorkBuddy 设计模式的完整宿主认证已经跑通。
+
+实际生成结果
+单次 VideoGen 返回 completed，MP4 已保存到 cold-sample，并无损重新封装为 silver-dragon-cold-preview.mp4 以便预览。
+ffprobe 确认8.041667秒、1280×720、24fps、H.264、193帧、无音轨。
+本次证明的是独立 CodeBuddy CLI 内置视频生成通道可用；Miora 的独立桌面认证问题仍未解决。
+样片存在中段镜头尺度变化，尚未进行恢复动画、循环背景和实际应用窗口的无缝衔接验收。

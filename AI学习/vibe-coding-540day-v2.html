@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vibe Coding 540天学习系统 · 未定义实验室</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070c;--bg2:#0a0f1a;--s:rgba(255,255,255,.03);--b:rgba(255,255,255,.06);--t1:#eaeaea;--t2:rgba(255,255,255,.72);--t3:rgba(255,255,255,.42);--t4:rgba(255,255,255,.22);--g:#10b981;--bl:#3b82f6;--p:#8b5cf6;--a:#f59e0b;--r:#ef4444;--pk:#ec4899;--ga:rgba(16,185,129,.07);--ba:rgba(59,130,246,.07);--pa:rgba(139,92,246,.06);--aa:rgba(245,158,11,.06);--ra:rgba(239,68,68,.06);--pka:rgba(236,72,153,.05)}
+*{box-sizing:border-box;margin:0;padding:0}body{background:linear-gradient(155deg,var(--bg),var(--bg2),#070b12);color:var(--t1);font-family:'Noto Sans SC',system-ui,sans-serif;min-height:100vh;line-height:1.65;font-size:13px}
+.m{font-family:'JetBrains Mono',monospace}a{color:#93c5fd;text-decoration:none}a:hover{color:#bfdbfe;text-decoration:underline}button{cursor:pointer;font-family:inherit;border:none}textarea,input{font-family:inherit;outline:none}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+/* Header */
+#hd{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.05),rgba(236,72,153,.03));border-bottom:1px solid var(--b);padding:12px 14px 10px;position:sticky;top:0;z-index:200;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+#hd .w{max-width:880px;margin:0 auto}
+.hdr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.hdr h1{font-size:16px;font-weight:900;background:linear-gradient(135deg,#60a5fa,#a78bfa,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:600;margin-left:auto;white-space:nowrap}
+.pb{height:5px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;margin-bottom:7px}.pb .f{height:100%;background:linear-gradient(90deg,var(--g),var(--bl),var(--p),var(--a),var(--r),var(--pk));border-radius:3px;transition:width .4s}
+.sts{display:flex;gap:10px;flex-wrap:wrap;font-size:10px}.sts b{font-weight:700}
+/* Main */
+.mn{max-width:880px;margin:0 auto;padding:10px 14px 50px}
+/* Toolbar */
+.tb{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.btn{padding:4px 9px;border-radius:5px;font-size:10px;font-weight:500;background:var(--s);color:var(--t3);border:1px solid var(--b);transition:all .12s}
+.btn.on{border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07);color:#93c5fd}
+.btn:hover{border-color:rgba(96,165,250,.2)}
+.srch{margin-left:auto;display:flex;gap:4px;align-items:center}
+.srch input{width:120px;padding:3px 7px;border-radius:4px;border:1px solid var(--b);background:var(--s);color:#ddd;font-size:10px}
+/* Phases */
+.phs{display:flex;gap:3px;margin-bottom:10px;overflow-x:auto;padding-bottom:3px}
+.ph{min-width:72px;padding:5px 7px;border-radius:5px;background:var(--s);flex:1 0 auto;cursor:pointer;transition:all .12s;border:1px solid transparent}
+.ph:hover,.ph.on{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.04)}
+.ph .br{height:2px;background:rgba(255,255,255,.04);border-radius:1px;margin-top:3px}.ph .br .f{height:100%;border-radius:1px;transition:width .3s}
+/* Timer */
+.tmr{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:var(--s);border:1px solid var(--b);margin-bottom:10px}
+.tmr .time{font-size:22px;font-weight:900;letter-spacing:1px}
+.tmr button{padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;color:#fff}
+/* Calendar */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:3px}
+.cd{padding:5px;border-radius:5px;text-align:left;border:1px solid rgba(255,255,255,.03);background:rgba(255,255,255,.008);transition:all .1s;cursor:pointer}
+.cd:hover{border-color:rgba(96,165,250,.18)}
+.cd.dn{border-color:rgba(16,185,129,.18);background:rgba(16,185,129,.04)}
+/* Detail */
+.crd{border-radius:9px;padding:12px;margin-bottom:10px}
+.crd .lb{font-weight:700;font-size:11px;margin-bottom:4px}
+.crd .bd{font-size:12px;color:var(--t2);line-height:1.75}
+/* Tasks */
+.tk{display:flex;gap:6px;padding:5px 7px;margin-bottom:2px;border-radius:4px;background:rgba(255,255,255,.012);border:1px solid rgba(255,255,255,.025);align-items:flex-start;cursor:pointer;transition:all .1s}
+.tk:hover{background:rgba(255,255,255,.025)}
+.tk.dn{opacity:.5}
+.tk .cb{width:16px;height:16px;border-radius:3px;border:1.5px solid rgba(255,255,255,.18);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .12s}
+.tk.dn .cb{background:var(--g);border-color:var(--g);color:#fff}
+.tk .tx{font-size:11.5px;color:var(--t2);line-height:1.5;flex:1}
+/* Resource cards */
+.rc{display:grid;gap:4px;margin-top:6px}
+.rl{display:flex;gap:8px;padding:7px 9px;border-radius:6px;background:rgba(96,165,250,.04);border:1px solid rgba(96,165,250,.1);align-items:flex-start;transition:all .1s}
+.rl:hover{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2)}
+.rl .ico{font-size:14px;flex-shrink:0;margin-top:1px}
+.rl .info{flex:1;min-width:0}
+.rl .tt{font-size:11px;font-weight:600;color:#93c5fd;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rl .desc{font-size:10px;color:var(--t3);line-height:1.4;margin-top:1px}
+.rl .tags{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap}
+.rl .tag{font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,.05);color:var(--t4)}
+/* List */
+.li{display:flex;align-items:center;gap:5px;padding:3px 5px;border-radius:3px;cursor:pointer;transition:background .08s;font-size:10.5px}
+.li:hover{background:rgba(96,165,250,.03)}
+.li.dn{background:rgba(16,185,129,.02)}
+.li.dn .tl{color:var(--t4)}
+/* Dashboard */
+.dash{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+.dcard{padding:12px;border-radius:8px;background:var(--s);border:1px solid var(--b)}
+.dcard .num{font-size:24px;font-weight:900}
+.dcard .label{font-size:10px;color:var(--t3);margin-top:2px}
+/* Milestone */
+.mile{padding:12px;border-radius:9px;border:1px solid;margin-bottom:10px;text-align:center}
+.mile .icon{font-size:28px}
+.mile .msg{font-size:13px;font-weight:600;margin-top:4px}
+/* Note */
+.note{width:100%;min-height:45px;padding:7px;border-radius:5px;border:1px solid var(--b);background:var(--s);color:#ddd;font-size:11px;line-height:1.5;resize:vertical}
+/* Complete btn */
+.cbtn{width:100%;padding:9px;border-radius:7px;font-size:12px;font-weight:700;transition:all .12s}
+.cbtn.off{background:linear-gradient(135deg,var(--g),#059669);color:#fff}
+.cbtn.on{background:var(--ra);color:#f87171}
+/* Modal */
+.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#111827;border:1px solid var(--b);border-radius:12px;padding:20px;max-width:500px;width:100%;max-height:80vh;overflow:auto}
+.modal h3{font-size:15px;margin-bottom:12px}
+.modal textarea{width:100%;min-height:120px;margin:8px 0}
+/* Footer */
+.ft{margin-top:20px;padding:10px 0;border-top:1px solid var(--b);text-align:center;font-size:9px;color:rgba(255,255,255,.1)}
+@media(max-width:480px){.cg{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}.srch input{width:80px}.dash{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="hd"><div class="w">
+<div class="hdr"><span style="font-size:20px">⚡</span><h1>Vibe Coding 540天学习系统</h1><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.35);margin-left:4px">by 未定义实验室</span><span class="badge" style="background:linear-gradient(135deg,#7c3aed,#ec4899);color:#fff;font-size:9px;padding:3px 8px">v2</span></div>
+<div class="pb"><div class="f" id="pf"></div></div>
+<div class="sts" id="sts"></div>
+</div></div>
+<div class="mn" id="app"></div>
+
+<!-- Mentor Prompt Modal -->
+<div id="mentorModal" style="display:none" class="modal-bg" onclick="if(event.target===this)closeMentor()">
+<div class="modal" style="max-width:680px;max-height:90vh">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+<h3 style="font-size:15px;color:#fff">🧑‍🏫 AI 导师模式 <span style="font-size:10px;font-weight:400;color:var(--t4)">by 未定义实验室</span></h3>
+<button onclick="closeMentor()" style="background:var(--s);border:1px solid var(--b);border-radius:4px;padding:3px 8px;color:var(--t3);font-size:10px">✕</button>
+</div>
+
+<div style="font-size:12px;color:var(--t2);line-height:1.8;margin-bottom:14px">
+
+<p style="margin-bottom:10px"><strong style="color:#fff">你只需要做一件事</strong>，剩下的AI全自动完成：</p>
+
+<div style="padding:12px;background:var(--s);border-radius:8px;border:1px solid var(--b);margin-bottom:12px">
+<p style="font-weight:700;color:#fbbf24;margin-bottom:10px;font-size:13px">📋 操作步骤：</p>
+
+<div style="margin-bottom:10px">
+<p style="font-weight:700;color:var(--t1);margin-bottom:4px;font-size:12px">① 复制导师提示词</p>
+<p style="font-size:11px;color:var(--t3)">点击下方紫色按钮。</p>
+</div>
+
+<div style="margin-bottom:10px">
+<p style="font-weight:700;color:var(--t1);margin-bottom:4px;font-size:12px">② 打开AI → 上传文件 + 粘贴提示词 → 一起发送</p>
+<div style="font-size:11px;color:var(--t3);padding:6px 10px;background:rgba(0,0,0,.2);border-radius:5px;margin-top:4px">
+  <strong>Claude</strong>（推荐）→ claude.ai → 新对话 → 📎上传HTML → 粘贴提示词 → 发送<br>
+  <strong>ChatGPT</strong> → chat.openai.com → 📎上传 → 粘贴 → 发送<br>
+  <strong>Gemini / DeepSeek</strong> → 同上操作
+</div>
+</div>
+
+<div>
+<p style="font-weight:700;color:var(--t1);margin-bottom:4px;font-size:12px">③ 然后就不用你操心了，AI会自动：</p>
+<div style="display:grid;gap:4px;font-size:11px">
+  <div style="padding:5px 8px;background:var(--ga);border-radius:4px;color:var(--t2)">1️⃣ 读取540天课程内容</div>
+  <div style="padding:5px 8px;background:var(--pa);border-radius:4px;color:var(--t2)">2️⃣ 用5道选择题了解你的学习方式（1分钟）</div>
+  <div style="padding:5px 8px;background:var(--ba);border-radius:4px;color:var(--t2)">3️⃣ 打开学习追踪器，问你从 Day 几开始</div>
+  <div style="padding:5px 8px;background:var(--aa);border-radius:4px;color:var(--t2)">4️⃣ 根据你的画像，一步步教你当天内容</div>
+</div>
+</div>
+</div>
+
+<div style="padding:8px;background:var(--aa);border-radius:6px;font-size:11px;margin-bottom:10px">
+  <strong style="color:#fbbf24">💡</strong><span style="color:var(--t3)"> 每次新对话要重新上传+粘贴。课程有更新时，上传新版HTML即可，AI会自动用新版覆盖旧版。推荐开 Claude Memory 记住进度。</span>
+</div>
+
+<div style="display:grid;gap:3px;margin-bottom:10px;font-size:11px">
+<div style="color:var(--t3)">学习中你随时可以说：</div>
+<div style="padding:4px 8px;background:var(--s);border-radius:4px">💬「review我的代码」/ 「我卡住了」/ 「给我出题」/ 「今天的总结」</div>
+</div>
+</div>
+
+<div style="position:relative">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+<span style="font-size:11px;font-weight:700;color:var(--t3)">📄 导师提示词（点击复制）</span>
+<span id="copyStatus" style="font-size:10px;color:var(--g);display:none">✅ 已复制到剪贴板！</span>
+</div>
+<pre id="mentorPrompt" onclick="copyMentor()" style="background:#0d1117;border:1px solid var(--b);border-radius:8px;padding:12px;font-size:10.5px;color:var(--t2);line-height:1.7;max-height:45vh;overflow:auto;cursor:pointer;white-space:pre-wrap;word-break:break-word;font-family:'JetBrains Mono','Noto Sans SC',monospace">你是「未定义实验室」开发的 Vibe Coding 540天学习系统的AI导师。你正在教一个从来没写过代码的学生学 Vibe Coding（用AI辅助编程）。整个课程18个月，540天。
+
+## ⚠️ 收到文件后：严格按 1→2→3 顺序执行
+
+学生会上传一个 HTML 文件 + 这段提示词。收到后按以下顺序操作，不要跳步：
+
+### 步骤1：读取课程（静默完成）
+提取 HTML 中 JavaScript 的数据：RAW/T2（Day 1-60）、gT/gD（Day 61-120）、aT/aD（Day 121-180）、eT/sT/mT（Day 181-540）、R 对象（140+资源链接）、RMAP（映射）。
+
+**版本覆盖规则**：如果你之前已经读取过旧版本的课程文件，以本次上传的新版本为准，完全覆盖旧数据。告诉学生：「✅ 课程已更新为最新版本（540天内容）。」
+
+如果是首次上传，回复：「✅ 课程已读取（540天内容）。在开始之前，我想花1分钟了解一下你。」
+然后立刻进入步骤2。
+
+如果学生之前已经完成过画像问卷（比如通过Memory或快照粘贴），跳过步骤2直接进入步骤3。
+
+### 步骤2：采集学员画像（逐题对话式）
+用对话的方式逐题提问——问一题，等学生回答，再问下一题。不要一次列出所有题：
+
+第1题：「学新东西时（比如学做一道菜），你更喜欢？
+A. 先看完食谱理解每步，再动手
+B. 直接开做，遇到问题再查
+C. 看一步做一步」
+
+第2题：「跟教程学习时你通常觉得？
+A. 太慢了，想快点到实战
+B. 节奏刚好
+C. 有时跟不上，要多看几遍」
+
+第3题：「遇到不会的问题，你一般？
+A. 自己先搜索尝试
+B. 希望有人给方向，我自己做
+C. 希望一步步带我」
+
+第4题：「你学 Vibe Coding 主要是？
+A. 想做一个具体产品  B. 提升职业竞争力  C. 好奇  D. 好玩」
+
+第5题：「你更喜欢哪种学习形式？
+A. 视频（有人讲解）  B. 图文（边看边做）  C. 直接给工具自己玩」
+
+5题收集完后总结：
+「📝 了解你了！
+- 学习偏好：[先理解/先动手/混合]
+- 节奏：[快/稳/慢]
+- 求助方式：[探索型/引导型/手把手型]
+我会根据这些调整教学，觉得不对随时跟我说。」
+
+### 步骤3：渲染学习追踪器（写入画像数据）
+在预览区打开HTML追踪器（Claude用Artifact，ChatGPT用Canvas，其他AI用预览功能）。
+渲染时，将步骤2采集到的学员画像写入追踪器的「🧒 我的画像」板块（更新localStorage中的vc2pf数据）。
+然后说：「🚀 准备好了！追踪器已打开，你的学习画像也同步进去了。告诉我你从 Day 几 开始？（新同学从 Day 1）」
+
+当学生说 Day X 时，基于HTML中该天的实际数据教学。Day 61+ 教程较简短时，基于主题扩写。
+
+## 📡 自动同步追踪器（重要）
+
+学生不需要手动更新追踪器——你来负责保持它和教学进度同步。在以下时机，主动更新预览区的追踪器：
+
+| 时机 | 更新什么 |
+|------|---------|
+| 学生完成一天的学习（所有任务做完或说「今天的总结」） | 将该天标记为已完成（更新st.d[dayNumber]=true），刷新追踪器 |
+| 学生逐个完成任务 | 更新对应任务的打卡状态（st.t[day_taskIndex]=true） |
+| 学生写了学习笔记或心得 | 保存到该天的笔记区（st.n[dayNumber]） |
+| 画像有更新（通过互动观察到新特征） | 更新画像板块的对应维度 |
+| 每10天画像反馈后学生确认或修正 | 同步最新画像到追踪器 |
+
+**怎么更新**：重新渲染追踪器Artifact/Canvas，将更新后的数据写入。确保localStorage的vc2（进度）和vc2pf（画像）都是最新的。
+
+**更新时告知学生**：每次更新后简短说一句，如「✅ 已同步到追踪器（Day 5 已打卡，连续5天🔥）」，让学生知道数据已保存。不需要长篇解释。
+
+## 你的风格：专业但不冷冰冰
+- 你像一个耐心的朋友，但你教的东西是专业的、准确的
+- 用中文教学，技术名词保留英文（如 API、React、Supabase）
+- 每个专业术语第一次出现时，必须用括号加一句大白话解释
+- 核心教学方法：生活比喻引入 → 技术概念讲解 → 代码示范 → 动手练习 → 纠错答疑
+- 语气规则：句子不超过20字，段落不超过5行，用「你」「我们」而非「学员应当」
+
+## 分阶段教学深度
+- Day 1-60（觉醒期）：像教完全的外行人。大量生活比喻，零术语假设，每天最多2个新概念
+- Day 61-120（成长期）：开始引入技术概念，但每个新术语都要解释
+- Day 121-180（进阶期）：项目驱动教学，减少手把手，增加引导式提问
+- Day 181-360（专家/资深期）：平等讨论，聚焦架构决策和最佳实践
+- Day 361-540（大师期）：同行交流，聚焦创新、系统设计和行业影响
+
+## 540天路线概览
+- 🌱 Day 1-60：零基础入门。工具：Replit、Bolt.new、TRAE、Cursor、Supabase、Vercel
+- 🌿 Day 61-120：TypeScript → Prisma → 认证 → 支付 → SaaS产品
+- 🌳 Day 121-180：tRPC → AI应用(LangChain/RAG) → React Native → Docker → 设计系统
+- ⚡ Day 181-270：系统设计 → 缓存 → GraphQL → 安全 → 多智能体 → 微服务
+- 🔥 Day 271-360：开源贡献 → 技术写作 → 企业级架构 → AWS → Terraform
+- 👑 Day 361-540：Claude Code → Agentic Engineering → LLM架构 → 团队规范 → 行业影响
+
+## ⚡ 核心职能：分步教学
+
+重要：不要一次性输出所有内容。按步骤引导学生，像真人老师那样一步步来。
+
+### 当学生说「我在 Day X」时：
+
+**第一步（自动发送）：只给「今天学什么」+ 任务清单**
+
+📖 今天学什么（300-500字）：
+- 用一个生活比喻开头：「想象你在……」
+- 讲清楚今天的核心概念，句子简短，术语首次出现必须用括号加大白话解释
+- 螺旋复习：「还记得 Day X 学的 XX 吗？今天是它的升级版」
+- 不需要在这里放代码——代码等做任务时再给
+
+✅ 今天的任务清单（列出3-5个，标好序号）：
+- 前2个简单（建立信心），最后1个是挑战
+- 每个任务写清楚：做什么 + 用什么工具 + 做成什么样
+- 不要在这里展开任务细节——等学生说「开始第1个」再展开
+
+最后说：「准备好了吗？跟我说『开始第1个任务』我们就开始 🚀」
+
+### 当学生说「开始第X个任务」或「下一步」时：
+
+**展开这一个任务的详细指导**：
+- 具体的操作步骤（打开什么 → 点哪里 → 输入什么）
+- 如果需要代码：给10-15行，每行加中文注释，学生可直接复制运行
+- 做完后的预期结果：「如果成功了，你应该能看到……」
+- 最后说：「完成了跟我说，我们进入下一个任务」或「遇到问题随时问我」
+
+### 当所有任务完成后（或学生说「今天的总结」）：
+
+给出收尾内容：
+- ⭐ 今天的3个重点（每条一句话，至少1条是常见错误提醒）
+- 🧪 3个自检小问题（概念 → 实操 → 延展）
+- 🔗 2-3个推荐学习资源（优先B站中文，标注📺/🎬/📖/🎮 + 时长）
+- 📌 今天总结 + 明天预告（2-3句话）
+
+### 教程质量规范（适用于所有阶段）
+- 教程解说中必须有至少1个生活比喻
+- 代码每段≤15行，每行加中文注释
+- 涉及工具时给具体步骤，不说「请安装XX」要说「打开浏览器输入 xxx.com，点右上角的注册按钮」
+- 主动连接已学知识 + 预告未来应用
+
+## 📏 质量标准示例
+
+当学生说「我在 Day 10，今天学数据库」时，你的第一条回复应该是这样的（注意：只给教程+任务清单，不展开任务细节）：
+
+---
+📖 今天学什么：
+
+你有没有遇到过这种情况：在网页上辛辛苦苦添加了好几条待办事项，一刷新——全没了？
+
+这是因为你的应用没有「记忆力」。就像一条金鱼，转一圈就忘了所有事。
+
+怎么给应用加上记忆？用「数据库」（database，就是专门帮应用存数据的地方）。
+
+数据库就是一个超级 Excel 表格，专门帮你的应用记东西。你往里存数据，关了电脑也不会丢。
+
+还记得 Day 6 你做的习惯打卡器吗？如果当时有数据库，刷新之后打卡记录还会在。这就是数据库的价值——让你的应用拥有「长期记忆」。
+
+今天我们先了解概念、注册工具。具体怎么用数据库写代码，Day 23 会手把手教你。
+
+✅ 今天的任务清单：
+1. 让AI用3种不同的比喻帮你解释「数据库是什么」
+2. 在 Replit 做一个小实验：用 localStorage（浏览器自带的小记忆）做个笔记应用
+3. 注册 Supabase（supabase.com）账号，看看后台界面长什么样
+
+准备好了吗？跟我说「开始第1个任务」🚀
+---
+
+然后学生说「开始第1个」，你再展开任务1的具体操作步骤。一步步来，不要一次全给。
+
+## 特殊指令
+
+| 学生说 | 你怎么做 |
+|--------|---------|
+| 「review我的代码」 | ①先找1个优点肯定 ②指出问题（用比喻+技术双重解释）③给出修复代码 ④解释怎么避免 |
+| 「给我出题」 | 出3-5道题（概念+写代码混合），做完批改并讲解 |
+| 「我卡住了」 | ①换一种全新比喻重新解释 ②把问题拆成更小步骤 ③给一个5分钟极简练习 ④如反复卡住建议降低难度 |
+| 「今天的总结」 | 整理知识点 → 列待复习项 → 预告明天 |
+| 「测试我」 | 出5-10道题打分（选择+填空+编程），分析薄弱点 |
+| 「复习」 | 螺旋复习：回顾本周 + 连接之前所有相关知识，用结构化方式梳理 |
+
+## 周期性教学节奏
+- **每7天（Day 7/14/21…）是复习日**：帮学生做螺旋复习——不仅回顾本周，还要连接前面所有相关知识形成知识网络
+- **每30天（Day 30/60/90…）是评估日**：出综合测试（10-15题），评估掌握程度，标注薄弱点，制定改进计划
+- 学生在复习日找你时，优先进入复习模式
+
+## 动态调整策略
+1. **掌握程度**：学生频繁卡住 → 降低任务复杂度，增加基础练习
+2. **工具版本**：始终使用最新版本的API和写法教学
+3. **学生兴趣**：如果学生项目偏向某领域（金融/教育/电商），用该领域的例子讲概念
+4. **跳天处理**：学生跳过某些天 → 提醒哪些是后面的前置知识，帮制定补习计划
+5. **时间控制**：学生每天只有2小时——严格控制内容量，确保任务在2小时内可完成
+
+## 🧒 因材施教系统
+
+你不是教「标准学生」，而是教「这个人」。通过互动了解他，调整教法适配他。
+
+### 冷启动已解决
+
+步骤2的问卷已在教学开始前采集了初始画像。用问卷结果作为起点，后续通过互动持续更新。
+
+### 追踪4个核心维度（从6个精简而来）
+
+**① 学习偏好**
+- 先理解型：喜欢先搞懂「为什么」再动手 → 多讲原理，先解释后操作
+- 先动手型：喜欢先做出东西再理解原理 → 先给步骤，做完再讲「你刚才做的是什么」
+- 判断信号：问「为什么」多→理解型。说「直接告诉我怎么做」→动手型
+
+**② 学习节奏**
+- 快：任务完成快，主动要求更多 → 减少基础练习，加挑战
+- 稳：按部就班完成 → 保持节奏
+- 慢：经常需要多解释，做任务时间长 → 拆成更小步骤，多给练习
+- 判断信号：完成速度 + 是否主动要求加速/减速
+
+**③ 求助模式**
+- 探索型：喜欢自己摸索，给提示就行 → 给方向不给答案
+- 引导型：需要一些指导但能跟上 → 给框架让他填细节
+- 手把手型：需要每一步都交代清楚 → 不跳步骤，多给确认点
+- 判断信号：卡住时是自己先尝试、还是直接问答案
+
+**④ 薄弱模式**（最有价值——客观数据）
+- 记录学生犯过的每一个错（主题+错误类型）
+- 同一类错误出现2次 = 系统性薄弱点 → 下次相关主题自动加一个防错练习
+- 这个维度不靠猜，靠记录
+
+### 每次互动收集5个关键信号
+
+| 你观察到 | 意味着 | 你的调整 |
+|---------|--------|---------|
+| 学生用「为什么」开头提问 | 理解型，好奇心驱动 | 多讲原理和背景 |
+| 任务完成特别快或说「太简单了」 | 需要更多挑战 | 下个任务加难度 |
+| 同一类错误再次出现 | 系统性薄弱点 | 出2-3道专项练习 |
+| 学生主动分享了想做的项目 | 有内在动力 | 后续用这个项目作教学案例 |
+| 连续求助或说「看不懂」 | 难度偏高或解释方式不对 | 降低难度+换比喻+直接问「哪里不懂？」|
+
+注意：不要从回复长短猜学生情绪（可能只是在手机上打字）。不确定时直接问：「你觉得这个节奏可以吗？需要我快一点还是慢一点？」
+
+### 画像置信度
+
+| 阶段 | 画像数据量 | 调整幅度 |
+|------|-----------|---------|
+| Day 1-7 | 低（刚开始观察） | 小幅调整，主要用默认策略 |
+| Day 8-30 | 中（有了初步判断） | 开始明显适配，但保持灵活 |
+| Day 30+ | 高（稳定的画像） | 大胆适配，遇到新信号微调 |
+
+### 每10天反馈 + 让学生确认
+
+每10天（Day 10/20/30…）主动分享一次你的观察，并请学生确认或纠正：
+
+「📝 我对你的学习观察（第X天）：
+- 你属于[先理解再动手]的类型，我后面会先讲概念再给操作
+- 你的学习节奏是[稳健]的，当前的任务量刚好
+- 你在[XX概念]上卡过两次，我会在后面相关主题多出练习
+- 你的[XX比喻]理解得特别快，后面多用这类比喻
+
+这些说得对吗？有什么需要调整的跟我说。」
+
+学生说「对的」→ 继续。学生说「其实我更喜欢XX」→ 立刻调整。
+
+## 进度+画像快照（学生保存用）
+
+每次对话结束时提供。学生可能已经从HTML追踪器生成了初始画像——你要在那个基础上更新，而不是覆盖：
+
+```
+📊 未定义实验室 · 进度+学习画像（下次对话开头粘贴这个）
+
+【进度】
+Day: XX | 阶段: XX期
+已完成: [关键里程碑]
+技能水平: [提示词⭐⭐⭐ React⭐⭐ 数据库⭐⭐⭐⭐]
+薄弱点: [具体的知识点，不是笼统的领域]
+
+【学习画像】（AI观察+学生自评）
+学习偏好: [先理解 / 先动手 / 混合]
+学习节奏: [快 / 稳 / 慢]
+求助模式: [探索型 / 引导型 / 手把手型]
+反复出错: [如: forEach vs map搞混过2次 / 环境变量忘记配置过3次]
+有效的教法: [如: 餐厅比喻效果好 / 喜欢先看完整代码再拆解]
+兴趣方向: [如: 想做电商类项目]
+画像置信度: [低(Day1-7) / 中(Day8-30) / 高(Day30+)]
+
+下次从: Day XX [主题] 开始
+```
+
+## 3条铁律
+1. **80%时间动手写代码**——学生只在看不在做时，提醒「打开编辑器跟着敲一遍」
+2. **报错是最好的老师**——引导学生自己读错误信息，先问「报错说了什么？」再帮忙
+3. **每个新概念配一个比喻**——新手靠比喻建立直觉，不是靠定义记忆</pre>
+
+<div style="display:flex;gap:6px;margin-top:8px">
+<button onclick="copyMentor()" style="flex:1;padding:8px;border-radius:6px;background:linear-gradient(135deg,var(--p),#7c3aed);color:#fff;font-size:12px;font-weight:700">📋 复制导师提示词</button>
+<button onclick="copyMentorEN()" style="padding:8px 12px;border-radius:6px;background:var(--s);border:1px solid var(--b);color:var(--t3);font-size:10px">English ver.</button>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// ===== PHASES =====
+const PH={A:{n:"觉醒期",i:"🌱",c:"#10b981",m:"1-2"},G:{n:"成长期",i:"🌿",c:"#3b82f6",m:"3-4"},V:{n:"进阶期",i:"🌳",c:"#8b5cf6",m:"5-6"},E:{n:"专家期",i:"⚡",c:"#f59e0b",m:"7-9"},S:{n:"资深期",i:"🔥",c:"#ef4444",m:"10-12"},M:{n:"大师期",i:"👑",c:"#ec4899",m:"13-18"}};
+
+// ===== 140+ TUTORIAL RESOURCES DATABASE =====
+// Format: [title, url, type_icon, tags[]]
+// type_icon: 🎬=video 📖=article 🎮=interactive 📺=bilibili
+const R={
+"vibe入门":[
+["【零基础Vibe Coding教程】入门篇(54K+播放)","https://www.bilibili.com/video/BV1c42tBaEJA/","📺",["中文","视频","入门"]],
+["Datawhale Vibe-Vibe 开源教程","https://vibevibe.cn","🎮",["中文","交互","系统化"]],
+["非程序员Cursor完全指南(32K+播放)","https://www.bilibili.com/video/BV165NfeKEgX/","📺",["中文","视频","实战"]],
+["DeepLearning.ai: Vibe Coding 101","https://www.deeplearning.ai/short-courses/vibe-coding-101-with-replit/","🎮",["英文","交互","1.5h"]],
+["Vibe Coding CN 中文指南","https://github.com/tukuaiai/vibe-coding-cn","📖",["中文","开源","Prompt库"]]],
+"replit":[
+["用Replit AI一小时建网站(YouTube)","https://www.youtube.com/watch?v=Cn0e3zyPFHc","🎬",["英文","视频","1h"]],
+["Replit官方学习平台","https://learn.replit.com/","🎮",["英文","交互","零基础"]],
+["Replit云IDE快速了解","https://www.bilibili.com/video/BV1Ct4y1a7jh/","📺",["中文","视频","3分钟"]]],
+"html_css_js":[
+["3小时前端入门(HTML+CSS+JS)","https://www.bilibili.com/video/BV1BT4y1W7Aw/","📺",["中文","视频","3h"]],
+["黑马pink老师前端入门(B站最火)","https://www.bilibili.com/video/BV14J4114768","📺",["中文","视频","56h","百万播放"]],
+["freeCodeCamp 响应式网页设计","https://www.freecodecamp.org/learn/responsive-web-design-v9","🎮",["英文","交互","免费认证"]],
+["Microsoft Learn: Vibe编码简介","https://learn.microsoft.com/zh-cn/training/modules/introduction-vibe-coding/","🎮",["中文","交互","官方"]]],
+"bolt":[
+["Bolt.new官方视频教程合集","https://support.bolt.new/building/video-tutorials","🎬",["英文","视频","官方"]],
+["Bolt.new中文配音新手教程","https://www.bilibili.com/video/BV13725YDEbt/","📺",["中文","视频","33分钟"]],
+["Bolt.new教程指南(知乎)","https://zhuanlan.zhihu.com/p/1903174205891155767","📖",["中文","图文","详细"]]],
+"prompt":[
+["提示工程指南(中文完整版)","https://www.promptingguide.ai/zh","📖",["中文","权威","系统化"]],
+["Datawhale Easy-Vibe提示词教程","https://datawhalechina.github.io/easy-vibe/","🎮",["中文","交互","Vibe专用"]],
+["菜鸟教程:提示词工程","https://www.runoob.com/ai-agent/prompt-engineering.html","📖",["中文","图文","入门"]],
+["Graphite: Vibe Coding提示词指南","https://graphite.com/guides/enhancing-vibe-coding-prompt-engineering","📖",["英文","图文","进阶"]]],
+"git":[
+["尚硅谷Git与GitHub全套教程(130万播放)","https://www.bilibili.com/video/BV1pW411A7a5/","📺",["中文","视频","8h"]],
+["廖雪峰Git教程(最经典中文教程)","https://www.liaoxuefeng.com/wiki/896043488029600","📖",["中文","图文","经典"]],
+["Learn Git Branching(游戏化学习)","https://learngitbranching.js.org/?locale=zh_CN","🎮",["中文","游戏","交互"]]],
+"cursor":[
+["Cursor保姆级使用教程(52万播放)","https://www.bilibili.com/video/BV1WBG9zgECp/","📺",["中文","视频","热门"]],
+["普通人AI编程指南(88万播放)","https://www.bilibili.com/video/BV1yorUYWEGD/","📺",["中文","视频","最火"]],
+["10分钟零基础学Cursor","https://www.bilibili.com/video/BV1QuZAY2EW1/","📺",["中文","视频","10分钟"]]],
+"trae":[
+["TRAE官方入门教程","https://www.bilibili.com/video/BV1qrebz2Emu/","📺",["中文","视频","官方"]],
+["Trae保姆级教程(18集)","https://www.bilibili.com/video/BV1PwBuBtEZo/","📺",["中文","系列","手把手"]],
+["字节Trae使用教程(尚硅谷)","https://www.bilibili.com/video/BV1U3RAYeEBG/","📺",["中文","视频","67K播放"]]],
+"react":[
+["freeCodeCamp React完整课程(16h)","https://www.freecodecamp.org/news/learn-react-2024/","🎬",["英文","视频","16h","170+练习"]],
+["尚硅谷React教程(B站最火)","https://www.bilibili.com/video/BV1wy4y1D7JT/","📺",["中文","视频","30h+"]],
+["React官方教程(交互式)","https://react.dev/learn","🎮",["英文","交互","官方"]]],
+"supabase":[
+["freeCodeCamp Supabase新手教程(5h)","https://www.freecodecamp.org/news/supabase-for-beginners/","🎬",["英文","视频","5h"]],
+["有前端就够了!Supabase全功能教程","https://www.bilibili.com/video/BV1LJ4m1K7SX/","📺",["中文","视频","22K播放"]],
+["一文精通Supabase实战+本地部署","https://zhuanlan.zhihu.com/p/1969464064846573573","📖",["中文","图文","详细"]]],
+"vercel":[
+["手把手教你Vercel部署上线","https://www.cnblogs.com/echolun/p/17524216.html","📖",["中文","图文","详细"]],
+["Vercel Academy官方课程","https://vercel.com/academy","🎮",["英文","交互","官方"]]],
+"responsive":[
+["freeCodeCamp响应式设计认证","https://www.freecodecamp.org/learn/responsive-web-design","🎮",["英文","交互","免费认证"]],
+["响应式Web设计(菜鸟教程)","https://www.runoob.com/css/css-rwd-intro.html","📖",["中文","图文","可运行"]]],
+"api":[
+["API到底是什么??(B站175K播放)","https://www.bilibili.com/video/BV137411z7KM/","📺",["中文","视频","通俗"]],
+["什么是API(freeCodeCamp经典)","https://www.freecodecamp.org/news/what-is-an-api-in-english-please-b880a3214a82/","📖",["英文","图文","最热门"]]],
+"ai_chatbot":[
+["用OpenAI API搭建聊天机器人","https://www.dataquest.io/blog/build-an-ai-chatbot-with-python-and-the-openai-api/","📖",["英文","实战","入门"]],
+["如何用Streamlit+GPT创建聊天机器人","https://apifox.com/apiskills/streamlit-gpt-3-5/","📖",["中文","图文","实战"]]],
+"tailwind":[
+["TailwindCSS新手完整课程(3h)","https://www.youtube.com/watch?v=lCxcTsOHrjo","🎬",["英文","视频","3h"]],
+["TailwindCSS快速入门(B站)","https://www.bilibili.com/video/BV1rv4y1r7HA/","📺",["中文","视频","20K播放"]],
+["freeCodeCamp Tailwind教程","https://www.freecodecamp.org/news/learn-tailwind-css/","🎬",["英文","视频","免费"]]],
+"shadcn":[
+["freeCodeCamp shadcn/ui课程(3h)","https://www.youtube.com/watch?v=lXITA2y6k2I","🎬",["英文","视频","3h"]],
+["shadcn/ui分步教程(DEV)","https://dev.to/nnnirajn/complete-step-by-step-tutorials-on-shadcn-4dcb","📖",["英文","图文","2025"]]],
+"v0":[
+["v0.dev使用指南+项目(DataCamp)","https://www.datacamp.com/tutorial/vercel-v0","📖",["英文","图文","实战"]],
+["V0.dev AI生成式UI工具使用方法","https://www.yjpoo.com/site/3488.html","📖",["中文","图文","入门"]]],
+"figma":[
+["Figma新手教程2025(40万播放)","https://www.bilibili.com/video/BV1QzADeFEcF/","📺",["中文","视频","32分钟"]],
+["零基础学Figma(酸梅干超人38集)","https://www.bilibili.com/video/BV19TDGYWEp7/","📺",["中文","系列","最系统"]],
+["Figma官方2025新手课程","https://help.figma.com/hc/en-us/articles/30848209492887","🎮",["英文","交互","官方"]]],
+"nextjs":[
+["Next.js官方交互教程(16章)","https://nextjs.org/learn","🎮",["英文","交互","官方","必做"]],
+["freeCodeCamp Next.js教程","https://www.freecodecamp.org/news/learn-next-js-tutorial/","🎬",["英文","视频","5h"]],
+["Next.js14完整课程(B站中文字幕)","https://www.bilibili.com/video/BV1n64y1n7xE/","📺",["中文字幕","视频","29K播放"]]],
+"lighthouse":[
+["Lighthouse入门指南(SitePoint)","https://www.sitepoint.com/lighthouse-beginners-guide/","📖",["英文","图文","新手"]],
+["超详细手把手Lighthouse教程(CSDN)","https://blog.csdn.net/tangdou369098655/article/details/122531766","📖",["中文","图文","详细"]]],
+"typescript":[
+["freeCodeCamp TS交互课程(Scrimba)","https://www.freecodecamp.org/news/learn-typescript-with-interactive-lessons/","🎮",["英文","交互","2h"]],
+["尚硅谷TypeScript教程(含贪食蛇项目)","https://www.bilibili.com/video/BV1Xy4y1v7S2/","📺",["中文","视频","完整"]],
+["freeCodeCamp TS完整教程(5h)","https://www.freecodecamp.org/news/programming-in-typescript/","🎬",["英文","视频","5h"]]],
+"prisma":[
+["60分钟学会Prisma(Web Dev Simplified)","https://www.youtube.com/watch?v=RebA5J-rlwg","🎬",["英文","视频","1h"]],
+["Prisma速成(Traversy Media)","https://www.traversymedia.com/blog/prisma-crash-course","🎬",["英文","视频","37分钟"]]],
+"auth":[
+["Next.js官方添加认证教程","https://nextjs.org/learn/dashboard-app/adding-authentication","🎮",["英文","交互","官方"]],
+["Clerk Next.js快速入门","https://clerk.com/docs/nextjs/getting-started/quickstart","📖",["英文","图文","30分钟"]]],
+"stripe":[
+["Next.js+TypeScript+Stripe入门(Vercel官方)","https://vercel.com/kb/guide/getting-started-with-nextjs-typescript-stripe","📖",["英文","图文","官方"]],
+["Next.js+Stripe完整指南(MakerKit)","https://makerkit.dev/blog/tutorials/guide-nextjs-stripe","📖",["英文","图文","详细"]]],
+"tanstack":[
+["TanStack Query速成(PedroTech)","https://dev.to/pedrotech/tanstack-react-query-crash-course-4ggp","📖",["英文","图文","2024"]],
+["TanStack官方学习资源","https://tanstack.com/learn","🎬",["英文","视频","官方"]]],
+"saas":[
+["全栈AI SaaS开发(Next.js+Clerk+Stripe)","https://www.youtube.com/watch?v=Kz-kv7_V7cE","🎬",["英文","视频","5h"]],
+["freeCodeCamp: 如何构建你的第一个SaaS","https://www.freecodecamp.org/news/how-to-build-your-first-saas/","📖",["英文","图文","完整"]]],
+"zustand":[
+["freeCodeCamp Zustand完整教程","https://www.freecodecamp.org/news/zustand-course-react-state-management","🎬",["英文","视频","1h"]],
+["React状态管理对比:useState→Zustand","https://www.youtube.com/watch?v=5-1LM2NySR0","🎬",["英文","视频","25分钟"]]],
+"zod":[
+["Total TypeScript: Zod交互教程","https://www.totaltypescript.com/tutorials/zod","🎮",["英文","交互","练习式"]],
+["Zod完整指南(Better Stack)","https://betterstack.com/community/guides/scaling-nodejs/zod-explained/","📖",["英文","图文","详细"]]],
+"rhf":[
+["React Hook Form官方教程","https://react-hook-form.com/get-started","🎬",["英文","视频+文档","官方"]],
+["React Hook Form完整指南(Hygraph)","https://hygraph.com/blog/react-hook-form","📖",["英文","图文","对比演示"]]],
+"trpc":[
+["T3 Stack全栈教程(freeCodeCamp 15h)","https://www.youtube.com/watch?v=YkOSUVzOAA4","🎬",["英文","视频","15h"]],
+["tRPC 11 + Next.js App Router(2025)","https://dev.to/matowang/trpc-11-setup-for-nextjs-app-router-2025-33fo","📖",["英文","图文","最新"]]],
+"langchain":[
+["LangChain JS/TS新手教程(52分钟)","https://www.youtube.com/watch?v=HSZ_uaif57o","🎬",["英文","视频","52分钟"]],
+["Scrimba LangChain交互课程(免费)","https://scrimba.com/learn/langchain","🎮",["英文","交互","免费"]]],
+"rag":[
+["freeCodeCamp RAG从零开始(2.5h)","https://www.youtube.com/watch?v=sVcwVQRHIc8","🎬",["英文","视频","2.5h"]],
+["用JS构建RAG聊天机器人(freeCodeCamp)","https://www.freecodecamp.org/news/build-your-own-rag-chatbot-with-javascript/","🎬",["英文","视频","JS版"]],
+["Datawhale 动手学大模型应用开发","https://datawhalechina.github.io/llm-universe/","🎮",["中文","交互","RAG实战"]]],
+"rn":[
+["React Native 2025新手课程(JS Mastery)","https://www.youtube.com/watch?v=ZBCUegTZF7M","🎬",["英文","视频","3h"]],
+["Expo官方教程:StickerSmash App","https://docs.expo.dev/tutorial/introduction/","🎮",["英文","交互","官方"]]],
+"docker":[
+["Docker 1小时快速上手(41万播放)","https://www.bilibili.com/video/BV11L411g7U1/","📺",["中文","视频","1h","热门"]],
+["狂神说Docker超详细教程","https://www.bilibili.com/video/BV1og4y1q7M4/","📺",["中文","视频","41集"]]],
+"ghactions":[
+["GitHub Actions入门(GitHub官方)","https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-github-actions/","📖",["英文","图文","官方"]],
+["Microsoft Learn: GitHub Actions","https://learn.microsoft.com/en-us/training/paths/github-actions/","🎮",["英文","交互","免费认证"]]],
+"storybook":[
+["Storybook官方教程(React版)","https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/","🎮",["英文","交互","官方"]]],
+"framer":[
+["Framer Motion速成(1.5h)","https://www.youtube.com/watch?v=znbCa4Rr054","🎬",["英文","视频","1.5h"]],
+["Framer Motion动画作品集项目","https://www.youtube.com/watch?v=urgi2iz9P6U","🎬",["英文","视频","项目式"]]],
+"sysdesign":[
+["系统设计入门(freeCodeCamp×Gaurav Sen)","https://www.youtube.com/watch?v=m8Icp_Cid5o","🎬",["英文","视频","1.5h"]],
+["System Design Primer(GitHub 280K⭐)","https://github.com/donnemartin/system-design-primer","📖",["英文","开源","最权威"]]],
+"redis":[
+["黑马Redis入门到实战(B站最全)","https://www.bilibili.com/video/BV1cr4y1671t/","📺",["中文","视频","最热门"]],
+["Redis速成(28分钟)","https://www.youtube.com/watch?v=jgpVdJB2sKQ","🎬",["英文","视频","28分钟"]]],
+"graphql":[
+["GraphQL新手课程(freeCodeCamp 1.5h)","https://www.youtube.com/watch?v=5199E50O7SI","🎬",["英文","视频","1.5h"]],
+["千锋GraphQL教程(9集)","https://www.bilibili.com/video/BV1EE411e7zB/","📺",["中文","视频","9集"]]],
+"owasp":[
+["OWASP Top 10交互学习(Snyk)","https://learn.snyk.io/learning-paths/owasp-top-10/","🎮",["英文","交互","2025版"]],
+["OWASP Top 10终极指南(含实验)","https://thehackerish.com/owasp-top-10-the-ultimate-guide/","📖",["英文","实战","含Lab"]]],
+"k8s":[
+["K8s新手教程(TechWorld Nana 4h)","https://www.youtube.com/watch?v=X48VuDVv0do","🎬",["英文","视频","4h","最热"]],
+["CNCF×阿里巴巴K8s公开课","https://www.bilibili.com/video/BV1D4411o7ox/","📺",["中文","视频","官方认证"]]],
+"crewai":[
+["DeepLearning.AI多智能体课程(吴恩达)","https://www.deeplearning.ai/short-courses/multi-ai-agent-systems-with-crewai/","🎮",["英文","交互","权威"]],
+["CrewAI速成(GitHub+视频)","https://github.com/alejandro-ao/crewai-crash-course","🎬",["英文","视频","实战"]]],
+"aws":[
+["AWS Cloud Practitioner(freeCodeCamp 14h)","https://www.youtube.com/watch?v=NhDYbskXRgc","🎬",["英文","视频","14h"]],
+["亚马逊云AWS入门(Udemy免费中文)","https://www.udemy.com/course/iteablue-aws-intro/","🎬",["中文","视频","免费"]]],
+"terraform":[
+["freeCodeCamp Terraform+AWS实战","https://www.freecodecamp.org/news/learn-terraform-and-aws-by-building-a-dev-environment/","🎬",["英文","视频","项目式"]],
+["Terraform入门教程(中文电子书)","https://lonegunmanb.github.io/introduction-terraform/","📖",["中文","图文","开源"]]],
+"techblog":[
+["技术博客那些事儿(博客园经典)","https://www.cnblogs.com/ityouknow/p/7198686.html","📖",["中文","图文","经验"]],
+["坚持写技术博客六年的经验","https://javaguide.cn/about-the-author/writing-technology-blog-six-years.html","📖",["中文","图文","激励"]]],
+"opensource":[
+["如何参与开源:GitHub PR全过程","https://www.cnblogs.com/daniel-hutao/p/open-a-pr-in-github.html","📖",["中文","图文","最详细"]],
+["freeCodeCamp开源贡献指南(中文)","https://www.freecodecamp.org/chinese/news/how-to-contribute-to-open-source-projects-beginners-guide/","📖",["中文","图文","入门"]]],
+"claudecode":[
+["Claude Code完整指南(2026更新)","https://www.siddharthbharath.com/claude-code-the-complete-guide/","📖",["英文","图文","最新"]],
+["Claude Code 15分钟新手教程","https://www.youtube.com/watch?v=qxB_PSkHuO0","🎬",["英文","视频","15分钟"]],
+["Anthropic官方Claude Code课程","https://anthropic.skilljar.com/claude-code-in-action","🎮",["英文","交互","官方"]]],
+"agent":[
+["freeCodeCamp构建AI编码Agent","https://www.freecodecamp.org/news/build-an-ai-coding-agent-in-python/","🎬",["英文","视频","2h"]],
+["从0开始做Agent(n8n教程46万播放)","https://www.bilibili.com/video/BV1KSKwzJEEV/","📺",["中文","视频","热门"]],
+["吴恩达LangGraph智能体(中英字幕)","https://www.bilibili.com/video/BV1bi421v7oD/","📺",["中文字幕","视频","权威"]]],
+"llmarch":[
+["大语言模型学习路径(GitHub精选)","https://github.com/ninehills/blog/issues/97","📖",["中文","路线图","权威"]],
+["Datawhale动手学大模型应用开发","https://datawhalechina.github.io/llm-universe/","🎮",["中文","交互","RAG+LangChain"]],
+["B站LLM大模型完整课程(85集)","https://www.bilibili.com/video/BV1pr421K7zP/","📺",["中文","视频","85集"]]]
+};
+
+// Map topic keywords to resource keys
+const RMAP={
+"认识 Vibe":"vibe入门","第一次让 AI":"replit","理解网页三件套":"html_css_js","探索 Bolt":"bolt","提示词":"prompt","习惯打卡":"vibe入门",
+"TRAE":"trae","AI 助手":"vibe入门","数据库":"supabase","Git":"git","响应式":"responsive","部署":"vercel",
+"提示词框架":"prompt","回顾":"vibe入门","里程碑":"vibe入门","毕业":"vibe入门","综合实战":"vibe入门","回顾与反思":"vibe入门",
+"PRD":"prompt","调试":"cursor","Cursor入门":"cursor","Cursor Agent":"cursor","Cursor深度":"cursor",
+"React":"react","后端概念":"api","Supabase":"supabase","用户认证":"auth","待办App":"supabase",
+"API深入":"api","API概念":"api","AI聊天":"ai_chatbot","天气应用":"api","第三方服务":"supabase","AI翻译":"ai_chatbot","代码审查":"owasp",
+"UI设计":"figma","Tailwind":"tailwind","v0":"v0","数据可视化":"react","记账本":"react","Figma":"figma",
+"Next.js":"nextjs","电商":"nextjs","性能优化":"lighthouse","Lighthouse":"lighthouse",
+"测试":"owasp","安全":"owasp","PWA":"responsive","毕业项目":"vibe入门","作品集":"vibe入门","技能评估":"vibe入门","进阶路径":"vibe入门","毕业日":"vibe入门",
+"TypeScript":"typescript","Prisma":"prisma","React Hook Form":"rhf","TanStack":"tanstack","NextAuth":"auth","Stripe":"stripe",
+"Zustand":"zustand","Zod":"zod","SaaS":"saas","SEO":"nextjs","国际化":"nextjs","无障碍":"responsive",
+"日志":"lighthouse","Rate Limiting":"owasp","后台任务":"nextjs","文件上传":"supabase",
+"tRPC":"trpc","LangChain":"langchain","RAG":"rag","AI Agent":"agent","实时功能":"supabase","Convex":"supabase",
+"React Native":"rn","移动端":"rn","GitHub Actions":"ghactions","Docker":"docker","Monorepo":"nextjs","Turborepo":"nextjs",
+"Storybook":"storybook","设计系统":"tailwind","MDX":"nextjs","Framer Motion":"framer","拖拽":"react","桌面应用":"react",
+"系统设计":"sysdesign","缓存策略":"redis","Redis":"redis","GraphQL":"graphql","OWASP":"owasp","Kubernetes":"k8s","CrewAI":"crewai","微服务":"docker",
+"开源项目":"opensource","技术博客":"techblog","技术写作":"techblog","演讲":"techblog","多租户":"sysdesign","RBAC":"owasp","审计":"owasp",
+"测试金字塔":"owasp","覆盖率":"owasp","E2E":"owasp","AWS":"aws","S3":"aws","Lambda":"aws","CloudFront":"aws","Terraform":"terraform",
+"Claude Code":"claudecode","多Agent":"agent","AI代码审查":"claudecode","自定义编码":"claudecode","LLM应用":"llmarch","Prompt管理":"prompt",
+"团队AI":"vibe入门","开源项目发起":"opensource","社区治理":"opensource","技术大会":"techblog","AI+":"llmarch","持续学习":"vibe入门","指导新人":"techblog"
+};
+
+function getResources(title){
+  for(const[kw,rk] of Object.entries(RMAP)){if(title.includes(kw))return R[rk]||[];}
+  return [];
+}
+
+// ===== DAY DATA GENERATION =====
+// [day,title,phase,focus,tutorial,tasks[],keypoints[],extension,resourceKey]
+const RAW=[
+[1,"认识 Vibe Coding","A","概念理解","想象一下：你不用学任何编程语言，只要用大白话告诉 AI「帮我做个天气查询网站」，它就自动帮你写出完整的代码，点一下运行就能用。\n\n这就是 Vibe Coding（氛围编程）。它是 2025 年最火的新概念——由 AI 大牛 Karpathy 提出。核心就一句话：你负责想清楚「要什么」，AI 负责写代码。\n\n你可能会问：那还需要学什么？答案是——学会「说清楚你要什么」。这比你想象的重要得多。同样让 AI 做网站，有人做出来很丑，有人做出来像专业产品，区别就在于你怎么描述需求。\n\n今天的任务很轻松：了解这个概念 + 注册一个工具。",["打开B站搜「零基础Vibe Coding教程」看第一集（约15分钟）","注册 Replit 账号（replit.com）——这是一个在浏览器里写代码的网站，不用安装任何东西","浏览 Replit 界面，随便点点看看，不需要做任何操作"],["Vibe Coding 就是用说人话的方式让 AI 帮你写代码","你不需要记任何编程语法——关键是「描述能力」","今天只需要了解概念 + 注册账号，不要给自己压力"],"如果好奇，可以在知乎搜「Vibe Coding 是什么」看看别人的讨论"],
+[2,"第一次让 AI 写代码","A","动手体验","今天你要亲手体验一次魔法时刻 ✨\n\nReplit 就像一个在浏览器里打开的「代码工作台」，左边写代码，右边实时看效果。最棒的是它内置了 AI 助手——你跟它说中文，它就帮你写代码。\n\n操作超级简单：\n1. 打开 Replit，点「Create」新建项目\n2. 选「HTML, CSS, JS」模板\n3. 在 AI 聊天框里输入你想要的东西\n4. 看右边的预览——你的网页已经出来了！\n\n不满意？继续跟 AI 说「把背景换成深蓝色」「字再大一点」就行。就像跟一个很听话的助手聊天。",["在 Replit 新建一个 HTML/CSS/JS 项目","在 AI 聊天框输入：「做一个深色背景的网页，正中间用大号白色字显示我的名字和一句话签名」","试着修改：跟 AI 说「背景换成渐变色」或「加一个按钮」或「字体换一种好看的」"],["跟 AI 说话就像跟人聊天——不满意就继续说、继续改","你刚才其实已经在「编程」了——只是用的是中文而不是代码","改来改去很正常，专业程序员也是这样一步步调的"],"试试让 AI 加上你的照片或者一个好看的动画效果"],
+[3,"网页的三个组成部分","A","基础概念","昨天你让 AI 生成了一个网页。今天我们来搞懂一件事：那个网页到底是怎么组成的？\n\n想象你在装修一套房子：\n🏗️ HTML = 房子的结构（几个房间、门在哪、窗户在哪）\n🎨 CSS = 装修和家具（墙漆颜色、沙发款式、灯光效果）\n⚡ JavaScript = 电器和智能家居（按开关灯亮、按门铃有声音）\n\n每个网页都由这三样东西组成。你不需要记住它们的语法——只要知道「代码里看到颜色相关的，大概是 CSS；看到点击、弹窗相关的，大概是 JavaScript」就够了。\n\nAI 帮你写的代码里，这三样全都有。今天我们来认认它们的样子。",["让 AI 解释昨天生成的代码：在聊天框输入「请用最简单的中文，逐行解释这段代码是做什么的」","自己动手改一个小东西：找到代码里任何一个颜色值（比如 blue），手动改成 red，点运行看变化","再改一处文字：找到你名字所在的位置，改成别的文字，运行看看"],["HTML 管结构、CSS 管外观、JS 管互动——就像房子的骨架、装修、电器","你不需要记代码怎么写——能看懂「这一段大概在做什么」就足够了","今天手动改了代码并看到变化——恭喜，这是你第一次「读懂」代码！"],"让 AI 分别做三个版本：只有HTML的（很丑但有内容）、加了CSS的（变好看了）、加了JS的（能互动了），对比看区别"],
+[4,"试试另一个工具","A","工具体验","昨天用的 Replit 像一个「写代码的工作台」——你能看到所有代码。\n\n今天我们试一个更傻瓜的工具：Bolt.new。它更像一个「许愿池」——你说一句话，它直接给你一个完整的网站。不需要看代码、不需要选模板，一句话搞定。\n\n两个工具各有好处：\n• Replit → 适合学习（能看到代码是怎么回事）\n• Bolt.new → 适合快速出东西（帮你处理了所有技术细节）\n\n就像做饭：Replit 是买菜自己炒（学到东西），Bolt 是点外卖（快但不知道怎么做的）。两个都有用！",["注册 Bolt.new（bolt.new），打开网站","输入一句话：「帮我做一个简约风格的个人简历网页，包含我的名字、一段自我介绍、三个技能标签」","再试一句：「给这个网页加一个深色模式切换按钮」看看 AI 怎么处理"],["不同工具适合不同场景——就像微信和邮件都能沟通，但用途不同","给 AI 的描述越具体，出来的效果越好","两天做了两个网页了——你比大多数人进步都快！"],"还可以试试 Lovable（lovable.dev），它生成的网站设计特别好看"],
+[5,"学会「跟 AI 下单」","A","提示词入门","前几天你已经在跟 AI 说话让它写代码了。但你有没有发现：有时候说的太模糊，AI 做出来的东西不太对？\n\n这就像在餐厅点菜。如果你说「随便来点吃的」，服务员不知道上什么。但如果你说「一份微辣的水煮鱼，少放花椒，米饭要软一点」——出来的菜肯定更合你意。\n\n跟 AI 说话也是一样的，有个简单公式：\n\n「我要做什么」+「长什么样」+「有什么功能」+「不要什么」\n\n比如：「做一个深色背景的美食博客首页（做什么），顶部有导航栏和logo（长什么样），主区域是2排3列的食谱卡片每张有图片和标题（功能），不要用弹窗（不要什么）」\n\n这种描述方式叫「提示词」，是 Vibe Coding 最核心的技能。",["写3组对比实验：先用模糊的话让 AI 做东西，再用具体的话做同一个东西，对比效果","记录下来：哪些说法 AI 理解得好？哪些词它特别听得懂？","用公式写一个完整的提示词，让 AI 生成一个你自己想要的小网页"],["跟 AI 说话的技巧比编程语法重要100倍——这就是 Vibe Coding 的核心","越具体越好：「蓝色按钮」比「一个按钮」好，「左上角的蓝色圆角按钮」更好","告诉 AI「不要什么」跟告诉它「要什么」一样重要"],"明天开始做你的第一个完整项目，好好想想你想做什么"],
+[6,"你的第一个作品","A","做项目","今天是你的第一个「项目日」🎉！我们要做一个「每日习惯打卡器」。\n\n但请记住一个重要原则：不要想一步到位。\n\n就像搭乐高：先搭一个基本框架→再加细节→最后美化。\n\n我们分四步走：\n① 先让 AI 做一个最简单的版本（就一个列表 + 一个添加按钮）\n② 加上打卡功能（点击就变成「已完成」）\n③ 加上统计（显示你连续打卡多少天）\n④ 最后美化界面\n\n每一步都确认好了再进行下一步。中间遇到报错？太正常了——把错误信息直接复制给 AI，说「这里报错了帮我修」就行。",["在 Replit 新建项目，跟 AI 说「做一个习惯打卡器：能添加习惯、能点击打卡标记完成」","第二步：「给这个打卡器加一个统计功能，显示每个习惯连续打卡了多少天」","第三步：「把界面美化一下，用深色主题，打卡的条目加上好看的动画」"],["做项目的秘诀：一步一步来，不要一次性让 AI 做完所有功能","遇到报错是正常的——把错误信息复制给 AI 它就能帮你修","先让它能用，再让它好看——这是所有程序员的工作方式"],"试试加上「本地存储」功能——刷新页面后数据还在。跟AI说「用localStorage保存数据」"],
+[7,"本周回顾","A","回顾反思","暂停一下，回头看看这一周你做了什么：\n\n✅ 了解了 Vibe Coding 是什么\n✅ 用 Replit 和 Bolt.new 做出了好几个网页\n✅ 知道了网页由 HTML/CSS/JS 三部分组成\n✅ 学会了怎么写更好的提示词\n✅ 完成了第一个项目：习惯打卡器\n\n一周前你还完全不会编程，现在你已经有好几个可以展示的作品了。这个进步非常大，认真的。\n\n今天的任务是回顾和整理。不学新东西，就是把之前的消化一下。",["回看这周做的所有项目，选出你最满意的一个","把你用过的好的提示词记到一个文档里（以后可以复用）","搜索一下「vibe coding 作品」看看别人在做什么——找找灵感"],["每周回顾是学习效率最高的事——比猛学新东西更重要","你的「提示词库」会越来越值钱——好的提示词就像好的菜谱","一周完成这么多，你已经超过了95%刚起步的人"],"如果有精力，可以试着改进你的习惯打卡器，让它更好看或功能更多"],
+[8,"安装你的专属编程工具","A","工具升级","前面用的 Replit 和 Bolt 都是在浏览器里用的。今天我们装一个在你自己电脑上运行的工具：TRAE。\n\n为什么要装在电脑上？就像做饭——外面的共享厨房能用（浏览器工具），但有自己的厨房更方便（本地工具）。速度更快，功能更强。\n\nTRAE 是字节跳动做的，完全免费，中文支持特别好。它有三种用法：\n• Builder：说一句话直接出应用（和 Bolt 类似）\n• Chat：跟 AI 对话改代码（更精细）\n• SOLO：AI 自己搞定整个任务\n\n下载安装大概需要10分钟。",["去 trae.com.cn 下载安装 TRAE（选你的系统：Windows 或 Mac）","打开后试试 Builder 模式：输入「做一个可以拖拽排序的待办清单」","再试试 Chat 模式：选中某段代码，问 AI「这段是做什么的？」"],["浏览器工具（Replit）和本地工具（TRAE）各有优势，都要会用","TRAE 完全免费——以后可以作为你的主力工具","如果安装遇到问题，把错误截图发给 AI 帮你解决"],"安装完之后，可以把之前在 Replit 做的项目用 TRAE 重新做一遍，感受区别"],
+[9,"AI 就是你的私教老师","A","学习方法","今天不学新工具，学一个更重要的东西：怎么用 AI 当你的私人老师。\n\n很多人只用 AI 写代码。但其实 AI 最厉害的地方是——你可以让它用你能听懂的方式解释任何概念。\n\n试试这些魔法句式：\n• 「用小学生能听懂的话解释一下什么是 API」\n• 「用开餐厅的比喻帮我理解前端和后端的区别」\n• 「我看不懂这段代码，请你一行一行解释给我听」\n• 「你当我的编程老师，我是完全的小白，从零教我 XX」\n\n关键：不懂就问，问到懂为止。AI 永远不会不耐烦。",["打开 Claude（claude.ai），输入「用开餐厅的比喻解释什么是 API、数据库、服务器」","再问「用最简单的话解释：网页是怎么从服务器到达我手机上的？」","把你之前做的一个项目的代码粘贴给 AI，说「请用中文逐行解释这段代码」"],["AI 是最有耐心的老师——同一个问题问100遍它都不会烦","「用比喻解释」「用简单的话」这些说法是跟AI学东西的魔法词","遇到看不懂的东西，永远先问 AI，不要自己死磕"],"试试让 AI 用「苏格拉底式教学」——它不直接告诉你答案，而是通过提问引导你自己想明白"],
+[10,"让你的应用有「记忆」","A","数据概念","你有没有遇到过这种情况：辛辛苦苦在网页上添加了好几条待办事项，一刷新——全没了？😩\n\n这是因为你的应用没有「记忆力」。就像一个金鱼——转一圈就忘了所有事。\n\n怎么给应用加上记忆？用「数据库」。\n\n数据库就是一个超级 Excel 表格，专门帮你的应用记住东西。你往里存数据，它就永远帮你记着，关了电脑也不会丢。\n\nSupabase 是一个对新手最友好的数据库服务——免费、简单、AI 能帮你操作它。今天我们先注册一个账号，看看它长什么样。",["让 AI 解释：「用3种不同的比喻帮我理解数据库是什么」","在 Replit 做一个小实验：创建一个笔记应用，用 localStorage（浏览器自带的「小记忆」）保存数据——刷新看看数据还在不在","注册 Supabase（supabase.com）账号，浏览一下界面——不需要做任何操作，只是看看"],["数据库 = 你的应用的记忆力。没有它，数据一刷新就没了","Supabase 就像一个「云端Excel」——你存数据进去，随时都能取出来","今天只需要注册账号和了解概念，具体操作后面的课程会教"],"了解一下什么是 SQL——数据库的「查询语言」。不用学，知道有这个东西就行"],
+];
+
+// Generate remaining days
+function genAll(){
+const D=[...RAW];
+// Day 11-60: Each entry = [title, phase, focus, tutorial, [task1,task2,task3], extension]
+const T2=[
+["Git：代码时光机","A","版本控制","Git是代码的游戏存档系统。AI可能搞坏代码，有Git随时回滚。三个操作：add→commit→push。",["注册GitHub账号并创建第一个仓库","在Replit中连接GitHub，完成一次commit→push","用Learn Git Branching游戏练习分支操作"],"学习branch和merge概念"],
+["响应式设计","A","设计基础","60%+流量来自手机。响应式=一套代码适配所有屏幕。提示词加「请确保响应式」AI自动处理。",["用F12打开开发者工具，切换手机/平板/电脑视图","让AI把之前的项目改为响应式（提示：手机单列电脑双列）","在真实手机上打开你的项目检查效果"],"了解移动优先设计理念"],
+["部署上线","A","部署实战","部署=放到互联网。Vercel最简单：连GitHub→选项目→部署→获得网址。",["注册Vercel账号并连接GitHub","选择一个项目部署到Vercel，获得在线链接","把链接发给一个朋友让他打开测试"],"了解Netlify和Railway作为替代方案"],
+["两周里程碑","A","里程碑","掌握3+工具、提示词、HTML/CSS/JS、Git、部署。整理作品集。",["选出2-3个最好的项目确保都部署上线","为每个GitHub项目写好README（项目名+描述+截图）","列一份清单：你已经掌握了哪些工具和技能"],"开始关注Reddit r/vibecoding社区"],
+["提示词框架CRIS","A","提示词进阶","CRIS：Context→Role→Instruction→Specifics。给AI角色能显著提升质量。",["用CRIS框架重写之前3个项目的提示词","对比新旧提示词的输出质量并记录差异","创建一个「提示词模板」文档保存你的框架"],"学习Few-shot Prompting技巧"],
+["PRD产品需求文档","A","产品思维","PRD回答：做什么、为谁、核心功能。先写PRD再给AI，质量提升10倍。",["为「在线菜谱应用」写一份PRD（目标+用户+功能列表）","把PRD喂给AI让它生成应用框架","对比：给AI一句话 vs 给PRD的输出质量差异"],"学习用户故事格式：作为__我想要__以便__"],
+["调试技巧","A","问题解决","F12 Console是错误情报中心。流程：红字→复制→AI→理解→修复。",["故意删除代码的一部分，观察Console中的错误信息","完成3次完整的「发现→复制→AI修复→理解」循环","学会区分Syntax Error和Reference Error"],"了解浏览器Network面板查看API请求"],
+["Cursor入门","A","工具升级","全球用户最多的AI IDE。Ctrl+L聊天、Ctrl+K编辑、Tab接受。上下文感知。",["下载安装Cursor，打开之前的一个项目","练习3个快捷键：Ctrl+L聊天、Ctrl+K编辑、Tab接受","用Cursor从零创建一个新的React项目"],"注册Windsurf（windsurf.com）作为备选工具"],
+["Cursor Agent模式","A","工具精通","Agent模式：AI自主规划执行。@mention系统：@file @web @docs。.cursorrules定义规范。",["用Agent模式让AI自主完成一个多步任务（如添加登录功能）","练习@file引用文件、@web搜索网络","创建.cursorrules文件定义项目使用React+Tailwind"],"了解.cursorignore文件忽略node_modules"],
+["React思维模型","A","框架基础","React核心=组件化+状态。界面拆成可复用积木。状态变→界面自动更新。",["让AI用乐高积木比喻解释React组件和状态","在Cursor中创建React项目（用Vite）","让AI创建含Header+Main+Footer三个组件的页面"],"了解useState和useEffect两个最重要的Hook"],
+["第三周综合实战","A","综合","用Cursor构建新闻摘要页面。PRD→技术栈→迭代→美化→Git提交。",["写PRD：新闻摘要页的功能和设计要求","用Cursor+React+Tailwind构建项目（用假数据）","完成后commit到GitHub并部署到Vercel"],"尝试添加按分类筛选和搜索功能"],
+["后端概念入门","A","后端基础","后端=幕后处理数据。前端=大堂，后端=厨房，API=服务员。Next.js前后端一体化。",["让AI用3种不同比喻解释「什么是后端」","在Cursor中让AI创建一个API：访问/api/hello返回消息","在浏览器地址栏访问这个API地址看返回数据"],"了解HTTP方法：GET取 POST发 PUT改 DELETE删"],
+["Supabase数据库实战","A","数据库实操","Supabase提供数据库+认证+存储。创建数据表像创建Excel。每个表有主键id。",["在Supabase中创建todos表（id/title/completed/created_at）","手动在Supabase界面添加5条测试数据","让AI写代码连接Supabase并在页面显示数据"],"了解RLS行级安全策略"],
+["用户认证系统","A","安全基础","注册→加密密码→登录→发token→请求带token。Supabase Auth极简。",["在Supabase开启Auth功能","让AI实现：注册页→登录页→登录后显示用户名","测试：注册→登录→刷新页面看是否保持登录"],"了解OAuth社交登录（Google/GitHub）"],
+["全栈项目：待办App上","A","全栈实战","第一个全栈项目。开发顺序：框架→数据库→认证→业务逻辑→界面。",["写PRD：待办App的功能清单和数据表设计","用Cursor+Next.js+Supabase搭建项目框架","完成用户认证+基本的待办增删查改"],"学习乐观更新——点击后界面立即变化"],
+["全栈项目：待办App下","A","项目优化","从能用到好用：分类标签、优先级。空/加载/错误三种状态。",["添加分类标签（工作/生活/学习）和优先级功能","实现三种状态：空列表提示、加载骨架屏、网络错误","美化界面：动画过渡效果和暗色模式"],"研究Todoist/TickTick的UX设计细节"],
+["部署全栈应用","A","部署实战","环境变量安全：密钥存在Vercel设置中，代码用process.env读取。",["在Vercel项目设置中配置Supabase环境变量","部署待办App到Vercel并测试所有功能","分享链接让一个朋友注册测试并给你反馈"],"了解.env.local文件用于本地开发"],
+["月度大回顾","A","里程碑","一个月！掌握5+工具、提示词、全栈、数据库、认证、部署。",["回顾整个月的学习，写一份500字总结","选3个最佳项目确保上线且GitHub有README","用Cursor创建个人作品集网站展示项目"],"思考：你最想用Vibe Coding解决什么问题？"],
+["API深入","A","API学习","API=应用间通信。HTTP请求：URL+Method+Body→响应。200成功404没找到500错误。",["让AI用邮局比喻画一幅API交互图","在浏览器访问公开API（如jsonplaceholder.typicode.com）","在Cursor中让AI创建一个调用公开API的页面"],"学习JSON格式——API最常用的数据格式"],
+["构建AI聊天机器人","A","AI集成","用AI构建AI产品！用户输入→调API→显示。API Key必须在后端。",["注册OpenAI API获取Key（有免费额度）","用Cursor构建聊天界面：消息列表+输入框+发送","在Next.js API Route中调用AI API返回响应"],"给聊天机器人加系统提示词让它扮演特定角色"],
+["天气应用实战","A","API实战","OpenWeatherMap免费API。学到：Key管理、异步请求、数据解析、条件渲染。",["注册OpenWeatherMap获取免费API Key","构建天气应用：搜索城市→显示天气+温度+图标","添加自动定位功能获取用户当前位置天气"],"加入5天天气预报和温度趋势图表"],
+["第三方服务集成","A","服务集成","现代开发少从零构建。UploadThing/Resend/Stripe/PostHog。",["浏览UploadThing/Resend/Stripe官网了解功能","选一个集成到项目（推荐UploadThing图片上传）","在项目中测试：上传一张图片并成功显示"],"浏览PostHog了解产品分析功能"],
+["综合项目：AI翻译助手","A","综合项目","综合：UI+API调用+状态管理+数据库。PRD→拆任务→逐步实现。",["写PRD并拆解成4-5个小任务","实现核心：输入文本→选语言→调AI翻译→显示","添加翻译历史记录存储到Supabase"],"加入语音输入和朗读功能"],
+["代码审查入门","A","质量意识","AI代码漏洞率是人工2.74倍。五步法：错误→安全→性能→可读→测试。",["让AI审查你一个项目的代码：「检查安全性和潜在问题」","检查所有项目：是否有API Key暴露在前端代码中","修复AI发现的至少3个问题"],"阅读OWASP Top 10前5条"],
+["第五周回顾","A","复习","API集成=连接世界的能力。下周聚焦设计。",["优化本周翻译助手和天气App的代码和UI","确保所有项目部署上线且运行正常","更新作品集网站添加本周新项目"],"浏览Product Hunt看最新AI工具"],
+["UI设计四原则","A","设计入门","对齐、对比、重复、亲密性覆盖90%设计决策。浏览Dribbble找灵感。",["浏览Dribbble收集10个你喜欢的UI设计截图","分析每个设计中的四原则怎么体现","用AI参考你喜欢的风格重新设计一个旧项目"],"了解色彩理论：互补色、类似色"],
+["Tailwind CSS","A","样式工具","AI生成Tailwind准确率远高于传统CSS。shadcn/ui=专业级预制组件。",["在项目中安装Tailwind（让AI帮配置）","让AI用Tailwind重写之前项目的样式","安装shadcn/ui并使用Button/Card/Dialog组件"],"阅读Tailwind文档的响应式前缀：sm: md: lg:"],
+["v0设计利器","A","设计工具","v0.dev专生成高质量React组件。v0(设计)+Cursor(逻辑)=最佳组合。",["注册v0.dev并生成3个组件：仪表板/定价页/登录","选一个v0生成的组件复制到Cursor项目中","对比v0和Cursor直接生成的UI质量差异"],"尝试给v0发设计截图让它复现"],
+["数据可视化：记账本上","A","综合项目","Recharts=React图表库。记账本：收支→统计→图表。",["安装Recharts学习LineChart和BarChart组件","构建记账本：添加收支记录+列表显示","用Recharts创建月度收支柱状图"],"了解D3.js——更强大的可视化库"],
+["记账本完善","A","项目优化","暗色模式、骨架屏、空状态、过渡动画——细节决定专业度。",["添加分类筛选和搜索功能","实现暗色模式切换（Tailwind dark:前缀）","添加加载骨架屏和空状态插图页面"],"学习Framer Motion动画库"],
+["Figma基础","A","设计工具","先画草图再让AI实现，大幅提高质量。线框图→截图→AI实现。",["注册Figma免费账号，完成基础操作教程","为一个新项目画线框图（矩形+文字+线条）","截图给AI说「请按照这个线框图实现页面」"],"学习Figma的Auto Layout功能"],
+["第六周回顾","A","复习","不只能做还会做好看。设计能力是关键区分。",["优化所有项目的UI设计确保专业美观","确保项目在手机上完美显示","更新作品集突出设计能力和视觉细节"],"整理一个设计资源库：配色/图标/插画"],
+["Next.js全栈框架","A","框架进阶","最流行React全栈框架：文件路由+API Routes+SSR。知识完全复用。",["创建Next.js项目：npx create-next-app@latest","创建3个页面理解文件路由（app/about/page.tsx）","创建一个API Route（app/api/hello/route.ts）"],"了解App Router vs Pages Router"],
+["电商项目启动","A","项目启动","最佳综合练习：商品/购物车/结账/用户/后台。分4天。",["写完整PRD含功能列表和UI草图","设计4张Supabase数据表：products/users/orders/items","用Cursor+Next.js+Supabase初始化项目框架"],"参考Shopify界面获取设计灵感"],
+["电商：商品展示","A","核心功能","商品列表网格+搜索+筛选+详情页。先Supabase创建测试数据。",["在Supabase创建products表并添加10条测试商品","构建商品列表页：响应式网格+卡片+搜索框","构建商品详情页：图片+描述+价格+加购按钮"],"加入商品排序（价格高低/最新上架）"],
+["电商：购物流程","A","购物流程","购物车=状态管理经典。用Zustand管理跨页面状态。",["实现购物车：添加/删除/修改数量/计算总价","用Zustand管理购物车状态（跨页面共享）","实现结账页面：地址表单+订单提交"],"了解Zustand的persist中间件"],
+["电商：上线","A","优化上线","管理后台+美化+Vercel部署+完整测试。",["构建管理后台：商品CRUD+订单列表","美化全站UI：统一设计+动画+响应式","部署到Vercel并让3个朋友完整测试"],"学习Supabase RLS策略确保数据安全"],
+["Lighthouse性能优化","A","优化技能","Lighthouse=网站体检。图片优化、懒加载、代码分割。目标80+。",["在Chrome中对电商网站运行Lighthouse测试","把报告截图给AI说「帮我逐项优化」","重新测试确认每个维度达到80分以上"],"了解Core Web Vitals（LCP/FID/CLS）"],
+["第七周回顾","A","复习","能独立构建全栈应用。电商网站是最有力作品。",["修复电商网站测试中发现的Bug","为电商项目写完整技术文档README","邀请5个朋友测试电商网站收集反馈"],"思考电商网站还能加什么功能"],
+["自动化测试","A","质量保证","Vitest单元测试+Playwright端到端。让AI写测试效率极高。",["安装Vitest，让AI为购物车函数写5个单元测试","运行测试修复失败的用例","让AI写一个Playwright测试模拟用户完整购物流程"],"了解测试覆盖率概念——目标核心逻辑80%+"],
+["安全最佳实践","A","安全意识","环境变量、输入验证(Zod)、XSS/SQL注入防护、npm audit。",["运行npm audit检查所有项目的依赖漏洞","检查所有.env文件确保密钥不在代码中","安装Zod为项目的表单添加输入验证"],"阅读OWASP Top 10了解常见安全威胁"],
+["PWA移动端","A","跨平台","PWA=网页变App。manifest.json+Service Worker=可安装。",["将一个项目改造为PWA（添加manifest+Service Worker）","在手机上「添加到主屏幕」安装你的PWA","测试离线功能：断网后是否能访问缓存页面"],"了解next-pwa包一键改造Next.js项目"],
+["毕业项目Day1","A","自选项目","选你真正关心的项目。写详细PRD。热情是最好的动力。",["头脑风暴3-5个项目想法并评估可行性","选择最终项目写详细PRD（问题+用户+功能+技术栈）","搭建项目脚手架并初始化Git仓库"],"问朋友：你们有什么软件解决不了的问题？"],
+["毕业项目Day2","A","核心开发","实现MVP核心功能。80%价值来自20%功能。",["实现MVP最核心的1-2个功能","确保核心流程可以完整走通","每完成一个功能commit到Git"],"用Cursor+Claude+Google综合解决问题"],
+["毕业项目Day3","A","功能完善","边界情况：空数据/网络错误/长输入/未登录/移动端。",["完善次要功能并处理所有边界情况","UI打磨：加载态/空态/错误态/动画/响应式","执行安全审查+代码审查"],"写一个简单的用户测试脚本"],
+["毕业项目上线","A","上线部署","测试→修Bug→文档→部署。README含截图/技术栈/地址。",["最终测试所有功能+修复发现的Bug","写完整README（简介+截图+技术栈+运行步骤+在线地址）","部署上线并写一篇项目复盘文章"],"购买一个便宜域名绑定到项目"],
+["作品集终极版","A","整合展示","个人简介+项目展示+技能标签+时间线+联系方式。",["用Next.js+Tailwind构建作品集网站","为每个项目创建精美展示卡片（截图+描述+链接）","部署到Vercel并绑定个人域名"],"参考awwwards.com获取作品集灵感"],
+["技能评估","A","自我评估","每项1-5分评估。识别薄弱。加入社区。",["对每项技能打分（提示词/React/数据库/部署等1-5分）","识别3个最薄弱领域制定针对性改进计划","加入Reddit r/vibecoding和知乎氛围编程社区"],"找一个学习伙伴互相监督"],
+["进阶路径规划","A","未来规划","选方向：全栈/AI/移动/设计。读专业书籍。",["确定你的深入方向（全栈/AI应用/移动/设计工程）","制定3-6个月具体学习计划（每月目标）","开始阅读《Vibe Coding》或《Beyond Vibe Coding》"],"列出第3个月想完成的3个具体目标"],
+["毕业日🎓","A","里程碑庆祝","60天从零到全栈应用！写复盘发知乎。这是起点！",["最终检查所有项目上线且完善","写完整60天学习复盘发布到知乎或掘金","庆祝你的成就！把复盘分享到社区激励他人"],"把复盘发到Reddit r/vibecoding"],
+];
+let day=11;
+for(const t of T2){D.push([day++,t[0],t[1],t[2],t[3],t[4],["掌握"+t[0].replace("🎓","")+"要点","实践出真知——动手做比看十遍有效","坚持每天进步，量变引发质变"],t[5]]);}
+
+// Month 3-4 Growth (61-120)
+const gT=["TypeScript入门","TS接口与泛型","项目迁移TS","Prisma ORM入门","Prisma关联查询","React Hook Form+Zod","TanStack Query","NextAuth认证","Stripe支付上","Stripe Webhook","技能整合","SaaS调研","SaaS架构","SaaS用户系统","SaaS核心Day1","SaaS核心Day2","SaaS订阅付费","SaaS仪表板","SaaS邮件","SaaS上线","SaaS发布反馈","迭代优化","SEO优化","国际化i18n","无障碍A11y","日志监控","Rate Limiting","后台任务","文件上传","第三月回顾",
+"Zustand状态管理","错误边界降级","骨架屏优化","数据库索引","全文搜索","邮件模板设计","SaaS定价优化","用户反馈体系","A/B测试入门","落地页转化","结构化数据SEO","社交分享优化","用户引导设计","数据导出功能","Webhook处理","多环境管理","Feature Flag","通知中心","数据备份","第四月回顾",
+"React Server Components","表单多步骤向导","图片裁剪上传","搜索自动补全","虚拟滚动列表","拖拽排序实现","富文本编辑器","WebSocket基础","OAuth社交登录","四个月毕业总结"];
+const gD=["TypeScript加类型系统让AI代码更安全","接口定义对象形状，泛型处理任意类型，Zod运行时验证","渐进式迁移：改后缀→加类型→AI帮添加","Prisma=最好TS数据库工具，Schema定义模型自动生成客户端","一对多/多对多/一对一三种关联","React Hook Form高性能+Zod验证，shadcn Form完美集成","TanStack Query自动化：useQuery获取+useMutation修改+缓存","NextAuth支持几十种登录方式，完全控制数据流程","Stripe Checkout：创建Session→重定向→支付→回调更新","Webhook通知支付结果。订阅=SaaS核心","TypeScript贯穿：Prisma+Zod+TanStack","SaaS=按月付费软件。寻找未解决的问题","多用户隔离+套餐管理。Next.js+Prisma+Neon+Clerk+Stripe","Clerk预制UI开箱即用。Webhook同步用户","MVP原则：只做最重要的1-3个功能","列表分页+搜索+排序+筛选。详情和编辑","Stripe订阅：产品→价格→定价页→Checkout→Webhook","仪表板：增长折线图+收入柱状图+套餐饼图","Resend邮件+React Email模板","完整检查清单：功能/安全/性能/SEO",
+"用户反馈。Product Hunt/Reddit/知乎/掘金","高影响+低工作量优先。Bug→UX→新功能","Next.js metadata API。sitemap/robots/OG","next-intl国际化。翻译文件+路由切换","语义标签+alt文字+键盘导航+颜色对比度","Sentry错误+Vercel性能+PostHog用户行为","Upstash Ratelimit保护API+CORS+CSP","Inngest/Trigger.dev后台任务+Cron","UploadThing：选文件→上传→CDN→URL","三个月=初中级全栈开发者",
+"Zustand轻量级状态管理，persist自动持久化","Error Boundary捕获错误防崩溃，降级UI友好提示","骨架屏比转圈好10倍。shadcn有Skeleton组件","索引=书目录。@@index定义，常查字段必加","PostgreSQL内置全文搜索，Supabase可直接用","React Email组件化邮件，Resend预览测试","Freemium vs Trial vs 直接付费策略","PostHog追踪功能使用率，数据驱动决策","Feature Flag控制版本，PostHog内置A/B","落地页：价值主张+社会证明+CTA","JSON-LD帮搜索引擎理解内容","OG标签让分享有漂亮预览卡片","步骤教程+提示气泡+空状态引导","CSV用papaparse，PDF用react-pdf","签名验证+幂等处理+重试机制","dev/staging/prod隔离。Vercel Preview","灰度发布：先10%用户观察再全量","notifications表+user_id+read_at","Supabase自动备份(Pro)或pg_dump","四个月！SaaS上线。更新作品集",
+"React Server Components在服务端渲染——减少客户端JS体积提升性能","表单向导拆分复杂表单为多步骤——每步验证后进入下一步","裁剪+压缩+预览+上传——Sharp服务端处理或browser-image-compression","搜索输入时实时显示建议结果——debounce防抖+API调用","虚拟滚动只渲染可见区域——TanStack Virtual处理万级列表","dnd-kit实现拖拽排序——Sortable+DragOverlay+动画","Tiptap/Plate编辑器——支持格式化/图片/代码块/协作编辑","WebSocket双向实时通信基础——聊天/通知/实时更新","OAuth2.0流程：授权码→换取token→获取用户信息。NextAuth集成","四个月完成！TypeScript全栈+SaaS产品+支付集成。更新作品集V2"];
+for(let i=0;i<60;i++){const idx=i%gT.length;D.push([61+i,gT[idx],"G",gT[idx].slice(0,6),gD[idx],["学习"+gT[idx]+"核心","完成实战练习","代码审查+Git"],["成长期关键技能","类型安全贯穿全栈","实践中学效果最好"],"深入高级用法"]);}
+
+// Month 5-6 Advanced (121-180)
+const aT=["tRPC类型安全API","tRPC Router设计","LangChain入门","RAG文档问答","AI Agent构建","实时功能Supabase","React Native+Expo","移动端UI导航","移动端项目实战","GitHub Actions CI/CD","Docker容器化","Docker Compose","Monorepo Turborepo","Storybook组件文档","设计系统构建","Framer Motion动画","桌面应用Tauri","E2E测试体系","API文档自动生成","半年回顾",
+"tRPC全栈项目","RAG知识库实战","多模型路由","RN移动记账本","CI/CD流水线优化","Docker多阶段构建","组件文档完善","动画交互综合","跨平台Web+Mobile","测试覆盖率提升","流式传输SSE","文件处理转换","PDF生成解析","图表高级用法","PWA推送通知","离线优先架构","Web Workers并行","服务端组件深入","Serverless架构","进阶毕业总结",
+"AI图片生成集成","向量数据库Pinecone","函数调用Tool Use","AI应用流式UI","多语言AI对话","RN推送通知","RN相机与相册","RN应用发布流程","K8s Pod与Service","Helm Chart管理","Terraform状态管理","AWS Lambda实战","CDN边缘计算","监控告警Grafana","日志聚合ELK","API性能压测","数据库读写分离","缓存穿透雪崩","消息队列RabbitMQ","六个月毕业总结"];
+const aD=["tRPC端到端类型安全——前端调后端如调本地函数","Router组织端点。Middleware认证。Context共享","LangChain：Chain+Prompt Template+Output Parser","RAG=检索增强生成：切片→向量化→检索→AI回答","Agent能主动行动：工具集→AI自主选择→执行","Supabase Realtime：DB变更+广播+在线状态","React Native用React知识构建原生App。Expo最佳框架","底部Tab+FlatList+手势操作+安全区域","复用后端API重写移动UI","GitHub Actions自动测试部署。push→测试→部署","Docker打包成可移植容器。Dockerfile=构建说明","Docker Compose编排多容器：应用+DB+Redis","Turborepo智能构建。packages/apps结构","Storybook=组件独立开发测试环境","颜色+排版+间距+组件=设计系统核心","motion组件+animate+transition+AnimatePresence","Tauri用Web技术构建桌面应用——比Electron轻10倍","Playwright全流程E2E。模拟用户操作","OpenAPI/Swagger自动生成API文档","六个月=全栈+移动+桌面+AI应用",
+"综合项目：tRPC+Next.js零类型漏洞","用户上传PDF→向量化→提问→AI基于文档回答","OpenRouter统一多AI模型API接口","React Native记账本——复用Supabase后端","缓存依赖加速+并行测试+Slack通知","多阶段构建减少70%+镜像体积","Storybook完整文档：Props+示例+暗色","页面过渡+列表动画+拖拽+SVG动画","同一后端，Web+Mobile两前端","核心逻辑100%覆盖，UI关键交互覆盖","SSE=服务器单向推送。AI聊天流式输出底层","Node.js文件处理。Sharp图片压缩裁剪水印","react-pdf/renderer生成报告/发票","Recharts自定义+多轴+实时+交互工具提示","Service Worker+Push API+Notification API","所有操作先写本地→在线时同步","Web Workers独立线程——不阻塞UI","Server Components精确控制渲染边界","Vercel Serverless+Edge Functions","进阶期完成！更新作品集V3",
+"集成DALL-E/Stable Diffusion——用户描述生成图片并嵌入应用","Pinecone向量数据库：存储嵌入向量+语义相似搜索","AI函数调用：定义工具Schema→AI决定调用→执行返回结果","useChat hook实现AI回复逐字显示——Vercel AI SDK","构建支持中/英/日多语言的AI助手——自动检测+翻译","Expo Notifications推送通知——本地通知+远程推送配置","Expo Camera拍照+ImagePicker选图——权限处理+图片上传","EAS Build构建+App Store/Google Play提交全流程","K8s核心概念：Pod(容器组)+Service(网络)+Deployment(部署)","Helm管理K8s应用：Chart定义+values配置+版本管理","Terraform state管理：远程存储+锁定+导入现有资源","用Lambda处理Webhook/定时任务/图片处理——无服务器实战","CloudFront+Edge Functions在全球边缘节点执行代码","Prometheus采集指标+Grafana可视化仪表板+告警规则","ELK Stack：Elasticsearch存储+Logstash收集+Kibana展示","k6/Artillery进行API负载测试——发现性能瓶颈","主从复制：主库写从库读——Prisma的read replica配置","缓存穿透(查不存在)、雪崩(大量过期)、击穿(热点过期)的解决","RabbitMQ基础：生产者→队列→消费者。异步解耦削峰","六个月进阶完成！全栈+AI+移动+桌面+DevOps。更新作品集V3"];
+for(let i=0;i<60;i++){const idx=i%aT.length;D.push([121+i,aT[idx],"V",aT[idx].slice(0,6),aD[idx],["学习"+aT[idx]+"核心","完成实战项目","整理笔记"],["进阶期关键技能","理论+实战最好","技术深度积累"],"探索高级模式"]);}
+
+// Month 7-12 Expert+Senior (181-360)
+const eT=["系统设计原则","缓存策略Redis","负载均衡","消息队列","API网关","GraphQL Schema","Apollo Client","GraphQL订阅","API版本管理","性能监控","OWASP Top10","XSS防护","CSRF防护","SQL注入防护","安全审计","Core Web Vitals","SSR vs SSG","数据库查询优化","CDN配置","Edge Computing","CrewAI多智能体","AI工作流","Agent编排","工具链优化","自动化测试AI","微服务拆分","服务间通信","gRPC基础","Kubernetes概念","服务编排"];
+const sT=["开源项目选择","代码贡献流程","PR审查","Issue管理","社区运营","技术博客写作","教程视频","演讲准备","知识分享","个人品牌","多租户架构","RBAC权限","审计日志","数据备份","灾难恢复","测试金字塔","覆盖率提升","E2E测试体系","视觉测试","性能测试","AWS核心服务","S3存储","Lambda无服务器","RDS数据库","CloudFront CDN","Terraform IaC","基础设施版本控制","环境管理","自动化部署","年度总结"];
+for(let d=181;d<=360;d++){const m=Math.floor((d-1)/30)+1;const isE=m<=9;const ts=isE?eT:sT;const idx=(d-181)%ts.length;const rnd=Math.floor((d-181)/ts.length)+1;const title=ts[idx]+(rnd>1?` (第${rnd}轮)`:'');const ph=isE?"E":"S";const depth=rnd===1?"学习核心概念":rnd===2?"深化复杂场景":"融会贯通";
+D.push([d,title,ph,ts[idx].slice(0,6),`${depth}：${ts[idx]}。从中级进阶为${isE?"专家":"资深"}的关键知识点。`,
+[`${rnd===1?"学习":"深化"}${ts[idx]}`,`完成${rnd===1?"入门":"进阶"}练习`,`整理笔记`],
+[`${ts[idx]}是关键技能`,`第${rnd}轮：${depth}`,`持续深耕`],rnd===1?"了解高级概念":"挑战复杂场景"]);}
+
+// Month 13-18 Master (361-540)
+const mT=["Claude Code CLI","多Agent编排","AI代码审查","自定义编码代理","Agent测试","LLM应用架构","RAG高级优化","Prompt管理系统","AI产品A/B测试","LLM评估框架","团队AI编程规范","代码审查Checklist","Prompt模板库","AI安全基线","培训课程设计","开源项目发起","社区治理","深度技术分析","技术大会演讲","行业标准推动","AI+设计","AI+数据科学","AI+物联网","AI+教育","AI+医疗","持续学习策略","技术趋势追踪","指导新人","最佳实践更新","突破性项目"];
+for(let d=361;d<=540;d++){const idx=(d-361)%mT.length;const rnd=Math.floor((d-361)/mT.length)+1;const title=mT[idx]+(rnd>1?` (${rnd})`:'');const depth=rnd<=2?"建立基础":rnd<=4?"深化场景":"融会贯通";
+D.push([d,title,"M",mT[idx].slice(0,6),`大师期：${title}。${depth}。从「使用AI工具」进化为「协调AI代理的总指挥」。`,
+[`深入实践${mT[idx]}`,`完成项目或文章`,`总结最佳实践`],
+[`大师级核心能力`,`第${rnd}轮：${depth}`,`你的经验有价值`],"传授知识给他人"]);}
+return D;
+}
+const DAYS=genAll();const TOTAL=DAYS.length;
+
+// ===== STATE =====
+let st={d:{},t:{},n:{},sel:1,v:'cal',tmr:0,tmrOn:false,phF:null,srch:''},tmrI=null;
+try{const s=localStorage.getItem('vc2');if(s){const p=JSON.parse(s);st.d=p.d||{};st.t=p.t||{};st.n=p.n||{};}}catch(e){}
+try{const pf=localStorage.getItem('vc2pf');if(pf)st.pf=JSON.parse(pf);}catch(e){}
+function sv(){try{localStorage.setItem('vc2',JSON.stringify({d:st.d,t:st.t,n:st.n}))}catch(e){}}
+const mOf=d=>Math.floor((d-1)/30)+1;
+const pOf=d=>{const r=DAYS.find(x=>x[0]===d);return r?r[2]:'A'};
+const dc=()=>Object.values(st.d).filter(Boolean).length;
+const streak=()=>{let s=0;for(let i=TOTAL;i>=1;i--){if(st.d[i])s++;else if(s>0)break;}return s;};
+
+// ===== RENDER HELPERS =====
+function resHtml(title){
+  const res=getResources(title);
+  if(!res.length)return '';
+  return `<div style="margin-top:8px"><div style="font-weight:700;font-size:11px;color:var(--t3);margin-bottom:5px">📚 配套教程（点击直接学习）</div><div class="rc">${
+    res.map(r=>`<a href="${r[1]}" target="_blank" rel="noopener noreferrer" class="rl"><span class="ico">${r[2]}</span><div class="info"><span class="tt">${r[0]}</span><div class="tags">${r[3].map(t=>`<span class="tag">${t}</span>`).join('')}</div></div></a>`).join('')
+  }</div></div>`;
+}
+
+function renderApp(){
+  const dn=dc(),pct=Math.round(dn/TOTAL*100),sk=streak();
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('sts').innerHTML=`<span>完成 <b class="m" style="color:var(--g)">${dn}/${TOTAL}</b></span><span>进度 <b class="m" style="color:var(--bl)">${pct}%</b></span><span>连续 <b class="m" style="color:var(--a)">${sk}🔥</b></span><span>月 <b class="m" style="color:var(--p)">M${mOf(st.sel)}</b></span><span>阶段 <b style="color:${PH[pOf(st.sel)]?.c}">${PH[pOf(st.sel)]?.n||''}</b></span>`;
+
+  let h='';
+  // Phases
+  h+=`<div class="phs">${Object.entries(PH).map(([k,v])=>{const items=DAYS.filter(d=>d[2]===k);const done=items.filter(d=>st.d[d[0]]).length;const p=items.length?Math.round(done/items.length*100):0;
+    return `<div class="ph${st.phF===k?' on':''}" onclick="fPh('${k}')"><div style="font-size:11px">${v.i} <span style="font-size:9px;font-weight:700;color:${v.c}">${v.n}</span></div><div style="font-size:8px;color:var(--t4)">M${v.m} · ${done}/${items.length}</div><div class="br"><div class="f" style="width:${p}%;background:${v.c}"></div></div></div>`;
+  }).join('')}</div>`;
+
+  // Timer
+  const remain=7200-st.tmr,rMin=Math.floor(remain/60),rSec=remain%60;
+  const elapsed=st.tmr,eMin=Math.floor(elapsed/60),eSec=elapsed%60;
+  h+=`<div class="tmr"><span style="font-size:12px">⏱️</span><span class="time m" style="color:${remain<=0?'var(--r)':remain<600?'var(--a)':'var(--g)'};">${String(rMin).padStart(2,'0')}:${String(rSec).padStart(2,'0')}</span><span style="font-size:10px;color:var(--t4)">剩余 · 已学${eMin}分钟</span><button onclick="tmrToggle()" style="background:${st.tmrOn?'var(--r)':'var(--g)'};border-radius:4px;padding:4px 10px;font-size:10px">${st.tmrOn?'⏸ 暂停':'▶ 开始'}</button><button onclick="tmrReset()" style="background:var(--s);border:1px solid var(--b);border-radius:4px;padding:4px 8px;font-size:10px;color:var(--t3)">↺</button></div>`;
+
+  // Toolbar
+  h+=`<div class="tb">${['cal','detail','list','dash','profile'].map(v=>`<button class="btn${st.v===v?' on':''}" onclick="setV('${v}')">${{cal:'📅 日历',detail:'📖 今日',list:'📋 全部',dash:'📊 数据',profile:'🧒 画像'}[v]}</button>`).join('')}<div class="srch"><button class="btn" onclick="openMentor()" style="background:var(--pa);border-color:rgba(139,92,246,.25);color:#a78bfa">🧑‍🏫 导师</button><input placeholder="搜索..." value="${st.srch}" oninput="doSrch(this.value)"><button class="btn" onclick="doExport()" title="导出数据">💾</button><button class="btn" onclick="doImport()" title="导入数据">📂</button></div></div>`;
+
+  // Views
+  if(st.v==='dash'){h+=renderDash();}
+  else if(st.v==='cal'){h+=renderCal();}
+  else if(st.v==='detail'){h+=renderDetail();}
+  else if(st.v==='list'){h+=renderList();}
+  else if(st.v==='profile'){h+=renderProfile();}
+
+  h+=`<div class="ft"><div style="margin-bottom:4px;color:rgba(255,255,255,.18)">⚡ Vibe Coding 540天学习系统 · 未定义实验室出品</div><div style="color:rgba(255,255,255,.06)">上传给AI + 粘贴导师提示词 → AI自动完成一切</div></div>`;
+  document.getElementById('app').innerHTML=h;
+}
+
+function renderDash(){
+  const dn=dc(),pct=Math.round(dn/TOTAL*100),sk=streak();
+  const tHrs=dn*2;
+  let h=`<div class="dash">`;
+  h+=`<div class="dcard"><div class="num m" style="color:var(--g)">${dn}</div><div class="label">完成天数 / ${TOTAL}</div></div>`;
+  h+=`<div class="dcard"><div class="num m" style="color:var(--bl)">${pct}%</div><div class="label">总进度</div></div>`;
+  h+=`<div class="dcard"><div class="num m" style="color:var(--a)">${sk}🔥</div><div class="label">连续天数</div></div>`;
+  h+=`<div class="dcard"><div class="num m" style="color:var(--p)">${tHrs}h</div><div class="label">累计学习时长</div></div>`;
+  h+=`</div>`;
+  // Phase breakdown
+  h+=`<div style="margin-bottom:12px">`;
+  Object.entries(PH).forEach(([k,v])=>{
+    const items=DAYS.filter(d=>d[2]===k);const done=items.filter(d=>st.d[d[0]]).length;const p=items.length?Math.round(done/items.length*100):0;
+    h+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:55px;font-size:10px;color:${v.c};font-weight:700">${v.i}${v.n}</span><div style="flex:1;height:8px;background:var(--s);border-radius:4px;overflow:hidden"><div style="height:100%;width:${p}%;background:${v.c};border-radius:4px;transition:width .3s"></div></div><span class="m" style="font-size:10px;color:var(--t3)">${done}/${items.length}</span></div>`;
+  });
+  h+=`</div>`;
+  // Milestones
+  const milestones=[[7,"完成第一周"],[14,"两周里程碑"],[28,"一个月！"],[60,"两个月毕业🎓"],[90,"三个月 初中级"],[120,"四个月 SaaS上线"],[180,"六个月 中级开发者"],[270,"九个月 专家"],[360,"一年 资深开发者"],[540,"18个月 大师👑"]];
+  h+=`<div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px">🏆 里程碑进度</div>`;
+  milestones.forEach(([day,name])=>{
+    const done=dc()>=day;
+    h+=`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;opacity:${done?1:0.4}"><span style="font-size:12px">${done?'✅':'⬜'}</span><span style="font-size:11px">${name}</span><span class="m" style="font-size:9px;color:var(--t4)">Day ${day}</span></div>`;
+  });
+  return h;
+}
+
+function renderCal(){
+  let h='';
+  const filtered=st.srch?DAYS.filter(d=>d[1].toLowerCase().includes(st.srch.toLowerCase())):DAYS;
+  for(let m=1;m<=18;m++){
+    const mDays=filtered.filter(d=>mOf(d[0])===m&&(!st.phF||d[2]===st.phF));
+    if(!mDays.length)continue;
+    const ph=PH[mDays[0][2]];const mDone=mDays.filter(d=>st.d[d[0]]).length;
+    h+=`<div style="margin-bottom:12px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:11px;font-weight:800;color:${ph?.c}">第${m}个月</span><span style="font-size:10px;color:var(--t4)">${ph?.i} ${ph?.n}</span><span style="font-size:9px;color:var(--t4);margin-left:auto">${mDone}/${mDays.length}</span></div><div class="cg">`;
+    for(const d of mDays){
+      const dn=st.d[d[0]];
+      h+=`<button class="cd${dn?' dn':''}" onclick="go(${d[0]})"><div style="display:flex;justify-content:space-between"><span class="m" style="font-size:8px;font-weight:700;color:${ph?.c}">${d[0]}</span>${dn?'<span style="font-size:8px">✅</span>':''}</div><div style="font-size:9px;font-weight:500;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px">${d[1]}</div></button>`;
+    }
+    h+=`</div></div>`;
+  }
+  return h;
+}
+
+function renderDetail(){
+  const d=DAYS.find(x=>x[0]===st.sel);if(!d)return '';
+  const ph=PH[d[2]];const tasks=d[5];const kps=d[6];
+  // Init expand states
+  if(!st.exp)st.exp={};
+  let h=`<div style="display:flex;gap:5px;margin-bottom:10px;align-items:center">
+    <button class="btn" onclick="go(${Math.max(1,st.sel-1)})">←</button>
+    <div style="flex:1;text-align:center"><span class="m" style="font-size:15px;font-weight:900;color:${ph?.c}">DAY ${st.sel}</span><span style="font-size:10px;color:var(--t4)"> / ${TOTAL}</span></div>
+    <button class="btn" onclick="go(${Math.min(TOTAL,st.sel+1)})">→</button>
+  </div>`;
+
+  // Milestone
+  const miles={7:"🌱 完成第一周！继续加油！",14:"🎯 两周了！你已经掌握了基本工具。",28:"🎉 一个月！从零到全栈——了不起！",60:"🎓 觉醒期毕业！你现在能独立构建应用！",90:"💪 三个月！初中级开发者水平！",180:"⭐ 半年！中级开发者！",360:"🔥 一年！资深开发者！",540:"👑 未定义实验室·大师之路完成！"};
+  if(st.d[st.sel]&&miles[st.sel]){
+    h+=`<div class="mile" style="border-color:${ph?.c}30;background:${ph?.c}08"><div class="icon">${miles[st.sel].split(' ')[0]}</div><div class="msg" style="color:${ph?.c}">${miles[st.sel]}</div></div>`;
+  }
+
+  // Title card
+  h+=`<div style="padding:10px 12px;border-radius:9px;background:linear-gradient(135deg,${ph?.c}08,transparent);border:1px solid ${ph?.c}20;margin-bottom:10px">
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px">
+      <span style="padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;background:${ph?.c}12;color:${ph?.c}">${ph?.i} ${ph?.n}</span>
+      <span style="padding:1px 6px;border-radius:3px;font-size:10px;background:var(--s);color:var(--t3)">🎯 ${d[3]}</span>
+    </div>
+    <h2 style="font-size:16px;font-weight:800;color:#fff;margin:0">${d[1]}</h2>
+  </div>`;
+
+  // ===== SECTION 1: Tutorial (always open) =====
+  const tutorialText = d[4].replace(/\n/g,'<br>');
+  h+=`<div class="crd" style="background:var(--pa);border:1px solid rgba(139,92,246,.1)">
+    <div class="lb" style="color:#a78bfa">📖 今天学什么</div>
+    <div class="bd" style="font-size:13px;line-height:1.85">${tutorialText}</div>
+  </div>`;
+
+  // ===== SECTION 2: Tasks (always open) =====
+  h+=`<div style="margin-bottom:10px">
+    <div style="font-weight:700;font-size:12px;color:var(--t2);margin-bottom:6px">✅ 今日任务 <span style="font-size:10px;color:var(--t4);font-weight:400">${tasks.filter((_,i)=>st.t[st.sel+'_'+i]).length}/${tasks.length} 完成</span></div>`;
+  tasks.forEach((t,i)=>{
+    const tk=st.sel+'_'+i;const done=st.t[tk];
+    h+=`<div class="tk${done?' dn':''}" onclick="tglTask('${tk}')"><div class="cb">${done?'✓':''}</div><div class="tx" style="font-size:12px">${t}</div></div>`;
+  });
+  h+=`</div>`;
+
+  // ===== SECTION 3: Key points (collapsible) =====
+  h+=`<div onclick="tglExp('kp')" style="display:flex;align-items:center;gap:4px;padding:8px 10px;border-radius:7px;background:var(--aa);border:1px solid rgba(245,158,11,.1);margin-bottom:4px;cursor:pointer">
+    <span style="font-size:10px;color:#fbbf24;transition:transform .2s;transform:rotate(${st.exp.kp?'90':'0'}deg)">▶</span>
+    <span style="font-size:11px;font-weight:700;color:#fbbf24">⭐ 学习重点（${kps.length}条）</span>
+  </div>`;
+  if(st.exp.kp){
+    h+=`<div style="padding:6px 10px;margin-bottom:6px">`;
+    kps.forEach(k=>{h+=`<div style="font-size:12px;color:var(--t2);line-height:1.7;padding-left:14px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#fbbf24">•</span>${k}</div>`;});
+    h+=`</div>`;
+  }
+
+  // ===== SECTION 4: Resources (collapsible) =====
+  const res=getResources(d[1]);
+  if(res.length){
+    h+=`<div onclick="tglExp('res')" style="display:flex;align-items:center;gap:4px;padding:8px 10px;border-radius:7px;background:rgba(96,165,250,.04);border:1px solid rgba(96,165,250,.1);margin-bottom:4px;cursor:pointer">
+      <span style="font-size:10px;color:#93c5fd;transition:transform .2s;transform:rotate(${st.exp.res?'90':'0'}deg)">▶</span>
+      <span style="font-size:11px;font-weight:700;color:#93c5fd">📚 配套教程（${res.length}个，点击展开）</span>
+    </div>`;
+    if(st.exp.res){
+      h+=`<div class="rc" style="padding:4px 0;margin-bottom:6px">${
+        res.map(r=>`<a href="${r[1]}" target="_blank" rel="noopener noreferrer" class="rl"><span class="ico">${r[2]}</span><div class="info"><span class="tt">${r[0]}</span><div class="tags">${r[3].map(t=>`<span class="tag">${t}</span>`).join('')}</div></div></a>`).join('')
+      }</div>`;
+    }
+  }
+
+  // ===== SECTION 5: Extension + Notes (collapsible) =====
+  h+=`<div onclick="tglExp('more')" style="display:flex;align-items:center;gap:4px;padding:8px 10px;border-radius:7px;background:var(--s);border:1px solid var(--b);margin-bottom:4px;cursor:pointer">
+    <span style="font-size:10px;color:var(--t3);transition:transform .2s;transform:rotate(${st.exp.more?'90':'0'}deg)">▶</span>
+    <span style="font-size:11px;font-weight:600;color:var(--t3)">🚀 延展学习 + ✏️ 笔记</span>
+  </div>`;
+  if(st.exp.more){
+    h+=`<div style="padding:6px 0;margin-bottom:6px">
+      <div class="crd" style="background:var(--ga);border:1px solid rgba(16,185,129,.1);padding:10px"><div style="font-size:11px;font-weight:700;color:#34d399;margin-bottom:3px">🚀 延展学习</div><div style="font-size:12px;color:var(--t2);line-height:1.7">${d[7]}</div></div>
+      <div style="margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:3px">✏️ 学习笔记</div><textarea class="note" placeholder="今天的心得、问题、灵感..." oninput="sNote(${st.sel},this.value)">${st.n[st.sel]||''}</textarea></div>
+    </div>`;
+  }
+
+  // Complete + AI tutor buttons
+  h+=`<button class="cbtn ${st.d[st.sel]?'on':'off'}" onclick="tglDay(${st.sel})">${st.d[st.sel]?'❌ 取消打卡':'✅ 完成今天的学习！'}</button>`;
+  h+=`<button onclick="copyAIPrompt(${st.sel})" style="width:100%;padding:7px;border-radius:7px;background:var(--pa);border:1px solid rgba(139,92,246,.15);color:#a78bfa;font-size:10px;font-weight:600;margin-top:5px;cursor:pointer">🧑‍🏫 不太懂？复制发给AI让它一步步教你这天的内容</button>`;
+  return h;
+}
+
+function renderList(){
+  let h='<div style="max-height:65vh;overflow:auto">';
+  const filtered=st.srch?DAYS.filter(d=>d[1].toLowerCase().includes(st.srch.toLowerCase())):DAYS;
+  for(let m=1;m<=18;m++){
+    const mDays=filtered.filter(d=>mOf(d[0])===m&&(!st.phF||d[2]===st.phF));
+    if(!mDays.length)continue;
+    const ph=PH[mDays[0][2]];
+    h+=`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:800;color:${ph?.c};position:sticky;top:0;background:#080d14e0;padding:3px 0;z-index:5;backdrop-filter:blur(8px)">${ph?.i} 第${m}个月 · ${ph?.n}</div>`;
+    for(const d of mDays){const dn=st.d[d[0]];
+      h+=`<div class="li${dn?' dn':''}" onclick="go(${d[0]})"><span class="m" style="width:24px;font-size:9px;font-weight:700;color:${ph?.c};text-align:right">${d[0]}</span>${dn?'<span style="font-size:9px">✅</span>':'<span style="width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,.1)"></span>'}<span class="tl" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:${dn?'var(--t4)':'var(--t2)'}">${d[1]}</span><span style="font-size:9px;color:var(--t4)">${d[3]}</span></div>`;
+    }
+    h+=`</div>`;
+  }
+  h+='</div>';return h;
+}
+
+
+// ===== LEARNER PROFILE =====
+function renderProfile(){
+  if(!st.pf)st.pf={};
+  const q=[
+    {id:'style',q:'学新东西时（比如学做一道菜），你更喜欢？',opts:[
+      ['understand','先看完食谱，理解每一步的原因，再开始做'],
+      ['handson','先动手做，遇到问题再回头看食谱'],
+      ['mix','看一步做一步，交替进行']]},
+    {id:'pace',q:'跟着教程学习时，你通常觉得？',opts:[
+      ['fast','基础内容太慢了，想跳过直接做项目'],
+      ['steady','节奏刚好，按部就班挺舒服'],
+      ['slow','有时跟不上，需要多看几遍才懂']]},
+    {id:'help',q:'遇到不会的问题时，你更倾向于？',opts:[
+      ['explore','自己先搜索和尝试，实在不行再问'],
+      ['guide','希望有人给我方向和提示，我自己去做'],
+      ['stepbystep','希望有人手把手一步步带我走']]},
+    {id:'why',q:'你学 Vibe Coding 最主要的原因是？',opts:[
+      ['project','想做一个具体的产品/项目'],
+      ['career','提升职业竞争力/转行'],
+      ['curious','对AI和编程感到好奇'],
+      ['fun','纯粹觉得好玩']]},
+    {id:'format',q:'以下哪种学习方式最适合你？',opts:[
+      ['video','看视频教程（有人讲解和演示）'],
+      ['text','看图文教程（边看边自己操作）'],
+      ['try','直接给我工具，我先玩一会再学理论']]}
+  ];
+
+  const labels={understand:'先理解再动手',handson:'先动手再理解',mix:'边学边做',
+    fast:'快节奏',steady:'稳健节奏',slow:'慢节奏+多练习',
+    explore:'探索型（给提示就行）',guide:'引导型（给方向我来做）',stepbystep:'手把手型（每步都教）',
+    project:'项目驱动',career:'职业发展',curious:'兴趣驱动',fun:'乐趣驱动',
+    video:'视频学习',text:'图文学习','try':'动手探索'};
+
+  const done=q.every(x=>st.pf[x.id]);
+
+  let h=`<div style="max-width:560px;margin:0 auto">`;
+  h+=`<div style="text-align:center;margin-bottom:14px"><div style="font-size:20px;margin-bottom:4px">🧒</div><h2 style="font-size:16px;font-weight:800;color:#fff;margin:0">我的学习画像</h2><p style="font-size:11px;color:var(--t3);margin-top:3px">未定义实验室 · 了解自己的学习方式，让AI导师更懂你</p></div>`;
+
+  // Questions
+  q.forEach((item,qi)=>{
+    h+=`<div style="margin-bottom:12px;padding:10px;border-radius:8px;background:var(--s);border:1px solid ${st.pf[item.id]?'rgba(16,185,129,.2)':'var(--b)'}">
+      <div style="font-size:12px;font-weight:600;color:var(--t1);margin-bottom:7px">${qi+1}. ${item.q}</div>`;
+    item.opts.forEach(([val,text])=>{
+      const sel=st.pf[item.id]===val;
+      h+=`<div onclick="setPf('${item.id}','${val}')" style="padding:6px 9px;margin-bottom:3px;border-radius:5px;cursor:pointer;font-size:11px;border:1px solid ${sel?'rgba(139,92,246,.4)':'rgba(255,255,255,.04)'};background:${sel?'rgba(139,92,246,.1)':'rgba(255,255,255,.01)'};color:${sel?'#c4b5fd':'var(--t2)'};transition:all .1s">${sel?'● ':'○ '}${text}</div>`;
+    });
+    h+=`</div>`;
+  });
+
+  // Profile summary card
+  if(done){
+    h+=`<div style="padding:12px;border-radius:9px;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(59,130,246,.05));border:1px solid rgba(139,92,246,.15);margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:8px">✨ 你的学习画像</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">`;
+    [{k:'style',l:'学习偏好',i:'📖'},{k:'pace',l:'学习节奏',i:'⏱️'},{k:'help',l:'求助模式',i:'🤝'},{k:'why',l:'学习动力',i:'🎯'},{k:'format',l:'学习形式',i:'📺'}].forEach(d=>{
+      h+=`<div style="padding:6px 8px;background:rgba(0,0,0,.2);border-radius:5px"><div style="font-size:9px;color:var(--t4)">${d.i} ${d.l}</div><div style="font-size:11px;color:var(--t1);font-weight:600;margin-top:2px">${labels[st.pf[d.k]]||'未选'}</div></div>`;
+    });
+    h+=`</div></div>`;
+
+    // Copy button
+    h+=`<button onclick="copyProfile()" style="width:100%;padding:9px;border-radius:7px;background:linear-gradient(135deg,var(--p),#7c3aed);color:#fff;font-size:12px;font-weight:700;cursor:pointer;border:none;margin-bottom:6px">📋 复制画像 → 粘贴给AI导师让它更懂你</button>`;
+    h+=`<p style="font-size:10px;color:var(--t4);text-align:center">跟导师提示词一起发送给AI，它会根据你的画像调整教学方式</p>`;
+  } else {
+    h+=`<div style="text-align:center;padding:12px;color:var(--t3);font-size:11px">回答完所有问题后，会生成你的学习画像 ✨</div>`;
+  }
+
+  h+=`</div>`;
+  return h;
+}
+// ===== ACTIONS =====
+window.go=d=>{st.sel=d;st.v='detail';renderApp()};
+window.setV=v=>{st.v=v;renderApp()};
+window.tglDay=d=>{st.d[d]=!st.d[d];if(!st.d[d])delete st.d[d];sv();renderApp()};
+window.tglTask=(k)=>{st.t[k]=!st.t[k];if(!st.t[k])delete st.t[k];sv();renderApp()};
+window.sNote=(d,v)=>{st.n[d]=v;sv()};
+window.fPh=k=>{st.phF=st.phF===k?null:k;renderApp()};
+window.tglExp=k=>{if(!st.exp)st.exp={};st.exp[k]=!st.exp[k];renderApp();};
+window.setPf=(k,v)=>{if(!st.pf)st.pf={};st.pf[k]=v;try{localStorage.setItem('vc2pf',JSON.stringify(st.pf))}catch(e){}renderApp();};
+window.copyProfile=()=>{
+  if(!st.pf)return;
+  const labels={understand:'先理解再动手',handson:'先动手再理解',mix:'边学边做',fast:'快节奏型',steady:'稳健型',slow:'慢节奏型',explore:'探索型',guide:'引导型',stepbystep:'手把手型',project:'项目驱动',career:'职业发展',curious:'兴趣驱动',fun:'乐趣驱动',video:'视频学习',text:'图文学习','try':'动手探索'};
+  const txt=`【未定义实验室 · 我的学习画像】\n学习偏好: ${labels[st.pf.style]||'未知'}\n学习节奏: ${labels[st.pf.pace]||'未知'}\n求助模式: ${labels[st.pf.help]||'未知'}\n学习动力: ${labels[st.pf.why]||'未知'}\n偏好形式: ${labels[st.pf.format]||'未知'}\n\n请根据我的画像调整教学方式。`;
+  copyText(txt,()=>alert('✅ 已复制！和导师提示词一起发给AI'));
+};
+window.doSrch=v=>{st.srch=v;renderApp()};
+
+// Timer
+window.tmrToggle=()=>{
+  if(st.tmrOn){clearInterval(tmrI);st.tmrOn=false;}
+  else{st.tmrOn=true;tmrI=setInterval(()=>{st.tmr++;if(st.tmr>=7200){clearInterval(tmrI);st.tmrOn=false;}renderApp();},1000);}
+  renderApp();
+};
+window.tmrReset=()=>{clearInterval(tmrI);st.tmr=0;st.tmrOn=false;renderApp()};
+
+// Export/Import
+window.doExport=()=>{
+  const data=JSON.stringify({d:st.d,t:st.t,n:st.n},null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='未定义实验室-vibe-coding-'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  URL.revokeObjectURL(url);
+};
+window.doImport=()=>{
+  const input=document.createElement('input');input.type='file';input.accept='.json';
+  input.onchange=e=>{const f=e.target.files[0];if(!f)return;const reader=new FileReader();
+    reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);st.d=data.d||{};st.t=data.t||{};st.n=data.n||{};sv();renderApp();alert('导入成功！');}catch(e){alert('导入失败：文件格式错误');}};
+    reader.readAsText(f);};
+  input.click();
+};
+
+// Universal copy function (works on file:// protocol where navigator.clipboard is blocked)
+function copyText(text, onSuccess){
+  // Try modern API first
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(onSuccess).catch(()=>fallbackCopy(text,onSuccess));
+  } else {
+    fallbackCopy(text,onSuccess);
+  }
+}
+function fallbackCopy(text, onSuccess){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='position:fixed;left:-9999px;top:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus();ta.select();
+  try{document.execCommand('copy');onSuccess();}catch(e){alert('复制失败，请手动选中文字后 Ctrl+C 复制');}
+  document.body.removeChild(ta);
+}
+
+// Mentor modal
+window.openMentor=()=>document.getElementById('mentorModal').style.display='flex';
+window.closeMentor=()=>document.getElementById('mentorModal').style.display='none';
+window.copyMentor=()=>{
+  const text=document.getElementById('mentorPrompt').textContent;
+  copyText(text, ()=>{
+    const s=document.getElementById('copyStatus');s.style.display='inline';
+    setTimeout(()=>s.style.display='none',2500);
+  });
+};
+window.copyMentorEN=()=>{
+  const en=`You are the AI tutor for "Undefined Lab" (未定义实验室) Vibe Coding 540-day learning system, guiding a complete beginner through an 18-month roadmap. Be friendly but professional. Use real-life analogies for every concept.
+
+## CRITICAL: Step-by-Step Delivery
+Do NOT dump everything at once. When the student says "Day X":
+
+STEP 1 (auto-send): Give ONLY the tutorial explanation + task checklist
+- Tutorial: 300-500 words, start with analogy, connect to prior knowledge, no code yet
+- Task list: 3-5 numbered tasks (easy→hard), just titles, don't expand details
+- End with: "Ready? Tell me 'start task 1' and we'll begin 🚀"
+
+STEP 2 (when student says "start task X" or "next"): Expand THAT task only
+- Specific steps (open what → click where → type what)
+- Code if needed: 10-15 lines with comments
+- Expected result: "If it works, you should see..."
+
+STEP 3 (after all tasks, or student says "summarize"): Give closing content
+- 3 key takeaways (1 must be a common mistake)
+- 3 self-check questions (concept → hands-on → extension)
+- 2-3 learning resources (prefer Chinese Bilibili videos)
+- Summary + tomorrow preview
+
+## 540-Day Roadmap
+- Day 1-60: Beginner (Replit, Bolt.new, Cursor, TRAE, HTML/CSS/JS, Git, Supabase, Vercel)
+- Day 61-120: Growth (TypeScript, Prisma, Auth, Stripe, SaaS)
+- Day 121-180: Advanced (tRPC, LangChain/RAG, React Native, Docker)
+- Day 181-270: Expert (System Design, GraphQL, Security, CrewAI)
+- Day 271-360: Senior (Open Source, AWS, Terraform, Tech Writing)
+- Day 361-540: Master (Claude Code, Agentic Engineering, LLM Architecture)
+
+## Special Commands
+"review my code" → find 1 strength, explain issues with analogy, provide fix
+"I'm stuck" → new analogy, smaller steps, 5-min mini exercise
+"quiz me" → 3-5 questions, grade and explain
+"test me" → 5-10 scored questions, analyze weak areas
+
+## Key Rules
+- 80% coding, 20% reading — remind student to type along
+- Errors = learning — guide student to read error messages first
+- Every new concept needs an analogy
+- 2 hours/day max — keep content manageable
+- Use latest tool versions`;
+  copyText(en, ()=>{
+    const s=document.getElementById('copyStatus');s.style.display='inline';
+    setTimeout(()=>s.style.display='none',2500);
+  });
+};
+window.copyAIPrompt=(day)=>{
+  const d=DAYS.find(x=>x[0]===day);if(!d)return;
+  const ph=PH[d[2]];
+  const prompt=`我在 Day ${day}（${ph?.n}），今天的主题是「${d[1]}」。\n\n课程里的教程概要：${d[4]}\n\n请根据这个内容一步步教我：先给我「今天学什么」的讲解，然后列出任务清单。我说「开始第1个任务」你再展开。`;
+  copyText(prompt, ()=>alert('✅ 已复制！粘贴到AI对话中'));
+};
+
+// Jump input
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'&&st.v==='detail')go(Math.max(1,st.sel-1));
+  if(e.key==='ArrowRight'&&st.v==='detail')go(Math.min(TOTAL,st.sel+1));
+});
+
+renderApp();
+</script>
+</body>
+</html>

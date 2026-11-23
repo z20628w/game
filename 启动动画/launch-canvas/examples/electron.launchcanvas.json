@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "name": "我的软件",
+  "executable": "./MyApp.exe",
+  "framework": "electron",
+  "arguments": [],
+  "windowTitle": "",
+  "pagePrefix": "file://",
+  "background": { "selectors": ["#root"] }
+}

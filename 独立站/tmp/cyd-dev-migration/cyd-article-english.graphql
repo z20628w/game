@@ -1,0 +1,6 @@
+mutation($blogId: ID!, $blog: BlogUpdateInput!, $id0: ID!, $article0: ArticleUpdateInput!, $id1: ID!, $article1: ArticleUpdateInput!, $id2: ID!, $article2: ArticleUpdateInput!) {
+blog: blogUpdate(id: $blogId, blog: $blog) { blog { id title handle } userErrors { field message } }
+a0: articleUpdate(id: $id0, article: $article0) { article { id handle title isPublished image { url } } userErrors { field message } }
+a1: articleUpdate(id: $id1, article: $article1) { article { id handle title isPublished image { url } } userErrors { field message } }
+a2: articleUpdate(id: $id2, article: $article2) { article { id handle title isPublished image { url } } userErrors { field message } }
+}

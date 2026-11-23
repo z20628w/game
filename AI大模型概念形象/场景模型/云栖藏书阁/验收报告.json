@@ -1,0 +1,98 @@
+{
+  "状态": "通过",
+  "通行采样数": 957,
+  "glTF碰撞节点数": 17,
+  "角色半径米": 0.3,
+  "角色要求净高米": 1.85,
+  "最小实测净高米": 3.45,
+  "验证范围": "基于导出前实际碰撞网格的地面/净空/侧向射线检查，不代替 Cocos 引擎运行测试",
+  "Cocos实机测试": "未执行：本目录不是 Cocos 工程，尚无引擎运行环境",
+  "贴图": [
+    {
+      "name": "plaster_basecolor_4k.jpg",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "name": "plaster_normal_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "plaster_roughness_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "redwood_basecolor_4k.jpg",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "name": "redwood_normal_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "redwood_roughness_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "stone_basecolor_4k.jpg",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "name": "stone_normal_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "stone_roughness_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "wood_basecolor_4k.jpg",
+      "size": [
+        4096,
+        4096
+      ]
+    },
+    {
+      "name": "wood_normal_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "wood_roughness_2k.png",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "错误": [],
+  "错误总数": 0
+}

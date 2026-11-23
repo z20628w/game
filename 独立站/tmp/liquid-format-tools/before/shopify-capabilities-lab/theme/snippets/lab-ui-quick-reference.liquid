@@ -1,0 +1,76 @@
+{% comment %}
+UI 设计模块速查表，由 lab-ui.liquid 引用。
+每行的演示入口跳转到该区块的 ui-* 锚点，新增模块时需同时维护锚点和对应说明。
+CSS 在窄屏将表格改为逐行阅读，显式的表格角色与列头信息继续用于辅助技术。
+{% endcomment %}
+{% comment %}每行的演示入口指向 lab-ui 区块内的锚点。窄屏显示单元格短标签，辅助技术仍使用表头。{% endcomment %}
+<table class="lab-ui-matrix" role="table" aria-label="UI 设计速查表">
+  <thead role="rowgroup">
+    <tr role="row">
+      <th scope="col" role="columnheader">模块</th>
+      <th scope="col" role="columnheader">位置和交互可自定</th>
+      <th scope="col" role="columnheader">Shopify 固定或控制</th>
+      <th scope="col" role="columnheader">现成配置</th>
+      <th scope="col" role="columnheader">需要开发</th>
+      <th scope="col" role="columnheader">演示入口</th>
+    </tr>
+  </thead>
+  <tbody role="rowgroup">
+    <tr role="row">
+      <th scope="row" role="rowheader">购物车</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>独立页、左右抽屉、居中弹窗、底部面板。入口和自动打开时机可改。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>平台管理购物车商品行、可购数量、折扣和金额。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>选抽屉、独立页或加购通知。<br><strong>后台</strong>设库存与折扣规则。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>改变抽屉方向、弹层形态或桌面与手机的打开方式。</div></td>
+      <td role="cell"><a href="#ui-cart">试四种购物车形态 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">商品详情</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>图片可左右或上下排。价格、规格、购买按钮可重排。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>所选规格、加购变体、价格和库存须对应同一个商品变体。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>选媒体左右位置、画廊和规格控件，调整区块顺序。<br><strong>后台 → 产品</strong>维护媒体、规格、价格和库存。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>手机吸底购买栏、跨区布局、特殊规格联动。</div></td>
+      <td role="cell"><a href="#ui-product">试左图与右图 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">商品列表</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>网格、横排或瀑布流。列数、图片比例和加购按钮位置可改。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>使用原生集合时，商品归属、排序和分页数据由平台返回。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>调列数、每页数量、卡片和快速加购。<br><strong>后台 → 产品系列</strong>管理集合成员与默认排序。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>横排卡片、网格与列表即时切换、无限滚动。</div></td>
+      <td role="cell"><a href="#ui-list">试不同列数与快速加购 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">筛选</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>顶部、左右侧栏、抽屉或手机底部面板。可即时应用或确认后更新。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>原生筛选受支持的字段、查询参数和匹配规则约束。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>选顶部、左栏或抽屉。<br><strong>搜索与发现</strong>配置库存、价格、规格等筛选项。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>右栏、底部面板、自定义控件和提交时机。特殊筛选规则需评估应用或独立搜索。</div></td>
+      <td role="cell"><a href="#ui-filter">试三种真实筛选 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">导航</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>页头、页脚、侧栏、手机底部均可放。可横排、下拉或抽屉展开。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>主题可安排入口位置。链接仍指向各资源的有效路由。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>选桌面菜单类型、标志位置和吸顶方式。<br><strong>后台 → 内容 → 菜单</strong>管理层级和目标。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>手机底部导航、带图文的大菜单或自定义菜单区域。</div></td>
+      <td role="cell"><a href="#ui-navigation">试横向与分组菜单 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">搜索</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>输入框可常驻、弹出或全屏。建议、结果分组和空状态可定制。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>原生索引、匹配规则、资源类型和搜索路由由平台提供。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>主题编辑器</strong>开关预测搜索，设置结果网格和排序筛选。<br><strong>搜索与发现</strong>设置同义词和商品提升。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>全屏或常驻搜索、自定义结果分组、接第三方搜索。</div></td>
+      <td role="cell"><a href="#ui-search">试搜索与范围选择 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+    <tr role="row">
+      <th scope="row" role="rowheader">结账</th>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">可自定</span><div>主题内可放结账入口。托管结账可选单页或三页，以及可用品牌样式。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">平台边界</span><div>核心表单、订单提交与付款由 Shopify 托管。扩展只能放在支持的位置。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">现成配置</span><div><strong>后台 → 设置 → 结账</strong>管理版式、品牌与可用表单选项。支付、配送与税务各自配置。</div></td>
+      <td role="cell"><span class="lab-ui-cell-label" aria-hidden="true">需要开发</span><div>新增组件用结账扩展。信息、配送、付款步骤的界面扩展需 Shopify Plus。</div></td>
+      <td role="cell"><a href="#ui-checkout">对比步骤与查看结账入口 <span aria-hidden="true">↓</span></a></td>
+    </tr>
+  </tbody>
+</table>

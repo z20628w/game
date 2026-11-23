@@ -1,0 +1,106 @@
+{
+  "topic": "从零开始的 Web 3D 游戏开发手册：面向 PC 浏览器、移动浏览器与微信小游戏三端，覆盖技术选型推荐、分阶段学习路线、开发全流程与前后端实现（2026）",
+  "layout": "long",
+  "contentProfile": {
+    "id": "general",
+    "genreGuide": "general",
+    "audience": "从零开始学习游戏开发的前端开发者、学生与独立开发者",
+    "purpose": "提供一套可直接照着做的三端 3D 游戏开发手册：选什么技术、按什么路线学、按什么流程做，前端与后端分别怎么做，直到上线"
+  },
+  "structureRules": {
+    "headingPolicy": "chinese-publication",
+    "maxContentFilesPerBatch": 2
+  },
+  "sourcePolicy": {
+    "mode": "search-before-writing",
+    "minimumDirections": 3,
+    "requireGapReview": true
+  },
+  "sourceInputs": [],
+  "delivery": {
+    "mode": "markdown-only",
+    "userExplicitlyRequested": true,
+    "requestEvidence": "用户选择 Word + Markdown 双格式交付到本地文件夹 D:\\my_code\\我的学习\\3D游戏，不使用飞书云文档"
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "给出三端（PC/移动浏览器、微信小游戏）3D 游戏的技术推荐与引擎选型对比",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第2章 技术选型",
+      "resolution": ""
+    },
+    {
+      "id": "R2",
+      "requirement": "提供从零开始的、分阶段可执行的学习路线与时间预期",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第3章 学习路线",
+      "resolution": ""
+    },
+    {
+      "id": "R3",
+      "requirement": "覆盖从需求、原型、开发、测试、构建到上线的完整开发流程",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第4章 开发流程",
+      "resolution": ""
+    },
+    {
+      "id": "R4",
+      "requirement": "前端开发详解：引擎使用、场景与游戏系统、资源管线、性能优化",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第5章 前端开发",
+      "resolution": ""
+    },
+    {
+      "id": "R5",
+      "requirement": "三端适配与性能优化：浏览器差异、微信小游戏限制、包体控制",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第6章 三端适配",
+      "resolution": ""
+    },
+    {
+      "id": "R6",
+      "requirement": "后端开发详解：架构、登录认证、数据存储、排行榜、实时通信、部署",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第7章 后端开发",
+      "resolution": ""
+    },
+    {
+      "id": "R7",
+      "requirement": "前后端联调、安全与防作弊要点",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第8章 联调与安全",
+      "resolution": ""
+    },
+    {
+      "id": "R8",
+      "requirement": "上线部署、平台审核与运营迭代",
+      "priority": "main",
+      "in_scope": "yes",
+      "carrier": "第9章 上线与运营",
+      "resolution": ""
+    },
+    {
+      "id": "R9",
+      "requirement": "附录：工具、教程、官方文档与常见问题速查",
+      "priority": "no",
+      "in_scope": "yes",
+      "carrier": "第10章 附录",
+      "resolution": ""
+    }
+  ],
+  "wordCountRules": [
+    {
+      "id": "total-length",
+      "target": 36000,
+      "tolerancePercent": 15
+    }
+  ]
+}

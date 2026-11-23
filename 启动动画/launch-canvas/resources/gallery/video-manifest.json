@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "themes": {
+    "silver-dragon-classic": {
+      "verified": true,
+      "handoffSeconds": 0.5,
+      "coldLabel": "掌心引光 · 星庭回响",
+      "warmLabel": "耳坠轻摇 · 回眸微笑",
+      "cold": {
+        "file": "gallery/video/silver-dragon-classic/cold.mp4",
+        "durationMs": 8292
+      },
+      "warm": {
+        "file": "gallery/video/silver-dragon-classic/warm.mp4",
+        "durationMs": 3292
+      },
+      "background": {
+        "file": "gallery/video/silver-dragon-classic/background.mp4",
+        "durationMs": 5792
+      }
+    },
+    "chatgpt-art": {
+      "verified": true,
+      "handoffSeconds": 0.5,
+      "coldLabel": "指尖理发 · 花房回响",
+      "warmLabel": "指尖舒展 · 轻笑回应",
+      "cold": {
+        "file": "gallery/video/chatgpt-art/cold.mp4",
+        "durationMs": 8292
+      },
+      "warm": {
+        "file": "gallery/video/chatgpt-art/warm.mp4",
+        "durationMs": 3292
+      },
+      "background": {
+        "file": "gallery/video/chatgpt-art/background.mp4",
+        "durationMs": 5792
+      }
+    },
+    "chatgpt-anime": {
+      "verified": true,
+      "handoffSeconds": 0.5,
+      "coldLabel": "掌心迎云 · 龙翼轻随",
+      "warmLabel": "小云点头 · 掌心回应",
+      "cold": {
+        "file": "gallery/video/chatgpt-anime/cold.mp4",
+        "durationMs": 8292
+      },
+      "warm": {
+        "file": "gallery/video/chatgpt-anime/warm.mp4",
+        "durationMs": 3292
+      },
+      "background": {
+        "file": "gallery/video/chatgpt-anime/background.mp4",
+        "durationMs": 5792
+      }
+    },
+    "claude-art": {
+      "verified": true,
+      "handoffSeconds": 0.5,
+      "coldLabel": "指尖翻书 · 暖阁寻星",
+      "warmLabel": "风翻书页 · 低眸回应",
+      "cold": {
+        "file": "gallery/video/claude-art/cold.mp4",
+        "durationMs": 8292
+      },
+      "warm": {
+        "file": "gallery/video/claude-art/warm.mp4",
+        "durationMs": 3292
+      },
+      "background": {
+        "file": "gallery/video/claude-art/background.mp4",
+        "durationMs": 5792
+      }
+    },
+    "aurora": {
+      "verified": true,
+      "handoffSeconds": 0.5,
+      "coldLabel": "极光铺卷 · 雪原映色",
+      "warmLabel": "流光轻拂 · 山脊回响",
+      "cold": {
+        "file": "gallery/video/aurora/cold.mp4",
+        "durationMs": 8292
+      },
+      "warm": {
+        "file": "gallery/video/aurora/warm.mp4",
+        "durationMs": 3292
+      },
+      "background": {
+        "file": "gallery/video/aurora/background.mp4",
+        "durationMs": 5792
+      }
+    }
+  }
+}

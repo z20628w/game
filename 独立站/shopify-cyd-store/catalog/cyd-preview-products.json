@@ -1,0 +1,522 @@
+[
+  {
+    "handle": "cyd-preview-176",
+    "title": "演示 · 拢土 C07",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>从大地深处被捧出的一捧土。</p><dl><dt>内口</dt><dd>9cm</dd><dt>内深</dt><dd>6cm</dd><dt>外口</dt><dd>10.5cm</dd><dt>特别说明</dt><dd>随机发货</dd></dl><p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260822/1787389209342_000_73ea0d17f43a_1787389211594.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "拢土 C07"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260822/1787393311680_000_cd5f96ad2a42_1787393311870.jpg?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "拢土 C07"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260821/1787283188289_000_eb7cf5234dfc_1787283187827.jpg?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "拢土 C07"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "Title",
+        "position": 1,
+        "values": [
+          {
+            "name": "Default Title"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "39.00",
+        "optionValues": [
+          {
+            "optionName": "Title",
+            "name": "Default Title"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU176-000002"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-178",
+    "title": "演示 · 淬影 C12",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>冷焰熄于哑光深处。</p><p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260902/1788341277407_000_e8fe8723489c_1788341279552.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "淬影 C12"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260829/1787997779089_000_4cb3ac6d79f5_1787997779270.jpg?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "淬影 C12"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260821/1787280237272_000_87a630a39e65_1787280236848.jpg",
+        "contentType": "IMAGE",
+        "alt": "淬影 C12"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "款式",
+        "position": 1,
+        "values": [
+          {
+            "name": "款式 1"
+          },
+          {
+            "name": "款式 2"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "59.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 1"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU178-000001"
+        }
+      },
+      {
+        "price": "69.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 2"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU178-000002"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-180",
+    "title": "演示 · 白鳄纪 C01",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260827/1787794896527_000_6ff2acbde46a_1787794896096.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "白鳄纪 C01"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260827/1787794900151_000_ef6e593ebd08_1787794899580.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "白鳄纪 C01"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260827/1787794903119_000_29234223a15b_1787794903939.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "白鳄纪 C01"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "款式",
+        "position": 1,
+        "values": [
+          {
+            "name": "款式 1"
+          },
+          {
+            "name": "款式 2"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "69.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 1"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU180-000001"
+        }
+      },
+      {
+        "price": "79.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 2"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU180-000002"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-188",
+    "title": "演示 · 觚 C21",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260901/1788249654300_000_a1a7032fbffd_1788249654456.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "觚 C21"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260901/1788249652945_000_7b26a6745ddd_1788249652923.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "觚 C21"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260901/1788249649253_000_9fd7706b8514_1788249649421.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "觚 C21"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "款式",
+        "position": 1,
+        "values": [
+          {
+            "name": "款式 1"
+          },
+          {
+            "name": "款式 2"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "49.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 1"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU188-000001"
+        }
+      },
+      {
+        "price": "59.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 2"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU188-000002"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-185",
+    "title": "演示 · 蛋壳盆 C10",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<dl><dt>尺寸</dt><dd>小号</dd><dt>内口</dt><dd>7.3cm</dd><dt>内深</dt><dd>5.5cm</dd><dt>特别说明</dt><dd>随机发货</dd></dl><p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172144987_000_798dff92a2f3_1788172145604.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "蛋壳盆 C10"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172144771_000_9ee5dc303239_1788172145191.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "蛋壳盆 C10"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172145389_000_744f103e8cd8_1788172146345.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "蛋壳盆 C10"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "Title",
+        "position": 1,
+        "values": [
+          {
+            "name": "Default Title"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "45.00",
+        "optionValues": [
+          {
+            "optionName": "Title",
+            "name": "Default Title"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU185-000001"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-187",
+    "title": "演示 · 敛芒 C19",
+    "vendor": "CYD DESIGN",
+    "productType": "器皿",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172628258_000_f3abc257fcdd_1788172629328.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "敛芒 C19"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172627643_000_698812603887_1788172628458.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "敛芒 C19"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260831/1788172626686_000_5ffd61954bda_1788172627798.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "敛芒 C19"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "款式",
+        "position": 1,
+        "values": [
+          {
+            "name": "款式 1"
+          },
+          {
+            "name": "款式 2"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "49.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 1"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU187-000001"
+        }
+      },
+      {
+        "price": "59.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "款式 2"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU187-000002"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-191",
+    "title": "演示 · 龟甲龙扫地僧 C23",
+    "vendor": "CYD DESIGN",
+    "productType": "收藏品",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<dl><dt>颜色</dt><dd>玄曜鎏金</dd><dt>外高</dt><dd>10.5cm</dd><dt>外宽</dt><dd>9cm</dd><dt>特别说明</dt><dd>随机发货</dd></dl><p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260908/1788828109803_000_10e3b1728324_1788828112887.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "龟甲龙扫地僧 C23"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260908/1788828105866_000_a903427bb700_1788828109617.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "龟甲龙扫地僧 C23"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260908/1788828112770_000_beecd830ab4b_1788828117876.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "龟甲龙扫地僧 C23"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "Title",
+        "position": 1,
+        "values": [
+          {
+            "name": "Default Title"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "89.00",
+        "optionValues": [
+          {
+            "optionName": "Title",
+            "name": "Default Title"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU191-000001"
+        }
+      }
+    ]
+  },
+  {
+    "handle": "cyd-preview-192",
+    "title": "演示 · 特大号鳄鱼碗 C09",
+    "vendor": "CYD DESIGN",
+    "productType": "收藏品",
+    "status": "ACTIVE",
+    "tags": [
+      "cyd-theme-preview-v1",
+      "演示"
+    ],
+    "descriptionHtml": "<p>开发店铺演示商品。图片与名称取自 CYD 小程序；售价与库存仅用于测试。</p>",
+    "files": [
+      {
+        "originalSource": "https://file.cyd-live.com/20260928/1790575841428_000_e663c12c56ff_1790575841464.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "特大号鳄鱼碗 C09"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260928/1790576169024_000_2b15a073bfee_1790576169053.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "特大号鳄鱼碗 C09"
+      },
+      {
+        "originalSource": "https://file.cyd-live.com/20260916/1789541620410_000_f0179de92cff_1789541639304.png?imageMogr2/thumbnail/1200x1200%3E",
+        "contentType": "IMAGE",
+        "alt": "特大号鳄鱼碗 C09"
+      }
+    ],
+    "productOptions": [
+      {
+        "name": "款式",
+        "position": 1,
+        "values": [
+          {
+            "name": "荒漠色 # 1"
+          },
+          {
+            "name": "荒漠色 # 3"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "price": "129.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "荒漠色 # 1"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU192-000001"
+        }
+      },
+      {
+        "price": "139.00",
+        "optionValues": [
+          {
+            "optionName": "款式",
+            "name": "荒漠色 # 3"
+          }
+        ],
+        "inventoryItem": {
+          "tracked": false,
+          "sku": "SKU192-000003"
+        }
+      }
+    ]
+  }
+]

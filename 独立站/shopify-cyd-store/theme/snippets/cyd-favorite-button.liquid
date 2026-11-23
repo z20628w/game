@@ -1,0 +1,30 @@
+{% comment %}
+  可在商品卡或详情页复用的收藏按钮，与 assets/cyd-store.js 配合。
+  product 参数提供当前 Shopify 商品，appearance=product 时附带文字。
+  data-* 将商品 ID、标题、店内链接及缩略图交给脚本。hidden 在脚本初始化成功后移除，aria-pressed 反映收藏状态。
+{% endcomment %}
+{% doc %}
+  生成可收藏按钮所需的商品信息。收藏仅保存在当前浏览器。
+
+  @param {product} product - 要收藏的 Shopify 商品。
+  @param {string} [appearance] - 按钮外观，可选 product。
+{% enddoc %}
+<button
+  type="button"
+  class="cyd-favorite{% if appearance == 'product' %} cyd-favorite--product{% endif %}"
+  data-cyd-favorite
+  data-product-id="{{ product.id }}"
+  data-title="{{ product.title | escape }}"
+  data-url="{{ product.url | escape }}"
+  {% if product.featured_image %}
+    data-image="{{ product.featured_image | image_url: width: 160 | escape }}"
+  {% endif %}
+  aria-label="{{ 'cyd.favorites.add_product' | t: product: product.title | escape }}"
+  aria-pressed="false"
+  hidden
+>
+  {{ 'icon-heart.svg' | inline_asset_content }}
+  {%- if appearance == 'product' -%}
+    <span>{{ 'cyd.favorites.add' | t }}</span>
+  {%- endif -%}
+</button>

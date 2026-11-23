@@ -1,0 +1,18 @@
+query {
+  products(first: 30, query: "tag:cyd-theme-preview-v1") {
+    nodes {
+      id handle title descriptionHtml productType status onlineStoreUrl
+      translations(locale: "zh-CN") { key value outdated }
+      options { id name translations(locale: "zh-CN") { key value outdated }
+        optionValues { id name translations(locale: "zh-CN") { key value outdated } }
+      }
+      variants(first: 20) { nodes { id title price selectedOptions { name value } inventoryPolicy inventoryItem { tracked } } }
+      media(first: 20) { nodes { id alt status ... on MediaImage { image { url } } } }
+      resourcePublicationsV2(first: 10) { nodes { isPublished publication { name } } }
+    }
+    pageInfo { hasNextPage }
+  }
+  collections(first: 20, query: "handle:cyd-preview-*") {
+    nodes { id handle title productsCount { count } translations(locale: "zh-CN") { key value outdated } }
+  }
+}

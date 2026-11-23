@@ -1,0 +1,20 @@
+{% comment %}
+手机底部导航，由 layout/theme.liquid 按 cyd_show_mobile_nav 开关加载。
+商品详情使用购买表单跳转条，其他页面可显示本导航。定位和手机断点在 cyd-store.css。
+账户入口仅在店铺启用客户账户时出现，链接由 Shopify routes 提供。
+{% endcomment %}
+{% comment %}底栏使用 Shopify 提供的账户与购物车原生路由。{% endcomment %}
+<nav class="cyd-mobile-nav" aria-label="{{ 'cyd.navigation.mobile' | t }}">
+  <a href="{{ routes.root_url }}"{% if request.page_type == 'index' %} aria-current="page"{% endif %}>
+    {{ 'cyd-icon-home.svg' | inline_asset_content }}<span>{{ 'cyd.navigation.home' | t }}</span>
+  </a>
+  <a href="{{ routes.collections_url }}"{% if request.page_type == 'list-collections' %} aria-current="page"{% endif %}>
+    {{ 'cyd-icon-grid.svg' | inline_asset_content }}<span>{{ 'cyd.navigation.collections' | t }}</span>
+  </a>
+  <a href="{{ routes.cart_url }}"{% if request.page_type == 'cart' %} aria-current="page"{% endif %}>
+    {{ 'icon-cart-empty.svg' | inline_asset_content }}<span>{{ 'cyd.navigation.cart' | t }}</span>
+  </a>
+  {%- if shop.customer_accounts_enabled -%}
+    <a href="{{ routes.account_url }}">{{ 'icon-account.svg' | inline_asset_content }}<span>{{ 'cyd.navigation.account' | t }}</span></a>
+  {%- endif -%}
+</nav>

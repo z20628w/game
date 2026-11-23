@@ -1,0 +1,61 @@
+{
+  "sections": {
+    "hero": {
+      "type": "cyd-hero",
+      "blocks": {
+        "soil": {
+          "type": "slide",
+          "settings": {
+            "default_art": "banner-1",
+            "eyebrow": "CYD DESIGN / Objects with Soul",
+            "heading": "Longtu C7",
+            "description": "A handful of clay lifted from deep within the earth.",
+            "cta": "Explore Longtu",
+            "product": "cyd-preview-176"
+          }
+        },
+        "shadow": {
+          "type": "slide",
+          "settings": {
+            "default_art": "banner-2",
+            "eyebrow": "CYD DESIGN / Colors Forged by Nature",
+            "heading": "Cuiying C12",
+            "description": "A cold flame fades into the depths of a matte finish.",
+            "cta": "Explore Cuiying",
+            "product": "cyd-preview-178"
+          }
+        }
+      },
+      "block_order": [
+        "soil",
+        "shadow"
+      ],
+      "settings": {}
+    },
+    "series": {
+      "type": "cyd-series",
+      "settings": {
+        "title": "New Collections",
+        "kicker": "NEW ARRIVALS",
+        "limit": 3,
+        "collections": [
+          "cyd-preview-vessels",
+          "cyd-preview-selected"
+        ]
+      }
+    },
+    "catalog": {
+      "type": "cyd-catalog",
+      "settings": {
+        "title": "All Products",
+        "kicker": "ALL ITEMS",
+        "limit": 8
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "series",
+    "catalog"
+  ]
+}

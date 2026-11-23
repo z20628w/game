@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "executableName": "WorkBuddy.exe",
+  "pagePath": "resources/app.asar/renderer/index.html",
+  "selectors": [
+    "#root",
+    ".teams-container",
+    ".teams-grid-scroll-content",
+    "[class^=\"_gridView_\"]",
+    "[class^=\"_gridViewItem_\"]",
+    ".conversation-shell"
+  ]
+}

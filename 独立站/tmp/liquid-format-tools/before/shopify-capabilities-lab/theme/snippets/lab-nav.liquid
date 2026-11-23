@@ -1,0 +1,20 @@
+{% comment %}
+演示主题的固定导航，由 layout/theme.liquid 渲染。
+首页问号后的 view 选择 index.lab-*.json 备用模板，商品与系列入口使用各自的后台资源。
+routes.root_url 保留当前语言路径，修改模板后需同步检查这些入口。
+{% endcomment %}
+<nav class="lab-nav" aria-label="能力实验室导航">
+  <a class="lab-brand" href="{{ routes.root_url }}"><span class="lab-brand-mark" aria-hidden="true">S.</span><span>主题能力实验室<small>设计 · 产品 · 开发</small></span></a>
+  <div class="lab-nav-links">
+    <a href="{{ routes.root_url }}#lab-catalog">能力地图</a>
+    <a href="{{ routes.root_url }}?view=lab-ui">界面设计</a>
+    <a href="{{ routes.collections_url }}/lab-demo-collection">商品体验</a>
+    <a href="{{ routes.root_url }}?view=lab-data">自定义数据</a>
+    <a href="{{ routes.root_url }}?view=lab-api">接口实验</a>
+    <a href="{{ routes.root_url }}?view=lab-components">组件实验</a>
+    <a href="{{ routes.root_url }}?view=lab-saved">收藏对比</a>
+    <a href="{{ routes.root_url }}pages/lab-demo-contact">联系表单</a>
+    <a href="{{ routes.root_url }}?view=lab-boundaries">能力边界</a>
+    <a href="{{ routes.root_url }}?view=lab-markets">海外市场要求</a>
+  </div>
+</nav>

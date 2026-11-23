@@ -1,0 +1,7 @@
+fragment Copy on TranslatableResource { resourceId translatableContent { key value digest } translations(locale: "zh-CN") { key value outdated } }
+query {
+  p0: translatableResource(resourceId: "gid://shopify/Product/8205189709902") { ...Copy }
+  p1: translatableResource(resourceId: "gid://shopify/Product/8205191282766") { ...Copy }
+  p2: translatableResource(resourceId: "gid://shopify/Product/8205192626254") { ...Copy }
+  image: translatableResource(resourceId: "gid://shopify/MediaImage/41500523036750") { ...Copy }
+}

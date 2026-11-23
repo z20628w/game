@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-markets",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,13 @@
+{% comment %}
+主题编辑器区块组合实验，对应 index.lab-components.json。
+content_for blocks 输出编辑器在当前容器下配置的主题块与应用块。
+下方 schema 允许 @theme 和 @app，预设卡片为 blocks/lab-note.liquid。
+{% endcomment %}
+<section class="lab-shell lab-page">
+  <p class="lab-eyebrow">主题编辑器</p><h1>{{ section.settings.heading | escape }}</h1>
+  <p class="lab-lead">在 Shopify 主题编辑器中增删区块、调整顺序、替换内容。下方卡片使用可复用主题块。</p>
+  <div class="lab-grid lab-grid--two">{% content_for 'blocks' %}</div>
+</section>
+{% schema %}
+{"name":"实验室 · 组件容器","settings":[{"type":"text","id":"heading","label":"标题","default":"页面由可编辑的区块组成。"}],"blocks":[{"type":"@theme"},{"type":"@app"}],"presets":[{"name":"实验室 · 组件容器","blocks":[{"type":"lab-note"},{"type":"lab-note"}]}]}
+{% endschema %}

@@ -1,0 +1,39 @@
+{% comment %}
+  可复用的主题块，在 lab-flex.liquid 的 content_for blocks 中渲染。
+  block.settings 提供标签、标题和富文本正文，shopify_attributes 将当前卡片对应到编辑器的选中及重排操作。
+{% endcomment %}
+<article class="lab-panel" {{ block.shopify_attributes }}>
+  <p class="lab-eyebrow">{{ block.settings.label | escape }}</p>
+  <h3>{{ block.settings.title | escape }}</h3>
+  <div class="rte">{{ block.settings.body }}</div>
+</article>
+{% schema %}
+{
+  "name": "实验室 · 说明卡片",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "标签",
+      "default": "可复用主题块"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "标题",
+      "default": "在编辑器修改内容"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "正文",
+      "default": "<p>这是独立主题块，可在支持主题块的区块中复用。</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "实验室 · 说明卡片"
+    }
+  ]
+}
+{% endschema %}

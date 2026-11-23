@@ -1,0 +1,1 @@
+print("hell python\n我是换行的打印操作")

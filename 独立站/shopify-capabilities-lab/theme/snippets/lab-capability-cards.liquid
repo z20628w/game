@@ -1,0 +1,494 @@
+{% comment %}由 scripts/build-guide.mjs 生成，请修改 config/ 下的能力定义。{% endcomment %}
+{% if mode == 'overview' %}
+<section class="lab-decision lab-decision--direct">
+  <h2>主题能直接做</h2>
+  <p>在主题编辑器或主题代码中实现。</p>
+  <ul role="list"><li>首页排版与动效</li><li>商品规格切换</li><li>购物车抽屉</li></ul>
+  <a href="#lab-results" data-filter-decision="direct">查看 20 项<span aria-hidden="true"> →</span></a>
+</section>
+<section class="lab-decision lab-decision--special">
+  <h2>需要特殊方法</h2>
+  <p>先核对后台配置、应用、扩展或套餐。</p>
+  <ul role="list"><li>商品筛选</li><li>跨设备收藏</li><li>结账页扩展</li></ul>
+  <a href="#lab-results" data-filter-decision="special">查看 21 项<span aria-hidden="true"> →</span></a>
+</section>
+<section class="lab-decision lab-decision--blocked">
+  <h2>主题做不了</h2>
+  <p>这些做法超出主题权限，需调整方案。</p>
+  <ul role="list"><li>重写整个结账页</li><li>前端直接改应付价</li><li>在主题里跑后端</li></ul>
+  <a href="#lab-results" data-filter-decision="blocked">查看 5 项<span aria-hidden="true"> →</span></a>
+</section>
+{% else %}
+<section class="lab-capability-group lab-decision--direct" data-decision-group>
+  <h3>主题能直接做 <span data-group-count>20 项</span></h3>
+  <div class="lab-capability-columns" aria-hidden="true"><span>功能</span><span>实现方式或条件</span><span>入口</span></div>
+  <article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>自由布局与响应式</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用主题设置管理风格，按设计稿编写布局和样式。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}" aria-label="自由布局与响应式 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 自由布局与响应式</span></summary>
+    <p>颜色、字体、间距、栅格与移动端布局可由主题代码控制。</p><p>打开首页并缩放窗口；主题编辑器可调导览标题和主题颜色。</p><p class="lab-code">layout/theme.liquid、assets/lab.css</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>可视化区块与拖拽</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用可排序区块和主题设置开放编辑入口。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="可视化区块与拖拽 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 可视化区块与拖拽</span></summary>
+    <p>JSON 模板、Section、Block 与 Section Group 可组合页面。</p><p>进入主题编辑器，移动首页区块；编辑组件实验区。</p><p class="lab-code">sections/lab-hub.liquid、sections/lab-flex.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/architecture" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>可复用主题块</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>开发可复用主题块，放进支持它的区块。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="可复用主题块 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 可复用主题块</span></summary>
+    <p>主题块可在支持 @theme 的区块内复用；应用块需要已安装的应用提供。</p><p>组件实验区展示两个复用说明块；在编辑器增删。</p><p class="lab-code">blocks/lab-note.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>不同页面使用不同模板</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>按页面类型创建模板，有差异的页面用替代模板。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-data" aria-label="不同页面使用不同模板 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 不同页面使用不同模板</span></summary>
+    <p>商品、集合、页面、搜索等有独立模板；可建立替代模板。</p><p>本实验室用首页替代模板承载数据、接口和收藏实验。</p><p class="lab-code">templates/index.lab-*.json</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/templates" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>轮播、图文、折叠与视频</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>复用或定制主题区块，再配置图文或媒体素材。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="轮播、图文、折叠与视频 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 轮播、图文、折叠与视频</span></summary>
+    <p>Dawn 内置轮播、图文、视频、折叠内容和多列组件。</p><p>在组件实验区体验折叠内容，在编辑器添加媒体区块。</p><p class="lab-code">sections/slideshow.liquid、video.liquid、collapsible-content.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>商品卡片与详情</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用商品模板展示 Shopify 商品数据和购买入口。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}collections/lab-demo-collection" aria-label="商品卡片与详情 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 商品卡片与详情</span></summary>
+    <p>读取 Shopify 商品、媒体、价格、描述和售卖状态。</p><p>打开演示集合，再进入商品详情。</p><p class="lab-code">sections/main-product.liquid、snippets/card-product.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/product-merchandising" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>多规格、变体价格与售罄</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用规格选择器切换变体，同步价格、库存状态和按钮。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="多规格、变体价格与售罄 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 多规格、变体价格与售罄</span></summary>
+    <p>规格选择对应真实变体，价格与可用状态由 Shopify 数据决定。</p><p>切换陶瓷杯颜色，查看台灯与售罄笔记本。</p><p class="lab-code">assets/product-info.js、snippets/product-variant-picker.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/product-merchandising/variants" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>集合、分页与排序</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>主题实现商品列表和分页，使用 Shopify 排序参数。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}collections/lab-demo-collection" aria-label="集合、分页与排序 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 集合、分页与排序</span></summary>
+    <p>集合数据由后台维护，主题渲染并处理原生排序与分页。</p><p>切换演示集合的价格排序；更多商品时体验分页。</p><p class="lab-code">sections/main-collection-product-grid.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>搜索与预测搜索</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用 Shopify 搜索和预测搜索接口，定制输入框与结果。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}search?q=演示" aria-label="搜索与预测搜索 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 搜索与预测搜索</span></summary>
+    <p>使用 Shopify 搜索索引；结果受发布状态、语言和索引时延影响。</p><p>点击页头搜索并输入“演示”；进入完整搜索结果页。</p><p class="lab-code">sections/main-search.liquid、sections/predictive-search.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/navigation-search/search" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>快速加购</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>启用商品卡片快速加购，多规格商品先选择规格。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}#lab-products" aria-label="快速加购 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 快速加购</span></summary>
+    <p>商品列表可启用快速加购，多规格商品打开规格选择。</p><p>首页下方演示商品区点击快速加购。</p><p class="lab-code">sections/featured-collection.liquid、assets/quick-add.js</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>本机收藏与商品对比</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用浏览器本机存储保存收藏。跨设备同步需账户数据。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-saved" aria-label="本机收藏与商品对比 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 本机收藏与商品对比</span></summary>
+    <p>此示例仅保存在当前浏览器；清理存储后消失，不跨设备同步。</p><p>商品页加入收藏，打开收藏实验页比较属性。</p><p class="lab-code">assets/lab.js、sections/lab-saved.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>加购、改数量与移除</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用购物车接口实现加购、改数量和移除。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}cart" aria-label="加购、改数量与移除 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 加购、改数量与移除</span></summary>
+    <p>使用真实 Ajax Cart，最终价格和库存校验来自 Shopify。</p><p>加入两种颜色，在购物车调整数量并删除。</p><p class="lab-code">assets/product-form.js、assets/cart.js</p><a href="https://shopify.dev/docs/api/ajax/reference/cart" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>购物车形态与位置</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>Dawn 可选抽屉、独立页或加购通知。左右方向、居中和底部面板可改主题代码。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-ui#ui-cart" aria-label="购物车形态与位置 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 购物车形态与位置</span></summary>
+    <p>购物车可以是独立页、左右抽屉、居中弹窗或底部面板。主题决定布局和打开方式。</p><p>在界面设计页用同一个真实购物车切换位置，也可以进入独立购物车页。</p><p class="lab-code">sections/lab-ui.liquid、snippets/cart-drawer.liquid、assets/lab.js</p><a href="https://shopify.dev/docs/api/ajax/reference/cart" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>商品行定制文字</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用商品行属性记录刻字等输入。收费需另外定价。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="商品行定制文字 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 商品行定制文字</span></summary>
+    <p>Line item properties 可记录输入内容；文字本身不会自动加价。</p><p>陶瓷杯输入定制文字后加购，在购物车查看属性。</p><p class="lab-code">snippets/lab-product-tools.liquid</p><a href="https://shopify.dev/docs/api/ajax/reference/cart" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>订单备注</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用购物车备注记录订单留言。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}cart" aria-label="订单备注 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 订单备注</span></summary>
+    <p>购物车 note 可提交给订单；主题中的字段不改变履约规则。</p><p>购物车页输入备注并离开输入框，使用接口实验读取购物车验证。</p><p class="lab-code">sections/main-cart-footer.liquid</p><a href="https://shopify.dev/docs/api/ajax/reference/cart" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="自定义数据">
+  <div class="lab-capability-name"><h4>Ajax API 与区块刷新</h4><span class="lab-muted">自定义数据</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>调用公开接口并按需刷新区块，保留加载与失败状态。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-api" aria-label="Ajax API 与区块刷新 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · Ajax API 与区块刷新</span></summary>
+    <p>读取公开商品、当前购物车和服务端渲染区块；不需要 Admin token。</p><p>接口实验发起只读请求，展示脱敏后的响应摘要。</p><p class="lab-code">sections/lab-api.liquid、assets/lab.js</p><a href="https://shopify.dev/docs/api/ajax" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="内容与增长">
+  <div class="lab-capability-name"><h4>品牌页与联系表单</h4><span class="lab-muted">内容与增长</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用页面模板和原生联系表单实现图文与留言。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}pages/lab-demo-contact" aria-label="品牌页与联系表单 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 品牌页与联系表单</span></summary>
+    <p>页面正文由后台维护；联系表单由 Shopify 接收并发送通知。</p><p>打开演示联系页。提交会真实发送通知，不自动替你提交。</p><p class="lab-code">sections/contact-form.liquid、templates/page.contact.json</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="内容与增长">
+  <div class="lab-capability-name"><h4>SEO 与结构化数据</h4><span class="lab-muted">内容与增长</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>在主题输出标题、规范链接和商品结构化数据。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="SEO 与结构化数据 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · SEO 与结构化数据</span></summary>
+    <p>主题生成标题、canonical、社交元数据和商品结构化数据；不保证排名。</p><p>查看商品页面源码的元信息和 application/ld+json。</p><p class="lab-code">layout/theme.liquid、snippets/meta-tags.liquid、sections/main-product.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="开发流程">
+  <div class="lab-capability-name"><h4>CLI 初始化、开发、检查与上传</h4><span class="lab-muted">开发流程</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>用 Shopify CLI 开发、检查并上传未发布主题。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="CLI 初始化、开发、检查与上传 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · CLI 初始化、开发、检查与上传</span></summary>
+    <p>CLI 管理开发流程；功能可行性由 Shopify 产品能力和店铺条件决定。</p><p>项目提供 dev、check、push、package 命令和远端验证记录。</p><p class="lab-code">package.json、scripts/deploy.mjs</p><a href="https://shopify.dev/docs/api/shopify-cli/theme" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="theme" data-decision="direct" data-category="开发流程">
+  <div class="lab-capability-name"><h4>无障碍与性能基础</h4><span class="lab-muted">开发流程</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--theme">主题可实现</span><p>在主题实现键盘操作、可读状态与响应式资源。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}" aria-label="无障碍与性能基础 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 无障碍与性能基础</span></summary>
+    <p>语义结构、键盘操作、焦点、图片尺寸和按需脚本需要持续验证。</p><p>用 Tab 操作筛选和收藏，缩窄屏幕；Dawn 提供商店基础交互。</p><p class="lab-code">assets/lab.css、assets/lab.js、Dawn 原有组件</p><a href="https://shopify.dev/docs/storefronts/themes/best-practices" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+</section>
+<section class="lab-capability-group lab-decision--special" data-decision-group>
+  <h3>需要特殊方法 <span data-group-count>21 项</span></h3>
+  <div class="lab-capability-columns" aria-hidden="true"><span>功能</span><span>实现方式或条件</span><span>入口</span></div>
+  <article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="页面与设计">
+  <div class="lab-capability-name"><h4>导航与移动菜单</h4><span class="lab-muted">页面与设计</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>后台维护菜单，主题实现桌面与手机导航。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}" aria-label="导航与移动菜单 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 导航与移动菜单</span></summary>
+    <p>主题展示菜单，菜单结构在 Shopify 后台维护；实验室导览独立提供。</p><p>体验页头菜单及手机端抽屉；后台配置店铺主菜单。</p><p class="lab-code">sections/header.liquid、snippets/lab-nav.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>图片画廊、视频与 3D</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>上传商品图片、视频或 3D 素材，主题负责画廊。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="图片画廊、视频与 3D · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 图片画廊、视频与 3D</span></summary>
+    <p>主题提供媒体展示能力；商品后台需要相应图片、视频或 3D 文件。</p><p>商品图片可缩放；视频与 3D 需另行上传素材后体验。</p><p class="lab-code">snippets/product-media-gallery.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/product-merchandising/media" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>商品筛选</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在「搜索与发现」配置价格、库存或规格等筛选项。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}collections/lab-demo-collection" aria-label="商品筛选 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 商品筛选</span></summary>
+    <p>主题渲染平台返回的 filters；筛选项需在 Search &amp; Discovery 中配置。</p><p>查看集合页；若没有筛选项，先配置价格、库存与颜色过滤器。</p><p class="lab-code">snippets/facets.liquid、assets/facets.js</p><a href="https://shopify.dev/docs/storefronts/themes/navigation-search/filtering" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="商品与发现">
+  <div class="lab-capability-name"><h4>商品推荐</h4><span class="lab-muted">商品与发现</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>接入 Shopify 推荐结果，按需配置相关或互补商品。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="商品推荐 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 商品推荐</span></summary>
+    <p>推荐服务可能返回空；可通过 Search &amp; Discovery 设置相关或互补商品。</p><p>商品底部查看推荐；新店没有推荐结果属于正常空态。</p><p class="lab-code">sections/related-products.liquid</p><a href="https://shopify.dev/docs/api/ajax/reference/product-recommendations" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>折扣与礼品卡</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在后台配置优惠或礼品卡，主题展示结果。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}cart" aria-label="折扣与礼品卡 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 折扣与礼品卡</span></summary>
+    <p>优惠由后台折扣规则和平台计算；礼品卡商品需后台启用与配置。</p><p>先创建测试折扣，再用购物车与结账验证；本项目不创建促销规则。</p><p class="lab-code">snippets/price.liquid、sections/main-cart-footer.liquid</p><a href="https://help.shopify.com/en/manual/discounts" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>进入 Shopify 结账</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>配置支付、配送和税费，主题从购物车跳转托管结账。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}cart" aria-label="进入 Shopify 结账 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 进入 Shopify 结账</span></summary>
+    <p>主题把购物车交给托管结账；支付、配送、税费需要后台配置。</p><p>可点击结账查看；测试下单前由店铺启用测试支付并配置配送。</p><p class="lab-code">sections/main-cart-footer.liquid</p><a href="https://shopify.dev/docs/apps/build/checkout" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>在结账页指定位置增加组件</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>使用结账界面扩展，按目标位置核对应用与套餐。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="在结账页指定位置增加组件 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 在结账页指定位置增加组件</span></summary>
+    <p>通过结账界面扩展在平台提供的位置增加组件。结账步骤内部分位置仅适用于 Shopify Plus。</p><p>先确定是结账步骤、感谢页还是订单状态页，再核对扩展位置和套餐。演示店未安装结账扩展。</p><p class="lab-code">结账界面扩展，需要应用工程</p><a href="https://shopify.dev/docs/apps/build/checkout" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>到店自提</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>配置门店地点、自提与库存，再展示可提货状态。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="到店自提 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 到店自提</span></summary>
+    <p>主题展示平台自提信息，需要地点、库存和自提设置。</p><p>后台配置后，商品页出现提货可用性组件。</p><p class="lab-code">sections/pickup-availability.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>订阅与销售计划</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>用订阅应用建立销售计划，主题接入订阅选项。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="订阅与销售计划 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 订阅与销售计划</span></summary>
+    <p>Selling plans 需要订阅应用或专项应用创建；主题还要实现对应选择器。</p><p>本项目提供边界说明，未安装订阅应用或提交订阅订单。</p><p class="lab-code">能力说明，未实现订阅选择器</p><a href="https://shopify.dev/docs/apps/build/purchase-options/subscriptions" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="购物与结账">
+  <div class="lab-capability-name"><h4>组合商品与复杂促销</h4><span class="lab-muted">购物与结账</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>组合库存用组合商品方案，特殊折扣用应用或 Shopify Functions。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="组合商品与复杂促销 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 组合商品与复杂促销</span></summary>
+    <p>展示组合不等于共享库存或结账优惠；应评估 Bundles、Functions 或应用。</p><p>在需求评审中区分展示组合、库存联动与价格计算。</p><p class="lab-code">能力说明，需专项实现</p><a href="https://shopify.dev/docs/apps/build/product-merchandising/bundles" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="自定义数据">
+  <div class="lab-capability-name"><h4>Metafields 自定义字段</h4><span class="lab-muted">自定义数据</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在后台定义字段类型并填值，主题读取并展示。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-data" aria-label="Metafields 自定义字段 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · Metafields 自定义字段</span></summary>
+    <p>在已有资源上添加有类型的字段，定义与值保存在后台。</p><p>数据实验读取商品材质和特点列表，与后台字段对照。</p><p class="lab-code">sections/lab-data.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/metafields" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="自定义数据">
+  <div class="lab-capability-name"><h4>Metaobjects 自定义结构</h4><span class="lab-muted">自定义数据</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在后台定义结构并建条目，主题读取或引用。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-data" aria-label="Metaobjects 自定义结构 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · Metaobjects 自定义结构</span></summary>
+    <p>先定义类型和字段，再创建条目；可被多个商品引用。</p><p>查看真实保养指南条目、全局读取和商品引用读取。</p><p class="lab-code">sections/lab-data.liquid、scripts/seed-demo.mjs</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/metaobjects" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="自定义数据">
+  <div class="lab-capability-name"><h4>动态数据源</h4><span class="lab-muted">自定义数据</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在主题编辑器把兼容的设置绑定到资源字段。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}products/lab-demo-cup" aria-label="动态数据源 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 动态数据源</span></summary>
+    <p>支持的主题设置可绑定类型兼容的字段，绑定能力取决于设置类型与上下文。</p><p>主题编辑器选择商品模板，尝试为文本字段连接动态源。</p><p class="lab-code">sections/main-product.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/settings/dynamic-sources" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="自定义数据">
+  <div class="lab-capability-name"><h4>Storefront API 扩展</h4><span class="lab-muted">自定义数据</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>按需接入店面接口，单独设计数据权限和购物车流程。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="Storefront API 扩展 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · Storefront API 扩展</span></summary>
+    <p>复杂前台查询可按需使用；权限、版本与购物车体系需要单独设计。</p><p>当前主题使用 Liquid 与 Ajax；未接入另一套 Storefront Cart。</p><p class="lab-code">能力说明，未配置 Storefront API</p><a href="https://shopify.dev/docs/api/storefront" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="内容与增长">
+  <div class="lab-capability-name"><h4>博客与文章</h4><span class="lab-muted">内容与增长</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>后台建立博客和文章，主题定制列表和阅读页面。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="博客与文章 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 博客与文章</span></summary>
+    <p>主题包含博客与文章模板；需要后台创建博客和文章。</p><p>本项目已带模板，尚未创建演示博客或提交文章评论。</p><p class="lab-code">templates/blog.json、templates/article.json</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="内容与增长">
+  <div class="lab-capability-name"><h4>邮件订阅表单</h4><span class="lab-muted">内容与增长</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>主题提供订阅表单，后台或应用配置营销邮件。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="邮件订阅表单 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 邮件订阅表单</span></summary>
+    <p>主题提供订阅入口；发送营销邮件、自动化等需要另行配置。</p><p>在编辑器添加 newsletter 区块；提交会真实修改订阅状态。</p><p class="lab-code">sections/newsletter.liquid</p><a href="https://shopify.dev/docs/storefronts/themes" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="内容与增长">
+  <div class="lab-capability-name"><h4>多语言、多币种与 Markets</h4><span class="lab-muted">内容与增长</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>在后台启用市场、语言与币种，主题提供切换入口。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}" aria-label="多语言、多币种与 Markets · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 多语言、多币种与 Markets</span></summary>
+    <p>主题有 locale 与本地化表单；可选语言、国家和价格来自店铺设置。</p><p>在店铺启用多个市场与语言后体验页头选择器。</p><p class="lab-code">locales/、snippets/country-localization.liquid</p><a href="https://shopify.dev/docs/storefronts/themes/markets" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="账号与扩展">
+  <div class="lab-capability-name"><h4>客户登录与账户中心</h4><span class="lab-muted">账号与扩展</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>后台启用客户账户，账户页新增组件用客户账户扩展。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}account" aria-label="客户登录与账户中心 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 客户登录与账户中心</span></summary>
+    <p>新客户账户由 Shopify 托管；主题提供入口，账户 UI 扩展另用扩展机制。</p><p>使用页头账户入口；不把旧 customer 模板当作新账户方案。</p><p class="lab-code">sections/header.liquid</p><a href="https://shopify.dev/docs/apps/build/customer-accounts" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="账号与扩展">
+  <div class="lab-capability-name"><h4>评论、积分与跨设备收藏</h4><span class="lab-muted">账号与扩展</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>接入应用或后端存储，按账户管理评论、积分与收藏。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="评论、积分与跨设备收藏 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 评论、积分与跨设备收藏</span></summary>
+    <p>涉及持久数据、权限与业务规则时需要应用或后端。</p><p>本机收藏不能替代账户收藏，演示不伪造评论和积分。</p><p class="lab-code">能力说明，未安装应用</p><a href="https://shopify.dev/docs/apps/build" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="app" data-decision="special" data-category="账号与扩展">
+  <div class="lab-capability-name"><h4>应用块与嵌入</h4><span class="lab-muted">账号与扩展</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--app">需应用或专项开发</span><p>安装提供相应区块的应用，再从编辑器添加。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-components" aria-label="应用块与嵌入 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 应用块与嵌入</span></summary>
+    <p>主题预留 @app 区块；具体内容由已安装的主题应用扩展提供。</p><p>安装应用后在主题编辑器添加应用块或开启应用嵌入。</p><p class="lab-code">sections/apps.liquid、sections/lab-flex.liquid</p><a href="https://shopify.dev/docs/apps/build/online-store/theme-app-extensions" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="config" data-decision="special" data-category="账号与扩展">
+  <div class="lab-capability-name"><h4>分析与隐私同意</h4><span class="lab-muted">账号与扩展</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--config">需后台配置</span><p>通过客户事件配置像素，通过客户隐私配置同意策略。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="分析与隐私同意 · 体验或说明">查看示例 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 分析与隐私同意</span></summary>
+    <p>统计像素和同意策略由 Shopify Customer events / Customer privacy 配置。</p><p>本项目不安装第三方跟踪器；需按目标市场确定同意流程。</p><p class="lab-code">能力说明，未新增像素</p><a href="https://shopify.dev/docs/api/customer-privacy" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+</section>
+<section class="lab-capability-group lab-decision--blocked" data-decision-group>
+  <h3>主题做不了 <span data-group-count>5 项</span></h3>
+  <div class="lab-capability-columns" aria-hidden="true"><span>功能</span><span>实现方式或条件</span><span>入口</span></div>
+  <article class="lab-capability-row" data-capability data-level="boundary" data-decision="blocked" data-category="平台边界">
+  <div class="lab-capability-name"><h4>不能用主题重写结账页面</h4><span class="lab-muted">平台边界</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--boundary">平台边界</span><p>保留 Shopify 托管结账，在允许的位置使用结账扩展。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="不能用主题重写结账页面 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 不能用主题重写结账页面</span></summary>
+    <p>checkout.liquid 不是新项目方案。结账扩展使用专用机制，部分位置限 Plus。</p><p>设计结账需求时先核对计划、扩展位置和 API。</p><p class="lab-code">无主题实现，使用 Checkout Extensibility</p><a href="https://shopify.dev/docs/apps/build/checkout" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="boundary" data-decision="blocked" data-category="平台边界">
+  <div class="lab-capability-name"><h4>不能由前端决定结算价格</h4><span class="lab-muted">平台边界</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--boundary">平台边界</span><p>由后台商品价格、折扣或平台定价机制计算应付价。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="不能由前端决定结算价格 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 不能由前端决定结算价格</span></summary>
+    <p>修改 DOM、表单或 JS 价格不会改变 Shopify 最终应付金额。</p><p>定制文字要收费时需合法定价方案，不能信任浏览器传价。</p><p class="lab-code">定价规则必须由平台/应用执行</p><a href="https://shopify.dev/docs/api/functions" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="boundary" data-decision="blocked" data-category="平台边界">
+  <div class="lab-capability-name"><h4>不能在主题暴露管理密钥</h4><span class="lab-muted">平台边界</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--boundary">平台边界</span><p>管理密钥放在授权服务端，由后端执行后台写入。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="不能在主题暴露管理密钥 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 不能在主题暴露管理密钥</span></summary>
+    <p>Admin API 管理凭据不得交给浏览器；写入后台要通过授权服务端。</p><p>演示数据脚本在本机通过官方 CLI 授权运行，主题只读取公开数据。</p><p class="lab-code">scripts/store-api.mjs 仅本机运行</p><a href="https://shopify.dev/docs/api/admin-graphql" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="boundary" data-decision="blocked" data-category="平台边界">
+  <div class="lab-capability-name"><h4>主题不是任意后端运行环境</h4><span class="lab-muted">平台边界</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--boundary">平台边界</span><p>把业务后端部署到应用或外部服务。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="主题不是任意后端运行环境 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 主题不是任意后端运行环境</span></summary>
+    <p>主题上传的是 Liquid、JSON 和前端资源，不能在 Shopify 主题服务器运行 Node/PHP。</p><p>ERP、私有数据库、Webhook 与定时任务需要应用或外部服务。</p><p class="lab-code">无主题服务端部署</p><a href="https://shopify.dev/docs/storefronts/themes/architecture" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+<article class="lab-capability-row" data-capability data-level="boundary" data-decision="blocked" data-category="平台边界">
+  <div class="lab-capability-name"><h4>核心 URL 与平台资源模型</h4><span class="lab-muted">平台边界</span></div>
+  <div class="lab-capability-path"><span class="lab-badge lab-badge--boundary">平台边界</span><p>保留平台资源路由，用模板、页面标识或重定向调整入口。</p></div>
+  <div class="lab-capability-actions">
+    <a href="{{ routes.root_url }}?view=lab-boundaries" aria-label="核心 URL 与平台资源模型 · 体验或说明">查看说明 <span aria-hidden="true">↗</span></a>
+  </div>
+  <details class="lab-capability-detail"><summary>体验步骤与技术说明<span class="visually-hidden"> · 核心 URL 与平台资源模型</span></summary>
+    <p>可以定制页面外观、handle 和部分跳转，但不能任意重写所有平台保留路由。</p><p>设计信息架构时使用 products、collections、pages 等平台路由。</p><p class="lab-code">模板遵循 Shopify 路由模型</p><a href="https://shopify.dev/docs/storefronts/themes/architecture/templates" target="_blank" rel="noopener">官方依据 ↗</a>
+  </details>
+</article>
+</section>
+{% endif %}

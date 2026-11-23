@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartoonify · 图片卡通化</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>Cartoonify</h1>
+    <p class="subtitle">把任意图片一键变成卡通风格</p>
+  </header>
+
+  <main class="container">
+    <section class="panel" id="uploader">
+      <div id="dropzone" class="dropzone">
+        <input type="file" id="fileInput" accept="image/*" hidden />
+        <div class="dz-inner">
+          <div class="dz-icon">📷</div>
+          <p class="dz-title">点击或拖拽图片到此处</p>
+          <p class="dz-hint">支持 JPG / PNG / WEBP，最大 15 MB</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label>
+          <span>风格</span>
+          <select id="styleSelect"></select>
+        </label>
+        <label>
+          <span>强度 <em id="strengthValue">5</em></span>
+          <input type="range" id="strengthInput" min="1" max="10" value="5" />
+        </label>
+        <button id="convertBtn" class="primary" disabled>转换</button>
+        <button id="resetBtn" class="ghost" disabled>重置</button>
+      </div>
+
+      <p class="status" id="status">请选择一张图片开始</p>
+    </section>
+
+    <section class="panel preview">
+      <div class="preview-card">
+        <h3>原图</h3>
+        <div class="image-frame" id="originalFrame">
+          <span class="placeholder">尚未上传</span>
+        </div>
+      </div>
+      <div class="preview-card">
+        <h3>卡通效果</h3>
+        <div class="image-frame" id="resultFrame">
+          <span class="placeholder">等待生成</span>
+        </div>
+        <button id="downloadBtn" class="primary block" disabled>下载结果</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Backend: FastAPI + OpenCV</span>
+    <span id="apiStatus">API: 检查中…</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

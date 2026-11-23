@@ -1,0 +1,13 @@
+mutation {
+  shopLocaleEnable(locale: "zh-CN", marketWebPresenceIds: ["gid://shopify/MarketWebPresence/48117874766"]) {
+    shopLocale { locale published marketWebPresences { id } } userErrors { field message }
+  }
+  marketCreate(input: {
+    name: "Canada (CYD Test)", handle: "cyd-test-ca", enabled: true,
+    conditions: { regionsCondition: { regions: [{ countryCode: CA }] } }
+  }) { market { id name handle status } userErrors { field message } }
+  pageCreate(page: {
+    title: "CYD Localization Test", handle: "cyd-localization-test", isPublished: true,
+    body: "<p>This test page demonstrates the CYD store in English and Simplified Chinese.</p><p>Use the language selector in the footer to see this page title and text change.</p>"
+  }) { page { id handle title isPublished } userErrors { field message } }
+}

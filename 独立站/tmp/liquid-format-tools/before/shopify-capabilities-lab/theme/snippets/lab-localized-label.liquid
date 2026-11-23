@@ -1,0 +1,46 @@
+{% comment %}
+演示主题的界面标签适配片段。kind 选择排序、菜单、筛选或政策类别，key 指定 Shopify 返回的代码。
+fallback 提供未知值或商家自定义标签，最后统一 escape。这里的映射用于中文演示展示。
+{% endcomment %}
+{%- assign label = fallback -%}
+{%- case kind -%}
+  {%- when 'sort' -%}
+    {%- case key -%}
+      {%- when 'manual' -%}{%- assign label = '精选' -%}
+      {%- when 'relevance' -%}{%- assign label = '相关度' -%}
+      {%- when 'best-selling' -%}{%- assign label = '销量优先' -%}
+      {%- when 'title-ascending' -%}{%- assign label = '名称升序' -%}
+      {%- when 'title-descending' -%}{%- assign label = '名称降序' -%}
+      {%- when 'price-ascending' -%}{%- assign label = '价格从低到高' -%}
+      {%- when 'price-descending' -%}{%- assign label = '价格从高到低' -%}
+      {%- when 'created-ascending' -%}{%- assign label = '上架时间从早到晚' -%}
+      {%- when 'created-descending' -%}{%- assign label = '上架时间从晚到早' -%}
+    {%- endcase -%}
+  {%- when 'menu' -%}
+    {%- case fallback -%}
+      {%- when 'Home' -%}{%- assign label = '首页' -%}
+      {%- when 'Catalog' -%}{%- assign label = '商品目录' -%}
+      {%- when 'Contact' -%}{%- assign label = '联系我们' -%}
+    {%- endcase -%}
+  {%- when 'filter' -%}
+    {%- case key -%}
+      {%- when 'filter.v.availability' -%}{%- assign label = '库存状态' -%}
+      {%- when 'filter.v.price' -%}{%- assign label = '价格' -%}
+    {%- endcase -%}
+  {%- when 'filter-value' -%}
+    {%- if filter_key == 'filter.v.availability' -%}
+      {%- case key -%}
+        {%- when '1' -%}{%- assign label = '有货' -%}
+        {%- when '0' -%}{%- assign label = '缺货' -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- when 'policy' -%}
+    {%- case key -%}
+      {%- when 'privacy-policy' -%}{%- assign label = '隐私政策' -%}
+      {%- when 'refund-policy' -%}{%- assign label = '退款政策' -%}
+      {%- when 'shipping-policy' -%}{%- assign label = '配送政策' -%}
+      {%- when 'terms-of-service' -%}{%- assign label = '服务条款' -%}
+      {%- when 'subscription-policy' -%}{%- assign label = '订阅政策' -%}
+    {%- endcase -%}
+{%- endcase -%}
+{{- label | escape -}}

@@ -1,0 +1,100 @@
+{% comment %}
+  首页商品区，对应 templates/index.json 中的 catalog。
+  取商品系列的优先级为编辑器手选、cyd-preview-catalog 演示系列、全部商品。数量取 section.settings.limit。
+  商品卡复用 card-product，快捷加购复用 quick-add.js 与 product-form.js。
+{% endcomment %}
+{% comment %}复用标准商品卡与快捷加购：售价、库存、促销价和规格始终取自 Shopify。{% endcomment %}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'quick-add.js' | asset_url }}" defer></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
+{%- liquid
+  assign catalog = section.settings.collection | default: collections['cyd-preview-catalog'] | default: collections.all
+  assign all_link = catalog.url | default: routes.all_products_collection_url
+-%}
+<section
+  class="cyd-home-section cyd-catalog page-width"
+  id="CydCatalog"
+  aria-labelledby="CydCatalog-{{ section.id }}"
+>
+  <div class="cyd-section-head">
+    <div>
+      <p class="cyd-eyebrow">{{ section.settings.kicker | escape }}</p>
+      <h2 id="CydCatalog-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+    </div>
+    <a class="cyd-text-link" href="{{ all_link }}">
+      {{ 'cyd.home.view_products' | t }}
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+  {%- if catalog.products_count > 0 -%}
+    <ul
+      class="grid product-grid contains-card contains-card--product grid--2-col-tablet-down grid--4-col-desktop"
+      role="list"
+    >
+      {%- for product in catalog.products limit: section.settings.limit -%}
+        <li class="grid__item">
+          {% comment %}
+            此处将当前循环商品作为 card_product 传入。开启第二张图和标准快捷加购，外层已加载公共样式所以跳过卡片重复样式。
+          {% endcomment %}
+          {% render 'card-product',
+            card_product: product,
+            media_aspect_ratio: 'square',
+            show_secondary_image: true,
+            show_vendor: false,
+            lazy_load: true,
+            skip_styles: true,
+            quick_add: 'standard',
+            section_id: section.id
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <p class="cyd-empty">{{ 'cyd.home.products_empty' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "CYD 首页商品",
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "标题",
+      "default": "全部商品"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "上方文字",
+      "default": "ALL ITEMS"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "指定系列",
+      "info": "留空时展示店铺全部商品"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "展示商品数",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "CYD 首页商品"
+    }
+  ]
+}
+{% endschema %}

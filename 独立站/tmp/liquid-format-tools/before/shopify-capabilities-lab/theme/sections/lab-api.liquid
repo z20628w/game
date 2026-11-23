@@ -1,0 +1,20 @@
+{% comment %}
+公开店面接口演示，对应 index.lab-api.json。
+按钮、接口选择和响应区域通过 data-* 与 lab.js 中的 LabApi 关联。
+routes.root_url 保留语言子目录，section.id 用于请求当前页面的区块 HTML。
+实际请求与错误处理见 lab.js，响应字段裁剪见 lab-utils.js。
+{% endcomment %}
+<section class="lab-shell lab-page">
+  <p class="lab-eyebrow">只读接口实验</p><h1>观察一次真实的数据请求。</h1>
+  <p class="lab-lead">使用当前店面的公开接口。请求不会创建订单、修改商品或清空购物车。</p>
+  <lab-api class="lab-panel" data-root="{{ routes.root_url }}" data-section-id="{{ section.id }}">
+    <label for="LabEndpoint-{{ section.id }}">选择请求</label>
+    <select id="LabEndpoint-{{ section.id }}" data-endpoint><option value="cart">当前浏览器购物车 / cart.js</option><option value="product">演示商品 / products/lab-demo-cup.js</option><option value="search">预测搜索 / search/suggest.json</option><option value="sections">当前区块 / 区块渲染接口</option></select>
+    <button class="lab-button" type="button" data-run>发送只读请求</button><p data-api-status role="status">选择接口后点击发送。响应仅显示与体验有关的字段。</p>
+    <pre class="lab-code lab-response" tabindex="0" aria-label="接口响应摘要"><code data-response>尚未发送请求</code></pre>
+  </lab-api>
+  <div class="lab-callout"><h2>这里能看到什么？</h2><p>商品接口返回公开商品数据；购物车只属于当前浏览器会话。区块接口返回 Shopify 渲染的 HTML，主题可据此局部更新页面。Admin API 凭据不应出现在主题中。</p></div>
+</section>
+{% schema %}
+{"name":"实验室 · 接口实验","settings":[],"presets":[{"name":"实验室 · 接口实验"}]}
+{% endschema %}

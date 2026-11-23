@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>两压缩工具对比</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #ffffff; color: #222; padding: 16px 22px 40px;
+  }
+  header h1 { font-size: 20px; font-weight: 700; }
+  header .sub { font-size: 13px; color: #888; margin-top: 4px; }
+  .toolbar { margin: 14px 0 6px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .model-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .model-btns button {
+    border: 1px solid #d8dade; background: #f7f8fa; color: #333;
+    font-size: 13px; padding: 6px 13px; border-radius: 20px; cursor: pointer;
+    transition: all .15s;
+  }
+  .model-btns button:hover { background: #eef0f3; }
+  .model-btns button.active { background: #2b6bff; color: #fff; border-color: #2b6bff; }
+  .toolbar .opt { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 13px; color: #555; }
+  .toolbar label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px; }
+  @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+
+  .viewer { border: 1px solid #e6e6ea; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
+  .vhead { padding: 10px 14px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f0f0f3; }
+  .tag { font-size: 11px; font-weight: 700; color: #fff; padding: 2px 8px; border-radius: 20px; }
+  .tagA { background: #2b6bff; }
+  .tagB { background: #18a058; }
+  .canvas-wrap { position: relative; height: 56vh; min-height: 340px; background: #f4f5f7; }
+  .cv { display: block; width: 100%; height: 100%; }
+  .vstat { display: flex; justify-content: space-between; padding: 9px 14px; font-size: 12.5px; color: #666; border-top: 1px solid #f0f0f3; }
+  .vstat b { color: #222; font-weight: 700; }
+  .err { color: #d03050; font-weight: 600; }
+
+  .panel { margin-top: 22px; border: 1px solid #e6e6ea; border-radius: 12px; padding: 16px 18px; }
+  .panel h2 { font-size: 15px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid #f0f0f3; }
+  th { color: #888; font-weight: 600; }
+  td.metric { color: #555; font-weight: 600; }
+  td.A { background: #f5f8ff; }
+  td.B { background: #f1faf4; }
+  .bar { height: 9px; border-radius: 6px; background: #eef0f3; overflow: hidden; margin-top: 5px; }
+  .bar > i { display: block; height: 100%; border-radius: 6px; }
+  .barA > i { background: #2b6bff; }
+  .barB > i { background: #18a058; }
+  .note { margin-top: 14px; font-size: 12.5px; color: #666; line-height: 1.7; }
+  .note code { background: #f3f4f6; padding: 1px 6px; border-radius: 4px; color: #333; }
+  .yes { color: #18a058; font-weight: 700; }
+  .no  { color: #d03050; font-weight: 700; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+  <header>
+    <h1>两压缩工具对比</h1>
+    <div class="sub">同一模型，用两把不同的压缩工具处理，对比体积、面数、Draco、纹理保留的差异。选择模型即可切换对比对象。</div>
+  </header>
+
+  <div class="toolbar">
+    <div class="model-btns" id="modelBtns"></div>
+    <div class="opt">
+      <label><input type="checkbox" id="spin" checked /> 自动旋转</label>
+      <span>拖拽旋转 · 滚轮缩放</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="viewer" id="vA">
+      <div class="vhead"><span class="tag tagA">工具A · 另一个AI</span> 整包压缩（compress_gltf_transform.js）</div>
+      <div class="canvas-wrap"><canvas class="cv"></canvas></div>
+      <div class="vstat"><span class="status">加载中…</span><span>实时三角面：<b class="tris">—</b></span></div>
+    </section>
+
+    <section class="viewer" id="vB">
+      <div class="vhead"><span class="tag tagB">工具B · 本agent</span> 白模生成（gen_whitemodel.js）</div>
+      <div class="canvas-wrap"><canvas class="cv"></canvas></div>
+      <div class="vstat"><span class="status">加载中…</span><span>实时三角面：<b class="tris">—</b></span></div>
+    </section>
+  </div>
+
+  <div class="panel">
+    <h2 id="panelTitle">指标对比</h2>
+    <table>
+      <thead>
+        <tr><th>指标</th><th>源模型</th><th class="A">工具A 整包压缩</th><th class="B">工具B 白模生成</th></tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="note">
+      <b>两种压缩思路的本质区别：</b><br />
+      • <b>工具A（另一个 AI）</b>：保留全部纹理（3 张，压到 1024 的 jpeg），用 weld + simplify 把网格减面，<b>不压 Draco</b>。产物是“带颜色的完整模型”，可直接在 three.js / 网页里看效果，适合要保外观的场景。<br />
+      • <b>工具B（本 agent）</b>：剥离所有纹理做成<b>纯白模</b>，再 <b>Draco 压缩</b>（目标 ~6 万面）。体积最小，适合小程序 / 批量加载，纹理在运行时另外贴（预览页就是这么做“换肤”的）。<br />
+      • 两者<b>减面目标不同</b>（A 按模型复杂度自适应，B 统一 ~6 万），且 A 留纹理、B 去纹理——所以“谁压缩更狠”要看维度：A 在<b>面数</b>上砍得更狠，B 在<b>体积</b>上更小。
+    </div>
+  </div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// 真实指标（gltf-transform 读取，6 个同名模型在 源 / 工具A / 工具B 三处）
+// 字段: s=大小MB, t=三角面, v=顶点, d=Draco压缩?, x=纹理张数
+const DATA = {
+  "双层葫芦":{src:{s:85.465,t:1500000,v:784548,d:false,x:3}, A:{s:0.925,t:18474,v:15761,d:false,x:3}, B:{s:0.245,t:60000,v:48895,d:true,x:0}},
+  "向日葵":{src:{s:105.136,t:1500000,v:839958,d:false,x:3}, A:{s:2.446,t:46416,v:39509,d:false,x:3}, B:{s:0.262,t:60000,v:50780,d:true,x:0}},
+  "小怪兽":{src:{s:42.864,t:12934,v:10180,d:false,x:3}, A:{s:0.74,t:12934,v:10180,d:false,x:3}, B:{s:0.047,t:12934,v:10191,d:true,x:0}},
+  "小怪兽2":{src:{s:81.658,t:1499896,v:810202,d:false,x:3}, A:{s:1.237,t:25262,v:21785,d:false,x:3}, B:{s:0.256,t:60000,v:50295,d:true,x:0}},
+  "痰盂":{src:{s:83.705,t:1500000,v:812416,d:false,x:3}, A:{s:1.382,t:31772,v:29155,d:false,x:3}, B:{s:0.266,t:60000,v:54132,d:true,x:0}},
+  "碗":{src:{s:86.772,t:1500000,v:788569,d:false,x:3}, A:{s:0.972,t:18556,v:16718,d:false,x:3}, B:{s:0.247,t:60000,v:51929,d:true,x:0}}
+};
+const ORDER = Object.keys(DATA);
+const PATH_A = name => './3d模型-gltf-transform/' + name + '.glb';
+const PATH_B = name => './3d模型-小程序/白模/' + name + '.glb';
+
+// ---- 视口 ----
+function makeViewer(id) {
+  const section = document.getElementById(id);
+  const canvas = section.querySelector('.cv');
+  const statusEl = section.querySelector('.status');
+  const trisEl = section.querySelector('.tris');
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f5f7);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = 1.4;
+
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(3, 5, 4); scene.add(dl);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+
+  const draco = new DRACOLoader();
+  draco.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
+  const loader = new GLTFLoader();
+  loader.setDRACOLoader(draco);
+
+  let current = null;
+  function disposeModel() {
+    if (!current) return;
+    scene.remove(current);
+    current.traverse(o => {
+      if (o.isMesh) {
+        o.geometry?.dispose();
+        const m = o.material;
+        if (Array.isArray(m)) m.forEach(x => x.dispose()); else m?.dispose();
+      }
+    });
+    current = null;
+  }
+
+  function load(url) {
+    disposeModel();
+    statusEl.textContent = '加载中…';
+    trisEl.textContent = '—';
+    loader.load(url, gltf => {
+      const model = gltf.scene;
+      scene.add(model);
+      const box = new THREE.Box3().setFromObject(model);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const dist = maxDim / (2 * Math.tan(camera.fov * Math.PI / 180 / 2)) * 1.6;
+      camera.position.copy(center).add(new THREE.Vector3(0, 0, dist));
+      controls.target.copy(center);
+      model.position.sub(center);
+      controls.update();
+      let tris = 0;
+      model.traverse(o => { if (o.isMesh && o.geometry) {
+        const g = o.geometry; tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+      }});
+      trisEl.textContent = Math.round(tris).toLocaleString();
+      statusEl.textContent = '加载完成';
+      current = model;
+      resize();
+      animate();
+    },
+    xhr => { const p = xhr.total ? (xhr.loaded / xhr.total * 100) : 0; statusEl.textContent = '加载中 ' + p.toFixed(0) + '%'; },
+    err => { statusEl.innerHTML = '<span class="err">加载失败：' + (err.message || err) + '</span>'; });
+  }
+
+  function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
+  resize();
+  return { load, setSpin: v => controls.autoRotate = v };
+}
+
+const viewerA = makeViewer('vA');
+const viewerB = makeViewer('vB');
+const spinCtl = document.getElementById('spin');
+spinCtl.addEventListener('change', e => { viewerA.setSpin(e.target.checked); viewerB.setSpin(e.target.checked); });
+
+// ---- 指标表 ----
+function cellNum(src, a, b) {
+  const pa = (a / src * 100).toFixed(2);
+  const pb = (b / src * 100).toFixed(2);
+  const max = Math.max(a, b) || 1;
+  const wa = (a / max * 100).toFixed(1), wb = (b / max * 100).toFixed(1);
+  return `<td class="A">${a.toLocaleString()} <span style="color:#2b6bff">(${pa}%)</span><div class="bar"><i class="barA" style="width:${wa}%"></i></div></td>`
+       + `<td class="B">${b.toLocaleString()} <span style="color:#18a058">(${pb}%)</span><div class="bar"><i class="barB" style="width:${wb}%"></i></div></td>`;
+}
+function cellPct(a, b) {
+  const max = 100;
+  const wa = (a).toFixed(1), wb = (b).toFixed(1);
+  return `<td class="A">${a.toFixed(2)}%<div class="bar"><i class="barA" style="width:${wa}%"></i></div></td>`
+       + `<td class="B">${b.toFixed(2)}%<div class="bar"><i class="barB" style="width:${wb}%"></i></div></td>`;
+}
+function bool(v) { return v ? '<span class="yes">是</span>' : '<span class="no">否</span>'; }
+
+function buildTable(name) {
+  const d = DATA[name]; const s = d.src, A = d.A, B = d.B;
+  const rows = [
+    ['文件大小 (MB)', s.s.toLocaleString(), cellNum(s.s, A.s, B.s)],
+    ['三角面数', s.t.toLocaleString(), cellNum(s.t, A.t, B.t)],
+    ['顶点数', s.v.toLocaleString(), `<td class="A">${A.v.toLocaleString()}</td><td class="B">${B.v.toLocaleString()}</td>`],
+    ['Draco 压缩', bool(s.d), `<td class="A">${bool(A.d)}</td><td class="B">${bool(B.d)}</td>`],
+    ['保留纹理 (张)', String(s.x), `<td class="A">${A.x} 张</td><td class="B">${B.x} 张</td>`],
+    ['体积压缩率 (vs 源)', '—', cellPct(A.s / s.s * 100, B.s / s.s * 100)],
+    ['面数压缩率 (vs 源)', '—', cellPct(A.t / s.t * 100, B.t / s.t * 100)],
+  ];
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = '';
+  for (const [metric, srcTxt, cells] of rows) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="metric">${metric}</td><td>${srcTxt}</td>${cells}`;
+    tb.appendChild(tr);
+  }
+  document.getElementById('panelTitle').textContent = '指标对比 · ' + name;
+}
+
+// ---- 模型选择 ----
+let currentName = null;
+function selectModel(name) {
+  if (name === currentName) return;
+  currentName = name;
+  document.querySelectorAll('.model-btns button').forEach(b => b.classList.toggle('active', b.textContent === name));
+  viewerA.load(PATH_A(name));
+  viewerB.load(PATH_B(name));
+  buildTable(name);
+}
+const btnWrap = document.getElementById('modelBtns');
+ORDER.forEach((n, i) => {
+  const b = document.createElement('button');
+  b.textContent = n;
+  b.className = i === 0 ? 'active' : '';
+  b.onclick = () => selectModel(n);
+  btnWrap.appendChild(b);
+});
+selectModel(ORDER[0]);
+</script>
+</body>
+</html>

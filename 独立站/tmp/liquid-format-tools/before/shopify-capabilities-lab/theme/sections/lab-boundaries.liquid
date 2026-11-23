@@ -1,0 +1,17 @@
+{% comment %}
+平台能力边界说明页，对应 index.lab-boundaries.json。
+这里是解释文案及外部官方文档链接，页面中的演示入口用于继续体验店铺支持的功能。
+{% endcomment %}
+<section class="lab-shell lab-page">
+  <p class="lab-eyebrow">需求评审参考</p><h1>先判断边界，再确定方案。</h1><p class="lab-lead">Shopify CLI 是开发工具。主题能做什么，取决于平台接口、店铺配置、套餐和应用能力。</p>
+  <div class="lab-grid lab-grid--two">
+    <article class="lab-panel"><span class="lab-badge lab-badge--theme">主题可实现</span><h2>自由设计购物体验</h2><p>页面布局、响应式、商品展示、变体选择、搜索界面、购物车、内容模块、自定义数据展示和浏览器交互。</p><p>主题代码可完全修改，不代表后台与托管结账也可用主题任意改写。</p></article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--config">需后台配置</span><h2>让平台能力有数据可用</h2><p>商品内容、过滤器、菜单、Markets、语言、支付、配送、税费、自提、折扣与客户账户需要相应后台设置。</p><p>没有配置时，界面应提供空态或隐藏入口，不展示虚假的可用结果。</p></article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--app">需应用或专项开发</span><h2>扩展持续运行的业务</h2><p>订阅、积分、评论、账户收藏、复杂促销、ERP 同步与 Webhook 通常需要应用、Functions 或外部后端。可用性还与分发方式和套餐有关。</p><p>结账与新客户账户通过专用扩展机制定制，不能直接复用主题页面的实现方式。</p></article>
+    <article class="lab-panel"><span class="lab-badge lab-badge--boundary">平台边界</span><h2>这些实现方式不可采用</h2><ul><li>在主题中放 Admin API 管理密钥。</li><li>相信浏览器传入价格或绕过结账支付校验。</li><li>在托管主题服务器上运行任意 Node、PHP 或数据库。</li><li>用普通 Liquid 主题重写整个托管结账流程。</li></ul></article>
+  </div>
+  <div class="lab-callout"><h2>当前演示的范围</h2><p>本项目覆盖主题主流程与代表性扩展方式，不承诺枚举 Shopify 所有能力或所有应用。本机收藏、元对象、商品行属性和只读 API 为新增示例；商店基础交互复用官方 Dawn。订阅、会员、ERP、真实支付、3D 素材和第三方应用不以假数据冒充已接入。</p><a href="{{ routes.root_url }}#lab-catalog">回到能力地图，按实现条件筛选 →</a></div>
+</section>
+{% schema %}
+{"name":"实验室 · 能力边界","settings":[],"presets":[{"name":"实验室 · 能力边界"}]}
+{% endschema %}

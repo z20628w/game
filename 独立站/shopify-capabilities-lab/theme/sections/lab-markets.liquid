@@ -1,0 +1,32 @@
+{% comment %}
+  海外市场要求说明页，对应 index.lab-markets.json。
+  实际规则来自 lab-market-rules 生成片段，源定义位于 config/market-rules.mjs。
+  此区块负责组织说明与联系表单入口，规则资料的来源和核对日期由生成内容提供。
+{% endcomment %}
+<section class="lab-shell lab-page lab-market-guide">
+  <header class="lab-market-intro">
+    <p class="lab-eyebrow">海外独立站 · 上线评审</p>
+    <h1>海外市场要求</h1>
+    <p class="lab-lead">按市场查看独立站必须提供的功能、受限做法及 Shopify 实现思路。</p>
+    <p>
+      联系商家、报告产品安全问题、申请消费调解和撤回合同有不同用途。评审时先确定销售市场、经营主体角色和商品类别，再核对当地适用条款。
+    </p>
+    <a href="{{ routes.root_url }}pages/lab-demo-contact">查看联系表单示例 ↗</a>
+    <p class="lab-muted">
+      示例只演示留言入口。下方各项是需求评审参考，具体适用性和当地语言文案由业务与合规负责人在上线前确认。
+    </p>
+  </header>
+  {% render 'lab-market-rules' %}
+</section>
+
+{% schema %}
+{
+  "name": "实验室 · 海外市场要求",
+  "settings": [],
+  "presets": [
+    {
+      "name": "实验室 · 海外市场要求"
+    }
+  ]
+}
+{% endschema %}

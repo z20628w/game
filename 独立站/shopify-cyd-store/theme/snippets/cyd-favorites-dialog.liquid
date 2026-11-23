@@ -1,0 +1,35 @@
+{% comment %}
+  全站共用的收藏弹窗，由 layout/theme.liquid 按 cyd_enable_favorites 开关加载。
+  当前语言的提示先由 Liquid 渲染到 data-*，脚本读取 dialog.dataset 获取文案。
+  __CYD_PRODUCT__ 是运行时商品标题占位符，data-cyd-favorites-list 是脚本生成收藏列表的位置。
+  原生 dialog 管理模态焦点和关闭行为，form method=dialog 用于关闭按钮。
+{% endcomment %}
+{% comment %}使用浏览器原生对话框提供键盘焦点限制及退出键支持。{% endcomment %}
+<dialog
+  class="cyd-favorites-dialog"
+  id="CydFavorites"
+  aria-labelledby="CydFavoritesTitle"
+  data-add="{{ 'cyd.favorites.add' | t | escape }}"
+  data-saved="{{ 'cyd.favorites.saved' | t | escape }}"
+  data-add-product="{{ 'cyd.favorites.add_product' | t: product: '__CYD_PRODUCT__' | escape }}"
+  data-remove-product="{{ 'cyd.favorites.remove_product' | t: product: '__CYD_PRODUCT__' | escape }}"
+  data-remove="{{ 'cyd.favorites.remove' | t | escape }}"
+  data-remove-item="{{ 'cyd.favorites.remove_item' | t: product: '__CYD_PRODUCT__' | escape }}"
+  data-added="{{ 'cyd.favorites.added' | t: product: '__CYD_PRODUCT__' | escape }}"
+  data-unsaved="{{ 'cyd.favorites.unsaved' | t: product: '__CYD_PRODUCT__' | escape }}"
+  data-removed="{{ 'cyd.favorites.removed' | t | escape }}"
+  data-storage-error="{{ 'cyd.favorites.storage_error' | t | escape }}"
+>
+  <div class="cyd-favorites-dialog__head">
+    <h2 id="CydFavoritesTitle">{{ 'cyd.favorites.title' | t }}</h2>
+    <form method="dialog">
+      <button type="submit" aria-label="{{ 'cyd.favorites.close' | t }}">
+        {{ 'icon-close.svg' | inline_asset_content }}
+      </button>
+    </form>
+  </div>
+  <p class="cyd-favorites-dialog__note">{{ 'cyd.favorites.note' | t }}</p>
+  <p data-cyd-favorites-empty>{{ 'cyd.favorites.empty' | t }}</p>
+  <ul data-cyd-favorites-list class="cyd-favorites-list"></ul>
+</dialog>
+<span class="visually-hidden" aria-live="polite" data-cyd-favorites-status></span>

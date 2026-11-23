@@ -1,0 +1,6 @@
+mutation {
+  translationsRegister(resourceId: "gid://shopify/Page/128629833806", translations: [
+    { key: "title", locale: "zh-CN", value: "CYD 本地化测试", translatableContentDigest: "60cb5b82653c5ac9c5b4a799069de933560bcbd06aa32851f04c7ee4920e915c" },
+    { key: "body_html", locale: "zh-CN", value: "<p>本页用于演示 CYD 商城的英语和简体中文版本。</p><p>使用页脚的语言切换器，可以查看本页标题和正文随语言切换的效果。</p>", translatableContentDigest: "9cd037d321d9c7d74c3cb5d6c6c4b961afaa132c75f037cd26736cfba8ce52e7" }
+  ]) { translations { key locale value outdated } userErrors { field message } }
+}

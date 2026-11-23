@@ -1,0 +1,3 @@
+query($ids: [ID!]!) {
+  nodes(ids: $ids) { ... on Article { id title handle isPublished body image { url } } }
+}

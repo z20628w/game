@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>城市漫游 · 第一人称探索</title>
+<style>
+:root{--ink:#e8eef5;--sub:#9fb0c4;--panel:rgba(12,18,28,.82);--accent:#4da3ff}
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#0b1018;color:var(--ink);font-family:system-ui,"Microsoft YaHei",sans-serif}
+#canvas{display:block;width:100vw;height:100vh;cursor:grab;touch-action:none}
+#canvas.dragging{cursor:grabbing}
+.hud{position:fixed;pointer-events:none;z-index:5}
+#top{top:14px;left:14px;background:var(--panel);border:1px solid #2a3a4e;border-radius:10px;padding:12px 16px;max-width:340px}
+#top h1{margin:0 0 4px;font-size:15px}
+#top p{margin:2px 0;font-size:12px;color:var(--sub);line-height:1.6}
+#hint{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:8;text-align:center;
+  background:var(--panel);border:1px solid #2a3a4e;border-radius:14px;padding:26px 40px;transition:opacity .25s}
+#hint h2{margin:0 0 10px;font-size:20px}
+#hint p{margin:6px 0;color:var(--sub);font-size:13px}
+#hint .go{display:inline-block;margin-top:12px;padding:10px 24px;background:var(--accent);color:#fff;
+  border-radius:8px;font-weight:600;cursor:pointer}
+#hint .go:hover{background:#6cb6ff}
+#bottom{bottom:14px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid #2a3a4e;
+  border-radius:10px;padding:10px 18px;font-size:12px;color:var(--sub);display:flex;gap:18px;white-space:nowrap}
+#bottom b{color:var(--ink);font-variant-numeric:tabular-nums}
+.ctrl{position:fixed;right:14px;top:14px;background:var(--panel);border:1px solid #2a3a4e;border-radius:10px;padding:12px;z-index:6;width:200px}
+.ctrl label{font-size:12px;color:var(--sub);display:block;margin:8px 0 4px}
+.ctrl input[type=range]{width:100%}
+.ctrl button{width:100%;margin-top:10px;padding:8px;background:#24374d;color:var(--ink);border:1px solid #35506e;
+  border-radius:7px;cursor:pointer;font-size:12px}
+.ctrl button:hover{background:#2e4a68}
+#loading{position:fixed;inset:0;z-index:20;background:#0b1018;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px}
+#loading .bar{width:320px;height:6px;background:#1e2b3b;border-radius:4px;overflow:hidden}
+#loading .fill{height:100%;width:0;background:var(--accent);transition:width .2s}
+#loading p{color:var(--sub);font-size:13px;margin:0}
+#err{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:9;background:#5b2020;color:#ffdede;
+  border:1px solid #a33;border-radius:8px;padding:10px 18px;font-size:13px;display:none}
+</style>
+<script type="importmap">
+{"imports":{"three":"./js/three.module.js"}}
+</script>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div id="loading">
+  <h2 style="margin:0">正在加载城市…</h2>
+  <div class="bar"><div class="fill" id="lfill"></div></div>
+  <p id="ltext">读取轻量探索地图（约 5MB），请稍候</p>
+</div>
+
+<div id="hint" style="display:none">
+  <h2>🚶 城市漫游</h2>
+  <p>以真人 1.7 米视角探索这座城市</p>
+  <p style="color:#cfe3ff">按住鼠标左键拖动 = 转头环视 · WASD = 行走</p>
+  <p>Shift 加速 · Q/E 升降 · 方向键也可转视角</p>
+  <div class="go" id="enter">开始漫游</div>
+</div>
+
+<div class="hud" id="top">
+  <h1>城市漫游 · 第一人称</h1>
+  <p>视角高度 = 1.7 米（真人比例）· 可按 E 升高上楼</p>
+  <p>按住鼠标左键拖动环视 · WASD 行走</p>
+  <p style="color:#8fd6a0">可进入建筑内含连续楼梯，通往上层</p>
+</div>
+
+<div class="ctrl">
+  <label>移动速度 <span id="spdval">12</span></label>
+  <input type="range" id="speed" min="3" max="40" value="12">
+  <label>视角高度 <span id="hval">1.7</span> 米</label>
+  <input type="range" id="eyeheight" min="1" max="30" step="0.1" value="1.7">
+  <button id="reset">回到街道起点</button>
+  <button id="topview">切换到俯瞰</button>
+  <button onclick="location.href='./preview.html'">← 返回俯瞰地图</button>
+</div>
+
+<div class="hud" id="bottom">
+  <span>位置 X <b id="px">0</b></span>
+  <span>Z <b id="pz">0</b></span>
+  <span>速度 <b id="pv">0</b></span>
+  <span>模式 <b id="mode">行走</b></span>
+</div>
+
+<div id="err">加载出错，详见页面提示</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from './js/GLTFLoader.js';
+
+const canvas = document.getElementById('canvas');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x9fc3e8);
+scene.fog = new THREE.Fog(0x9fc3e8, 180, 1200);
+
+const camera = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, 0.1, 5000);
+const EYE = 1.7;
+const START = new THREE.Vector3(-189, EYE, -150);
+camera.position.copy(START);
+camera.lookAt(-189, 8, -230);
+
+scene.add(new THREE.HemisphereLight(0xdfefff, 0x404850, 2.2));
+const sun = new THREE.DirectionalLight(0xffffff, 2.0);
+sun.position.set(200, 400, 150);
+scene.add(sun);
+
+// ---- Drag-to-look (works inside iframes, no Pointer Lock needed) ----
+let yaw = 0, pitch = 0, dragging = false, lastX = 0, lastY = 0;
+function syncAnglesFromCamera(){
+  const e = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
+  yaw = e.y; pitch = e.x;
+}
+function applyAngles(){
+  camera.rotation.order = 'YXZ';
+  camera.rotation.y = yaw;
+  camera.rotation.x = Math.max(-1.45, Math.min(1.45, pitch));
+}
+canvas.addEventListener('pointerdown', e=>{
+  dragging = true; lastX = e.clientX; lastY = e.clientY;
+  canvas.classList.add('dragging');
+  canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+  hideHint();
+});
+canvas.addEventListener('pointermove', e=>{
+  if(!dragging) return;
+  const dx = e.clientX - lastX, dy = e.clientY - lastY;
+  lastX = e.clientX; lastY = e.clientY;
+  yaw   -= dx * 0.0035;
+  pitch -= dy * 0.0035;
+  applyAngles();
+});
+canvas.addEventListener('pointerup', e=>{
+  dragging = false; canvas.classList.remove('dragging');
+  try{ canvas.releasePointerCapture && canvas.releasePointerCapture(e.pointerId); }catch(_){}
+});
+canvas.addEventListener('pointercancel', ()=>{ dragging=false; canvas.classList.remove('dragging'); });
+
+const hint = document.getElementById('hint');
+function hideHint(){ hint.style.opacity='0'; hint.style.pointerEvents='none'; setTimeout(()=>hint.style.display='none',260); }
+document.getElementById('enter').addEventListener('click', e=>{ e.stopPropagation(); hideHint(); });
+
+// keyboard
+const keys = {w:false,a:false,s:false,d:false,shift:false,q:false,e:false,
+              arrowleft:false,arrowright:false,arrowup:false,arrowdown:false};
+addEventListener('keydown', e=>{
+  const k=e.key.toLowerCase();
+  if(k in keys) keys[k]=true;
+  if(k==='shift') keys.shift=true;
+});
+addEventListener('keyup', e=>{
+  const k=e.key.toLowerCase();
+  if(k in keys) keys[k]=false;
+  if(k==='shift') keys.shift=false;
+});
+// prevent page scroll from arrows/space
+addEventListener('keydown', e=>{
+  if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) e.preventDefault();
+},{passive:false});
+
+let speed = 12, eyeH = EYE, exploring = true;
+document.getElementById('speed').oninput = e=>{ speed=+e.target.value; document.getElementById('spdval').textContent=speed; };
+document.getElementById('eyeheight').oninput = e=>{
+  eyeH=+e.target.value; document.getElementById('hval').textContent=eyeH.toFixed(1);
+  camera.position.y = eyeH;
+};
+document.getElementById('reset').onclick = ()=>{
+  camera.position.copy(window.__START || START); camera.position.y=eyeH;
+  syncAnglesFromCamera();
+};
+document.getElementById('topview').onclick = ()=>{
+  const top = camera.position.y > 100;
+  camera.position.y = top ? eyeH : 600;
+  document.getElementById('mode').textContent = top ? '行走' : '俯瞰';
+};
+
+// load model
+const loader = new GLTFLoader();
+const fill = document.getElementById('lfill'), ltext = document.getElementById('ltext');
+loader.load('./city_variants/explore_map.glb',
+  gltf=>{
+    const model = gltf.scene;
+    scene.add(model);
+    let target=null, best=-1;
+    model.traverse(o=>{
+      if(o.isMesh && !/ground|road|lane|ln|rh|rv/.test(o.name)){
+        const box=new THREE.Box3().setFromObject(o);
+        const c=box.getCenter(new THREE.Vector3());
+        const h=box.max.y-box.min.y;
+        const score=h - (Math.abs(c.x+252)+Math.abs(c.z+252))*0.01;
+        if(score>best){ best=score; target={c,box}; }
+      }
+    });
+    if(target){
+      const max=target.box.max;
+      camera.position.set(target.c.x, EYE, max.z+14);
+      camera.up.set(0,1,0);
+      camera.lookAt(target.c.x, Math.min((target.box.max.y-target.box.min.y)*0.5, 10), target.c.z);
+      window.__START=camera.position.clone();
+    } else {
+      camera.position.copy(START); camera.lookAt(-189,8,-260);
+    }
+    syncAnglesFromCamera();
+    document.getElementById('loading').style.display='none';
+    hint.style.display='block';
+  },
+  ev=>{
+    if(ev.lengthComputable){
+      const p=(ev.loaded/ev.total*100).toFixed(0);
+      fill.style.width=p+'%';
+      ltext.textContent=`加载模型 ${p}% · ${(ev.loaded/1048576).toFixed(0)} / ${(ev.total/1048576).toFixed(0)} MB`;
+    } else ltext.textContent=`加载模型 ${(ev.loaded/1048576).toFixed(0)} MB…`;
+  },
+  err=>{ ltext.textContent='加载失败：'+err.message; document.getElementById('err').style.display='block'; console.error(err); }
+);
+
+const clock = new THREE.Clock();
+const dir = new THREE.Vector3(), right = new THREE.Vector3();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.1);
+  // arrow keys also rotate
+  if(keys.arrowleft){ yaw += 1.6*dt; applyAngles(); }
+  if(keys.arrowright){ yaw -= 1.6*dt; applyAngles(); }
+  if(keys.arrowup){ pitch += 1.2*dt; applyAngles(); }
+  if(keys.arrowdown){ pitch -= 1.2*dt; applyAngles(); }
+
+  const v = speed * (keys.shift ? 3 : 1) * dt;
+  camera.getWorldDirection(dir); dir.y=0; dir.normalize();
+  right.crossVectors(dir, camera.up).normalize();
+  let moved=0;
+  if(keys.w){ camera.position.addScaledVector(dir, v); moved=v; }
+  if(keys.s){ camera.position.addScaledVector(dir,-v); moved=v; }
+  if(keys.d){ camera.position.addScaledVector(right, v); moved=v; }
+  if(keys.a){ camera.position.addScaledVector(right,-v); moved=v; }
+  if(keys.q){ camera.position.y-=v; }
+  if(keys.e){ camera.position.y+=v; }
+  if(!keys.q && !keys.e && camera.position.y < 400) camera.position.y = eyeH;
+  document.getElementById('pv').textContent = (moved/dt||0).toFixed(0);
+  document.getElementById('px').textContent = camera.position.x.toFixed(0);
+  document.getElementById('pz').textContent = camera.position.z.toFixed(0);
+  renderer.render(scene, camera);
+}
+animate();
+addEventListener('resize', ()=>{
+  camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+</body>
+</html>

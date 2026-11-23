@@ -1,0 +1,194 @@
+/**
+ * CYD 品牌样式入口，布局组件名与 cyd-* Liquid 片段对应。
+ * 先定义颜色和字体变量，再覆盖页眉、首页、商品卡及收藏弹窗。
+ * 989px 以下调整页眉，749px 以下启用手机布局和底部导航。
+ */
+/* CYD 的黑白界面、圆角和系列留白统一放在此文件；结账仍由 Shopify 渲染。 */
+/* 全站配色与标题字体变量，修改品牌基调优先调整这里。 */
+:root {
+  --cyd-ink: #252321;
+  --cyd-muted: #625d55;
+  --cyd-paper: #f5f3ef;
+  --cyd-line: #e7e2da;
+  --cyd-display: "Iowan Old Style", "Songti SC", "Noto Serif SC", Georgia, serif;
+}
+
+.cyd-store {
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  letter-spacing: 0;
+}
+.cyd-store [hidden] { display: none !important; }
+.cyd-store h1, .cyd-store h2, .cyd-store h3 { letter-spacing: -.025em; }
+.cyd-store a:focus-visible, .cyd-store button:focus-visible, .cyd-store input:focus-visible {
+  outline: 2px solid #7d502d;
+  outline-offset: 3px;
+}
+/* 页眉区域覆盖基础主题样式，搜索、导航和收藏使用同一套栅格。 */
+.cyd-store .header-wrapper { border-bottom: 1px solid var(--cyd-line); }
+.cyd-store .header { column-gap: 1.8rem; }
+.cyd-store .header__heading-link { padding: .3rem 0; }
+.cyd-logo { display: block; width: 82px; height: auto; }
+.cyd-navigation { display: flex; grid-area: navigation; gap: clamp(1.4rem, 3vw, 4rem); white-space: nowrap; }
+.cyd-navigation a { color: var(--cyd-ink); text-decoration: none; padding: .7rem 0; font-size: 1.45rem; }
+.cyd-navigation a:hover, .cyd-navigation [aria-current="page"] { text-decoration: underline; text-underline-offset: .6rem; }
+.cyd-store .header--middle-left:not(.drawer-menu) { grid-template-columns: auto minmax(0, 1fr) auto; }
+@media (min-width: 990px) {
+  .cyd-store .header--middle-left:not(.header--has-menu):not(.drawer-menu) { grid-template-areas: "heading navigation icons"; }
+}
+.cyd-store .header__inline-menu { justify-self: start; }
+.cyd-store .header__icons { align-items: center; gap: .35rem; padding-right: 0; }
+.cyd-store .header__search { display: none; }
+.cyd-store .header__icon--cart { margin-right: 0; }
+.cyd-search {
+  min-width: 0; width: clamp(175px, 24vw, 350px); display: flex; align-items: center;
+  border-radius: 100px; background: var(--cyd-paper); margin-inline-end: .65rem; color: var(--cyd-ink);
+}
+.cyd-search button { flex: 0 0 39px; height: 40px; background: transparent; color: inherit; border: 0; cursor: pointer; display: grid; place-items: center; }
+.cyd-search svg, .cyd-header-favorites svg { width: 18px; height: 18px; }
+.cyd-search input { min-width: 0; width: 100%; height: 40px; padding: 0 1.2rem 0 0; border: 0; background: transparent; color: inherit; font: inherit; font-size: 1.35rem; }
+.cyd-search input:focus-visible { outline-offset: -3px; border-radius: 100px; }
+.cyd-header-favorites { border: 0; background: transparent; color: var(--cyd-ink); cursor: pointer; }
+.cyd-header-favorites svg, .cyd-favorite svg { fill: currentColor; }
+.cyd-mobile-nav, .cyd-product-jump { display: none; }
+
+/* 首屏轮播的可滚动轨道和每页宽度，配合 CydCarousel 计算索引。 */
+.cyd-hero { margin-top: clamp(1.4rem, 2.5vw, 3.4rem); }
+.cyd-hero__track {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  border-radius: 18px; overscroll-behavior-x: contain; background: var(--cyd-paper);
+}
+.cyd-hero__track::-webkit-scrollbar, .cyd-series-grid::-webkit-scrollbar { display: none; }
+.cyd-hero__slide {
+  display: grid; grid-template-columns: minmax(0, 52fr) minmax(0, 48fr); flex: 0 0 100%; min-width: 0;
+  min-height: clamp(420px, 43vw, 605px); scroll-snap-align: start; scroll-snap-stop: always; background: #ded9d0;
+}
+.cyd-hero__slide:nth-child(even) { background: #eeebe4; }
+.cyd-hero__art .cyd-hero__photo { object-fit: contain; background: #24201d; }
+.cyd-hero__slide:nth-child(even) .cyd-hero__photo { background: #d9ccbb; }
+.cyd-hero__slide--brand { background: #eee8dd; }
+.cyd-hero__copy { padding: clamp(2.4rem, 5vw, 7.6rem); align-self: center; min-width: 0; }
+.cyd-eyebrow { font-size: 1.16rem; line-height: 1.4; font-weight: 650; letter-spacing: .18em; color: var(--cyd-muted); margin: 0 0 .8rem; }
+.cyd-hero__copy h2 { color: var(--cyd-ink); font: 550 clamp(3.4rem, 4.6vw, 7.4rem)/1.12 var(--cyd-display); margin: 1.3rem 0; text-wrap: balance; }
+.cyd-hero__description { color: var(--cyd-muted); font-size: clamp(1.3rem, 1.18vw, 1.65rem); line-height: 1.8; margin: 1.6rem 0 2.5rem; max-width: 27em; }
+.cyd-hero__action {
+  display: inline-flex; gap: 1.6rem; min-height: 44px; align-items: center; border-radius: 100px;
+  background: var(--cyd-ink); color: white; text-decoration: none; padding: .85rem 1.8rem;
+  font-size: 1.35rem; transition: background .2s ease;
+}
+.cyd-hero__action:hover { background: #504940; }
+.cyd-hero__art { position: relative; min-height: 100%; overflow: hidden; }
+.cyd-hero__art picture, .cyd-hero__art picture img, .cyd-hero__photo {
+  display: block; width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; object-position: center;
+}
+.cyd-hero__slide--brand .cyd-hero__art { display: grid; place-items: center; background: #3d3831; }
+.cyd-hero__stones { width: min(68%, 420px); height: auto; }
+.cyd-hero__art-label { position: absolute; top: 8%; left: 7%; font-size: 1rem; line-height: 1.5; letter-spacing: .22em; color: #ece5d8; }
+.cyd-hero__controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+.cyd-hero__dots, .cyd-hero__arrows { display: flex; align-items: center; gap: .45rem; }
+.cyd-hero__dots a { display: grid; width: 32px; height: 32px; place-items: center; }
+.cyd-hero__dots span { width: 13px; height: 3px; background: #bfb9af; border-radius: 3px; }
+.cyd-hero__dots [aria-current="true"] span { width: 23px; background: var(--cyd-ink); }
+.cyd-hero__arrows button {
+  width: 42px; height: 42px; border: 1px solid var(--cyd-line); border-radius: 50%;
+  color: var(--cyd-ink); background: white; cursor: pointer; font-size: 1.75rem;
+}
+.cyd-hero__arrows button:hover { background: var(--cyd-paper); }
+
+/* 首页系列与商品区的公共标题和间距。系列卡使用自适应网格，手机端可横向滑动。 */
+.cyd-home-section { margin-block: clamp(4rem, 6vw, 8.5rem); }
+.cyd-section-head { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 2.2rem; }
+.cyd-section-head h2 { margin: 0; font-family: var(--cyd-display); font-size: clamp(2.6rem, 3.5vw, 4.6rem); line-height: 1.22; color: var(--cyd-ink); }
+.cyd-text-link { display: inline-flex; align-items: center; gap: .7rem; color: var(--cyd-ink); padding: .55rem 0; text-underline-offset: .4rem; font-size: 1.35rem; white-space: nowrap; }
+.cyd-series-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+.cyd-series-card { text-decoration: none; color: var(--cyd-ink); }
+.cyd-series-card__image { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: var(--cyd-paper); }
+.cyd-series-card__image img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .3s ease; }
+.cyd-series-card__image img.cyd-series-card__brand { width: 60%; margin-inline: auto; object-fit: contain; }
+.cyd-series-card:hover img { transform: scale(1.035); }
+.cyd-series-card__name { display: flex; justify-content: space-between; gap: 1rem; padding: 1.2rem .2rem .4rem; font-size: 1.6rem; font-weight: 600; }
+.cyd-catalog .product-grid { margin: 0; }
+.cyd-empty { padding: 3rem; border: 1px solid var(--cyd-line); border-radius: 12px; color: var(--cyd-muted); }
+.cyd-store .product-card-wrapper { position: relative; }
+.cyd-store .product-card-wrapper .card__heading { font-size: clamp(1.4rem, 1.25vw, 1.75rem); font-weight: 600; }
+.cyd-store .product-card-wrapper .card__media { background: var(--cyd-paper); }
+.cyd-store .product-card-wrapper .price { color: var(--cyd-ink); font-weight: 650; }
+.cyd-store .product__media-wrapper .product__media { background: var(--cyd-paper); }
+.cyd-store .quick-add__submit { min-height: 42px; font-size: 1.35rem; }
+.cyd-store .footer-block__heading { font-size: 1.6rem; }
+
+/* 收藏状态以 aria-pressed 反映，选中配色、弹窗及收藏条目样式集中维护。 */
+.cyd-favorite { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; border: 1px solid var(--cyd-line); border-radius: 99px; background: white; color: var(--cyd-ink); cursor: pointer; min-width: 42px; min-height: 42px; }
+.cyd-favorite svg { width: 18px; height: 18px; }
+.cyd-favorite[aria-pressed="true"] { color: #976416; }
+.cyd-favorite[aria-pressed="true"] svg { fill: #976416; }
+.cyd-store .product-card-wrapper > .cyd-favorite { position: absolute; z-index: 3; top: .8rem; right: .8rem; }
+.cyd-favorite--product { padding-inline: 1.2rem; margin-block: .7rem; }
+.cyd-favorites-dialog { border: 1px solid var(--cyd-line); border-radius: 16px; width: min(90vw, 510px); max-height: 82dvh; padding: 2rem; color: var(--cyd-ink); }
+.cyd-favorites-dialog::backdrop { background: #15120e80; }
+.cyd-favorites-dialog__head { display: flex; align-items: center; justify-content: space-between; }
+.cyd-favorites-dialog__head h2 { margin: 0; }
+.cyd-favorites-dialog__head button, .cyd-favorites-list button { min-width: 42px; min-height: 42px; border: 0; border-radius: 99px; background: var(--cyd-paper); color: var(--cyd-ink); cursor: pointer; }
+.cyd-favorites-dialog__head button svg { width: 14px; height: 14px; }
+.cyd-favorites-dialog__note { color: var(--cyd-muted); }
+.cyd-favorites-list { list-style: none; margin: 0; padding: 0; }
+.cyd-favorites-list li { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--cyd-line); gap: .8rem; padding: .85rem 0; }
+.cyd-favorites-list a { display: flex; align-items: center; color: inherit; gap: 1rem; }
+.cyd-favorites-list img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+
+/* 平板和手机页眉调整，桌面导航在此收起，搜索框获得可伸缩空间。 */
+@media (max-width: 989px) {
+  .cyd-navigation { display: none; }
+  .cyd-store .header--middle-left:not(.drawer-menu),
+  .cyd-store .header { grid-template-areas: "heading icons"; grid-template-columns: auto minmax(0, 1fr); }
+  .cyd-store .header.header--has-menu,
+  .cyd-store .header--middle-left.header--has-menu:not(.drawer-menu) { grid-template-areas: "left-icons heading icons"; grid-template-columns: auto auto minmax(0, 1fr); }
+  .cyd-store .header__icons { justify-self: end; width: 100%; justify-content: flex-end; }
+  .cyd-search { flex: 1 1 auto; width: auto; max-width: 460px; }
+  .cyd-logo { width: 63px; }
+}
+@media (min-width: 750px) and (max-width: 989px) {
+  .cyd-store .header--middle-left:not(.header--has-menu):not(.drawer-menu) { grid-template-areas: "heading icons" "navigation navigation"; }
+  .cyd-navigation { display: flex; grid-area: navigation; }
+}
+/* 手机端将主视觉改成上图下文，系列卡可横向滑动。底部导航及购买跳转条预留安全区。 */
+@media (max-width: 749px) {
+  .cyd-store { --grid-mobile-horizontal-spacing: 12px; --grid-mobile-vertical-spacing: 20px; }
+  .cyd-store .header { column-gap: .8rem; }
+  .cyd-store .header__icon { width: 3.8rem; }
+  .cyd-store .header__icons { gap: 0; }
+  .cyd-store .header__icon--account { display: none; }
+  .cyd-search { margin-inline-end: .2rem; }
+  .cyd-search button { flex-basis: 32px; }
+  .cyd-search input { font-size: 16px; }
+  .cyd-hero__slide { grid-template-columns: 1fr; min-height: auto; grid-template-rows: auto auto; }
+  .cyd-hero__art { grid-row: 1; min-height: auto; aspect-ratio: 1262 / 1440; }
+  .cyd-hero__copy { padding: 2rem; grid-row: 2; }
+  .cyd-hero__copy h2 { font-size: clamp(2.8rem, 8.5vw, 4.2rem); margin: .65rem 0; }
+  .cyd-hero__description { margin: .65rem 0 1.2rem; }
+  .cyd-section-head { margin-bottom: 1.5rem; }
+  .cyd-series-grid { grid-auto-flow: column; grid-auto-columns: 66%; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 1.15rem; }
+  .cyd-series-card { scroll-snap-align: start; }
+  .cyd-series-card__image { aspect-ratio: 4 / 5; }
+  .cyd-store--mobile-nav { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+  .cyd-mobile-nav {
+    position: fixed; z-index: 4; display: flex; justify-content: space-around; bottom: 0; left: 0; right: 0;
+    background: #fff; border-top: 1px solid var(--cyd-line); padding: 3px 0 calc(3px + env(safe-area-inset-bottom));
+  }
+  .cyd-mobile-nav a { flex: 1 1 0; display: grid; justify-items: center; align-content: center; min-height: 52px; gap: .25rem; text-decoration: none; font-size: 1.2rem; color: var(--cyd-muted); }
+  .cyd-mobile-nav a[aria-current] { color: var(--cyd-ink); font-weight: 700; }
+  .cyd-mobile-nav svg { width: 21px; height: 21px; }
+  .cyd-store--product { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
+  .cyd-product-jump {
+    position: fixed; display: block; z-index: 4; bottom: 0; left: 0; right: 0; text-align: center;
+    padding: .7rem 1.5rem calc(.7rem + env(safe-area-inset-bottom)); border-top: 1px solid var(--cyd-line); background: #fff;
+  }
+  .cyd-product-jump a { width: 100%; }
+  .cyd-store .product-form, .cyd-store form[id^="product-form-"] { scroll-margin-top: 110px; }
+}
+
+/* 尊重系统减少动态效果偏好，与轮播脚本中的同名媒体查询配合。 */
+@media (prefers-reduced-motion: reduce) {
+  .cyd-series-card__image img, .cyd-hero__action { transition: none; }
+}
+
+.cyd-cart-page-link { display: block; text-align: center; padding-block: .8rem .3rem; }

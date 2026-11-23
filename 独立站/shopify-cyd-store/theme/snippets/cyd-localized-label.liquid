@@ -1,0 +1,69 @@
+{% comment %}
+  将 Shopify 的排序代码、默认菜单名、筛选代码及政策 handle 对应到主题语言键。
+  调用方传入 kind 选择映射类别，key 指定待映射代码，fallback 保存原始标签。库存筛选还需 filter_key。
+  未匹配的自定义值保留 fallback，最后统一 escape。固定界面词通过 t 过滤器读取 locales。
+{% endcomment %}
+{%- comment -%}保留 Shopify 提供的未知选项及商家自定义菜单名。{%- endcomment -%}
+{%- assign label = fallback -%}
+{%- case kind -%}
+  {%- when 'sort' -%}
+    {%- case key -%}
+      {%- when 'manual' -%}
+        {%- assign label = 'cyd.sort.manual' | t -%}
+      {%- when 'relevance' -%}
+        {%- assign label = 'cyd.sort.relevance' | t -%}
+      {%- when 'best-selling' -%}
+        {%- assign label = 'cyd.sort.best_selling' | t -%}
+      {%- when 'title-ascending' -%}
+        {%- assign label = 'cyd.sort.title_ascending' | t -%}
+      {%- when 'title-descending' -%}
+        {%- assign label = 'cyd.sort.title_descending' | t -%}
+      {%- when 'price-ascending' -%}
+        {%- assign label = 'cyd.sort.price_ascending' | t -%}
+      {%- when 'price-descending' -%}
+        {%- assign label = 'cyd.sort.price_descending' | t -%}
+      {%- when 'created-ascending' -%}
+        {%- assign label = 'cyd.sort.created_ascending' | t -%}
+      {%- when 'created-descending' -%}
+        {%- assign label = 'cyd.sort.created_descending' | t -%}
+    {%- endcase -%}
+  {%- when 'menu' -%}
+    {%- case fallback -%}
+      {%- when 'Home' -%}
+        {%- assign label = 'cyd.navigation.home' | t -%}
+      {%- when 'Catalog' -%}
+        {%- assign label = 'cyd.navigation.catalog' | t -%}
+      {%- when 'Contact' -%}
+        {%- assign label = 'cyd.navigation.contact' | t -%}
+    {%- endcase -%}
+  {%- when 'filter' -%}
+    {%- case key -%}
+      {%- when 'filter.v.availability' -%}
+        {%- assign label = 'cyd.filters.availability' | t -%}
+      {%- when 'filter.v.price' -%}
+        {%- assign label = 'cyd.filters.price' | t -%}
+    {%- endcase -%}
+  {%- when 'filter-value' -%}
+    {%- if filter_key == 'filter.v.availability' -%}
+      {%- case key -%}
+        {%- when '1' -%}
+          {%- assign label = 'cyd.filters.in_stock' | t -%}
+        {%- when '0' -%}
+          {%- assign label = 'cyd.filters.out_of_stock' | t -%}
+      {%- endcase -%}
+    {%- endif -%}
+  {%- when 'policy' -%}
+    {%- case key -%}
+      {%- when 'privacy-policy' -%}
+        {%- assign label = 'cyd.policies.privacy_policy' | t -%}
+      {%- when 'refund-policy' -%}
+        {%- assign label = 'cyd.policies.refund_policy' | t -%}
+      {%- when 'shipping-policy' -%}
+        {%- assign label = 'cyd.policies.shipping_policy' | t -%}
+      {%- when 'terms-of-service' -%}
+        {%- assign label = 'cyd.policies.terms_of_service' | t -%}
+      {%- when 'subscription-policy' -%}
+        {%- assign label = 'cyd.policies.subscription_policy' | t -%}
+    {%- endcase -%}
+{%- endcase -%}
+{{- label | escape -}}

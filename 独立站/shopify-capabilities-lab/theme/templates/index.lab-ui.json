@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "lab-ui", "settings": {} }
+  },
+  "order": ["main"]
+}

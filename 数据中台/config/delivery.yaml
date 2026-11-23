@@ -1,0 +1,65 @@
+# ============================================================
+# 企业微信交付配置
+# 对应简报 P3「04 企业微信交付」：微盘 · 标准报表归档 / 会话 · 待复核项提醒
+# ============================================================
+
+delivery:
+  # 归档：标准报表统一落到这里，再由企微微盘目录同步
+  archive_dir: data/outbox/wecom_drive
+  # 通知载荷（未配置 webhook 时的落盘位置，便于回放与排查）
+  notify_dir: data/outbox/notifications
+
+wecom:
+  # 企业微信群机器人 Webhook。留空 = dry-run，只落盘不真发。
+  # 真实值建议放到 config/delivery.local.yaml 或环境变量 WECOM_WEBHOOK 里，不要提交到仓库。
+  webhook_url: ""
+  # 是否 @所有人（只在 block 级异常时建议开启）
+  mention_all_on_blocker: true
+  # 单条消息最大字节数，超长会自动拆成多条
+  max_message_bytes: 4000
+
+message_templates:
+  report_ready: |
+    【{title}】{biz_date} 已生成并通过人工审核
+    审核人：{reviewer}
+    报表：{files}
+    归档位置：微盘 / 标准报表 / {biz_date}
+  review_needed: |
+    【待复核】{title} {biz_date}
+    阻断项 {block_count} 条 / 提示项 {warn_count} 条
+    主要问题：
+    {top_issues}
+    请在审核清单中逐条确认后再触发发送。
+  delivered: |
+    【已送达】{title} {biz_date}
+    接收人：{recipients}
+    企业微信发送时间：{sent_at}
+
+# 权限：谁能执行哪一步（对应落地原则「权限按角色隔离」）
+roles:
+  extractor:      # 取数岗：只能抽数、清洗与落地
+    - extract
+    - transform
+    - load
+    - mock
+    - init
+    - selftest
+  analyst:        # 数据岗：可成表与跑校验
+    - extract
+    - transform
+    - load
+    - build
+    - check
+    - review
+    - mock
+    - init
+    - selftest
+  finance_reviewer:  # 财务复核岗：唯一有权审批的人
+    - review
+    - approve
+    - deliver
+  admin:          # 管理员：全部权限
+    - "*"
+
+# 默认执行身份（CLI 未显式指定 --actor 时使用）
+default_role: admin

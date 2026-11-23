@@ -1,0 +1,28 @@
+{% comment %}
+  页眉搜索表单，由 header.liquid 引用。关键词字段 q 提交到 Shopify 搜索页。
+  type=product 将结果限定为商品，options[prefix]=last 为末尾搜索词启用前缀匹配。
+  搜索结果页由 main-search.liquid 渲染，输入框提示读取当前语言文件。
+{% endcomment %}
+{% comment %}保留网页可提交的 GET 表单，搜索结果交给 Shopify 搜索页。{% endcomment %}
+<form
+  class="cyd-search"
+  action="{{ routes.search_url }}"
+  method="get"
+  role="search"
+  aria-label="{{ 'cyd.search.landmark' | t }}"
+>
+  <label class="visually-hidden" for="CydHeaderSearch">{{ 'cyd.search.label' | t }}</label>
+  <button type="submit" aria-label="{{ 'cyd.search.submit' | t }}">
+    {{ 'icon-search.svg' | inline_asset_content }}
+  </button>
+  <input
+    id="CydHeaderSearch"
+    type="search"
+    name="q"
+    placeholder="{{ 'cyd.search.placeholder' | t }}"
+    value="{{ search.terms | escape }}"
+    required
+  >
+  <input type="hidden" name="type" value="product">
+  <input type="hidden" name="options[prefix]" value="last">
+</form>

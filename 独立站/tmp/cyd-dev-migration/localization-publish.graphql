@@ -1,0 +1,5 @@
+mutation {
+  shopLocaleUpdate(locale: "zh-CN", shopLocale: { published: true }) {
+    shopLocale { locale published marketWebPresences { id } } userErrors { field message }
+  }
+}

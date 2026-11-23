@@ -1,0 +1,5 @@
+query {
+  translatableResource(resourceId: "gid://shopify/Page/128629833806") {
+    resourceId translatableContent { key digest locale } translations(locale: "zh-CN") { key value }
+  }
+}

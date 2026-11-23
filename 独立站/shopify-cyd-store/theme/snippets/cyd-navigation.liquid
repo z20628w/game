@@ -1,0 +1,32 @@
+{% comment %}
+  页眉未选择后台菜单时显示的默认导航，由 header.liquid 调用。
+  routes 提供适合当前语言路径的首页、系列目录等网址。商品入口优先指向 CYD 演示总系列。
+  aria-current 用于标记当前页面，界面名称通过 cyd.navigation 下的语言键输出。
+{% endcomment %}
+{% comment %}没有配置商城菜单时，使用 Shopify 原生路由提供可用的导航。{% endcomment %}
+<nav class="cyd-navigation" aria-label="{{ 'cyd.navigation.main' | t }}">
+  <a
+    href="{{ routes.root_url }}"
+    {% if request.page_type == 'index' %}
+      aria-current="page"
+    {% endif %}
+  >
+    {{ 'cyd.navigation.home' | t }}
+  </a>
+  <a
+    href="{{ routes.collections_url }}"
+    {% if request.page_type == 'list-collections' %}
+      aria-current="page"
+    {% endif %}
+  >
+    {{ 'cyd.navigation.collections' | t }}
+  </a>
+  <a
+    href="{{ collections['cyd-preview-catalog'].url | default: routes.all_products_collection_url }}"
+    {% if collection.handle == 'all' or collection.handle == 'cyd-preview-catalog' %}
+      aria-current="page"
+    {% endif %}
+  >
+    {{ 'cyd.navigation.products' | t }}
+  </a>
+</nav>

@@ -1,0 +1,243 @@
+# ============================================================
+# 报表口径 + 校验规则（本项目的核心资产）
+#
+# 设计意图（对应简报 P4「不替财务拍板，它把规则变成可执行流程」）：
+#   财务用自然语言描述口径 → 落到这份 YAML → 程序把它编译成 SQL / 校验条件。
+#   规则是「数据」而不是「代码」，所以口径变更可追踪、逻辑可测试、结果可复跑。
+#   新增业务不需要改程序，只需要改这里。
+# ============================================================
+
+# ------------------------- 一、报表口径 -------------------------
+marts:
+  finance_daily:
+    title: 财务日报
+    business: 财务
+    cadence: daily
+    sheets: 3                      # 去掉税后汇总成 3 张表
+    owner: 财务
+    sql: sql/marts/mart_finance_daily.sql
+    # 校验规则挂在这张明细表上（UNQ-001 / DEV-001 都指向它）
+    validation_table: mart_finance_daily
+    outputs:
+      - name: 收入汇总表
+        table: mart_finance_revenue
+        file: finance_revenue_daily.csv
+        order_by: biz_date DESC
+      - name: 税额明细表
+        table: mart_finance_tax
+        file: finance_tax_daily.csv
+        order_by: biz_date DESC, dept
+      - name: 部门收入表
+        table: mart_finance_dept
+        file: finance_dept_daily.csv
+        order_by: revenue_net DESC
+    note: 口径关键点 —— 财务口径一律用「不含税收入」，税额单列，不做价税分离以外的调整
+
+  guest_source_weekly:
+    title: 客源周报
+    business: 客源
+    cadence: weekly
+    sheets: 1                      # 加减计算、汇总成 1 张表
+    owner: 会员运营
+    sql: sql/marts/mart_weekly.sql
+    outputs:
+      - name: 客源结构表
+        table: mart_guest_source_weekly
+        file: guest_source_weekly.csv
+        order_by: week_start DESC, consume_amount DESC
+
+  sales_weekly:
+    title: 销售周报
+    business: 销售
+    cadence: weekly
+    sheets: 1
+    owner: 销售负责人
+    sql: sql/marts/mart_weekly.sql
+    outputs:
+      - name: 销售汇总表
+        table: mart_sales_weekly
+        file: sales_weekly.csv
+        order_by: week_start DESC, room_revenue DESC
+
+  media_weekly:
+    title: 新媒体周报
+    business: 新媒体平台
+    cadence: weekly
+    sheets: 1
+    owner: 新媒体运营
+    sql: sql/marts/mart_weekly.sql
+    outputs:
+      - name: 新媒体投放表
+        table: mart_media_weekly
+        file: media_weekly.csv
+        order_by: week_start DESC, room_revenue DESC
+
+  ota_weekly:
+    title: 传统 OTA 周报
+    business: 传统OTA
+    cadence: weekly
+    sheets: 1
+    owner: 渠道负责人
+    sql: sql/marts/mart_weekly.sql
+    outputs:
+      - name: 渠道结算表
+        table: mart_ota_weekly
+        file: ota_weekly.csv
+        order_by: week_start DESC, room_nights DESC
+
+# ------------------------- 二、校验规则 -------------------------
+# type 取值与判定逻辑见 src/hotel_dw/rules/engine.py
+# severity: block=阻断交付（必须修完才能发） / warn=提示（可带例外发送）
+validation:
+
+  # ---- 完整性：该有的数据必须都在（对应异常类型「缺失」）----
+  - id: CMP-001
+    name: PMS 收入科目不得缺项
+    type: not_null
+    table: stg_pms_revenue
+    columns: [item, amount_with_tax, amount_net, tax_amount]
+    severity: block
+    reason: 收入科目或金额为空，日报会少计收入，必须先补齐再成表
+
+  - id: CMP-002
+    name: 会员数据不得缺失
+    type: not_null
+    table: stg_member
+    columns: [level, consume_amount]
+    severity: warn
+    reason: 会员维度缺失会导致客源周报分档不全
+
+  - id: CMP-003
+    name: 渠道到数数量需达到应有平台数
+    type: completeness
+    table: stg_channel
+    column: channel
+    # 只看「最后一个业务日」的到数情况：历史日期缺哪天已经不影响今天的报表。
+    # 没有这个作用域，规则会被历史缺失长期污染，最后没人再看它。
+    where: "source_key = 'ota' AND biz_date = (SELECT max(biz_date) FROM stg_channel)"
+    expected_from: config/data_sources.yaml#sources[ota].expected_accounts
+    min_ratio: 1.0
+    severity: block
+    reason: 渠道后台未全部导出就直接汇总，会低估渠道贡献
+
+  - id: CMP-004
+    name: 数据日期需与出报日期一致
+    type: date_freshness
+    table: stg_pms_revenue
+    column: biz_date
+    max_lag_days: 1
+    severity: block
+    reason: 跑到了旧数据，属于典型的「静默失败」，必须拦下
+
+  # ---- 一致性：勾稽关系必须平（对应异常类型「冲突」）----
+  - id: CON-001
+    name: 含税收入 = 不含税收入 + 税额
+    type: reconcile
+    table: stg_pms_revenue
+    expression: "amount_with_tax"
+    equals: "amount_net + tax_amount"
+    tolerance_from: config/settings.yaml#run.amount_tolerance
+    severity: block
+    reason: 价税分离不平，财务无法入账
+
+  - id: CON-002
+    name: 渠道佣金不得超过房费
+    type: reconcile
+    table: stg_channel
+    # 佣金/结算只对 OTA 有意义；新媒体侧这两列恒为 0，不参与勾稽
+    where: "source_key = 'ota'"
+    expression: "commission"
+    equals: "room_revenue"
+    op: "<="
+    tolerance: 0.01
+    severity: warn
+    reason: 佣金高于房费通常是平台账单口径串行，需人工确认
+
+  - id: CON-003
+    name: 渠道结算金额 + 佣金 = 房费
+    type: reconcile
+    table: stg_channel
+    where: "source_key = 'ota'"
+    expression: "settle_amount + commission"
+    equals: "room_revenue"
+    tolerance_from: config/settings.yaml#run.amount_tolerance
+    severity: warn
+    reason: 结算口径不平，渠道对账会有尾差
+
+  - id: CON-004
+    name: 人工导出财务套表与 PMS 系统口径一致
+    type: cross_check
+    left_table: stg_manual_finance
+    left_keys: [biz_date, dept]
+    left_value: amount_net
+    right_table: stg_pms_revenue
+    right_keys: [biz_date, dept]
+    right_value: amount_net
+    tolerance_from: config/settings.yaml#run.amount_tolerance
+    severity: warn
+    reason: 人工导出与系统口径不一致，说明其中一方导出范围或口径有问题，需人工确认
+
+  # ---- 合理性：数值不得越界 ----
+  - id: RNG-001
+    name: 金额不得为负
+    type: non_negative
+    table: stg_pms_revenue
+    columns: [amount_with_tax, amount_net, tax_amount]
+    allow_negative_items: [冲减, 退款]     # 冲减/退款类科目允许负数
+    severity: block
+    reason: 收入出现负数，多为串行或符号错误
+
+  - id: RNG-002
+    name: 渠道订单数与间夜数不得为负
+    type: non_negative
+    table: stg_channel
+    columns: [orders, room_nights]
+    severity: block
+    reason: 负数说明导出过程出错
+
+  # ---- 稳定性：环比不能突变（对应异常类型「偏离」）----
+  - id: DEV-001
+    name: 财务收入环比偏离
+    type: deviation
+    table: mart_finance_daily
+    value_column: revenue_net
+    key_column: biz_date
+    pct_from: config/settings.yaml#run.deviation_pct
+    severity: warn
+    reason: 收入日内波动过大，可能是漏跑、重复跑或平台改口径
+
+  - id: DEV-002
+    name: 渠道间夜数环比偏离
+    type: deviation
+    table: mart_ota_weekly
+    value_column: room_nights
+    key_column: channel
+    required_columns: [week_start]
+    pct_from: config/settings.yaml#run.deviation_pct
+    severity: warn
+    reason: 单渠道间夜数突变，需核对后台账单
+
+  # ---- 唯一性：主键不得重复（重跑必须幂等）----
+  - id: UNQ-001
+    name: 财务日报主键唯一
+    type: duplicate
+    table: mart_finance_daily
+    keys: [biz_date, dept]
+    severity: block
+    reason: 重复行会导致收入翻倍，属于最危险的一类错误
+
+# ------------------------- 三、异常解释文案 -------------------------
+# 只推例外 + 附带原因：让人工一眼看懂「为什么推送给我」
+anomaly_explain:
+  not_null: "字段缺失：{columns} 在 {rows} 行上为空，疑似上游导出不全。"
+  completeness: "渠道缺失：应有 {expected} 个渠道，实际只有 {actual} 个（{channels}）。"
+  date_freshness: "数据滞后：最新业务日期为 {latest}，距出报日期已 {lag} 天。"
+  reconcile: "勾稽不平：{expression} 与 {equals} 差异合计 {diff} 元，共 {rows} 行。"
+  non_negative: "出现负数：{columns} 存在负值，最大负值 {min_value}。"
+  deviation: "环比偏离：{key} 由 {prev} 变为 {curr}，变化 {pct}%，超过阈值 {threshold}%。"
+  duplicate: "主键重复：{keys} 存在 {rows} 组重复，可能重复跑批。"
+  # ↓ 通过时用的文案。跟上面的「异常解释」分开：异常模板写的是结论
+  #   （"超过阈值 30%"），套到通过的规则上会自相矛盾。
+  passed: "{name}：通过"
+  passed_deviation: "环比检查通过：{key} 最大偏离 {max_pct}%，未超阈值 {threshold}%。"
+  default: "触发规则 {rule_id}：{reason}"

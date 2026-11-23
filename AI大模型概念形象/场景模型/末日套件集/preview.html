@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>全景城市地图 · 模型总览</title>
+<script type="module" src="./model-viewer.min.js"></script>
+<style>
+:root{--bg:#eef0f3;--card:#fff;--line:#dfe2e6;--ink:#1f2328;--sub:#5c6470;--accent:#2b5bd2}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:18px;font-weight:600}
+header .meta{color:var(--sub);font-size:12px;margin-top:3px}
+.badge{background:var(--accent);color:#fff;padding:6px 14px;border-radius:18px;font-size:13px}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 24px}
+.model-wrap{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+model-viewer{width:100%;height:74vh;background:radial-gradient(circle at 50% 35%,#fafbfc,#dfe3e9)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.btn{padding:9px 16px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:13px;background:#fff;color:var(--ink)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.info{margin-top:16px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:16px 20px;font-size:13px;line-height:1.9;color:#3a4048}
+.info b{color:var(--ink)}
+.stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-size:12px;color:var(--sub)}
+.stat b{font-size:19px;color:var(--accent);display:block;margin-top:2px}
+.zones{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.zone{padding:8px 14px;border-radius:8px;font-size:13px;color:#fff}
+#load{color:var(--sub);font-size:13px;margin-left:4px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>全景城市地图 · 可进入 + 内含楼梯</h1>
+    <div class="meta">四风格分区 · 每区3横3竖街道 · 200栋精美建筑 · 带门洞/楼板/连续楼梯</div>
+  </div>
+  <div class="badge" style="display:flex;gap:10px;align-items:center">
+    <a href="./explore.html" style="background:#fff;color:#2b5bd2;padding:8px 14px;border-radius:16px;text-decoration:none;font-weight:600">🚶 第一人称探索</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <button class="btn" onclick="resetView()">重置视角</button>
+    <button class="btn" onclick="toggleRotate()">开启/停止旋转</button>
+    <button class="btn" onclick="document.getElementById('mv').requestFullscreen && document.getElementById('mv').requestFullscreen()">全屏查看</button>
+    <span id="load">模型加载中…</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat">精美建筑<b>200</b></div>
+    <div class="stat">内部台阶<b>1344</b></div>
+    <div class="stat">风格分区<b>4</b></div>
+    <div class="stat">每区街道<b>3横×3竖</b></div>
+    <div class="stat">街道宽度<b>48（3倍）</b></div>
+  </div>
+
+  <div class="model-wrap">
+    <model-viewer id="mv" src="./city_variants/master_map.glb" alt="全景城市地图" camera-controls
+      shadow-intensity="1" exposure="1" environment-image="neutral" interaction-prompt="none"
+      max-camera-orbit="auto auto 500"></model-viewer>
+  </div>
+
+  <div class="zones">
+    <div class="zone" style="background:#4a6076">现代商业（灰蓝）</div>
+    <div class="zone" style="background:#8a7a5e">郊区住宅（暖色）</div>
+    <div class="zone" style="background:#4e8a52">工业厂房（绿色）</div>
+    <div class="zone" style="background:#4a4038">废土建筑（深棕）</div>
+  </div>
+
+  <div class="info">
+    <b>操作</b>：左键拖拽旋转 · 滚轮缩放 · 右键平移。点击"重置视角"回到全景。<br>
+    <b>地图构成</b>：这张地图用的是您之前下载的 <b>Kenney CC0 精美建筑模型</b>（带窗户/屋顶/多层细节，非简单盒子）——商业 14 款 + 摩天楼 5 款、郊区 21 款、工业 20 款，款式轮换共 200 栋。四风格分区，每区 <b>3 横 3 竖街道</b>切成 4×4=16 街区，每街区 4 栋，随机缩放做出高矮错落。<br>
+    <b>街道宽度</b>：48 单位 = 原先十字公路（16 单位）的 <b>3 倍</b>，含车道线；四区由更宽十字主路贯通。废土区放您的原作者建筑。<br>
+    <b>可进入 + 上层楼梯（本次新增）</b>：39 栋较高建筑内部已补全<b>通往上层的连续楼梯</b>——底层地板 → 7 级逐级上升的阶梯 → 带楼梯井的上层楼板，楼梯顶与上层楼板精确衔接、连续可通行；楼梯贴后侧角落，不挡前门与中央动线，外观屋顶/窗户保持完好。全图共 <b>1344 级台阶、576 块楼板</b>。矮楼因高度不足未加楼梯（无需上层）。废土区建筑本身有内部空腔。<br>
+    <b>素材</b>：Kenney City Kit（CC0 可商用）+ 您的废土 kitbash，原始 ZIP 与 FBX/OBJ/GLB 各格式完整保留。
+  </div>
+</div>
+
+<script type="module">
+const mv = document.getElementById('mv');
+const load = document.getElementById('load');
+window.resetView = function(){ if(mv.resetTurntableRotation) mv.resetTurntableRotation(); mv.cameraOrbit='0deg 60deg 140m'; };
+window.toggleRotate = function(){ mv.autoRotate = !mv.autoRotate; };
+mv.addEventListener('load', ()=>{ load.textContent = '模型已加载 · 可拖拽查看'; });
+mv.addEventListener('error', (e)=>{ load.textContent = '加载失败：' + (e.detail && e.detail.message || '未知'); load.style.color='#b00'; });
+setTimeout(()=>{ if(!mv.loaded) load.textContent='加载较慢（186MB），请稍候…'; }, 8000);
+</script>
+</body>
+</html>

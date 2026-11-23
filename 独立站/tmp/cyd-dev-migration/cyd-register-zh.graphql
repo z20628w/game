@@ -1,0 +1,22 @@
+mutation($id0: ID!, $values0: [TranslationInput!]!, $id1: ID!, $values1: [TranslationInput!]!, $id2: ID!, $values2: [TranslationInput!]!, $id3: ID!, $values3: [TranslationInput!]!, $id4: ID!, $values4: [TranslationInput!]!, $id5: ID!, $values5: [TranslationInput!]!, $id6: ID!, $values6: [TranslationInput!]!, $id7: ID!, $values7: [TranslationInput!]!, $id8: ID!, $values8: [TranslationInput!]!, $id9: ID!, $values9: [TranslationInput!]!, $id10: ID!, $values10: [TranslationInput!]!, $id11: ID!, $values11: [TranslationInput!]!, $id12: ID!, $values12: [TranslationInput!]!, $id13: ID!, $values13: [TranslationInput!]!, $id14: ID!, $values14: [TranslationInput!]!, $id15: ID!, $values15: [TranslationInput!]!, $id16: ID!, $values16: [TranslationInput!]!, $id17: ID!, $values17: [TranslationInput!]!, $id18: ID!, $values18: [TranslationInput!]!, $id19: ID!, $values19: [TranslationInput!]!) {
+r0: translationsRegister(resourceId: $id0, translations: $values0) { translations { key locale outdated } userErrors { field message } }
+r1: translationsRegister(resourceId: $id1, translations: $values1) { translations { key locale outdated } userErrors { field message } }
+r2: translationsRegister(resourceId: $id2, translations: $values2) { translations { key locale outdated } userErrors { field message } }
+r3: translationsRegister(resourceId: $id3, translations: $values3) { translations { key locale outdated } userErrors { field message } }
+r4: translationsRegister(resourceId: $id4, translations: $values4) { translations { key locale outdated } userErrors { field message } }
+r5: translationsRegister(resourceId: $id5, translations: $values5) { translations { key locale outdated } userErrors { field message } }
+r6: translationsRegister(resourceId: $id6, translations: $values6) { translations { key locale outdated } userErrors { field message } }
+r7: translationsRegister(resourceId: $id7, translations: $values7) { translations { key locale outdated } userErrors { field message } }
+r8: translationsRegister(resourceId: $id8, translations: $values8) { translations { key locale outdated } userErrors { field message } }
+r9: translationsRegister(resourceId: $id9, translations: $values9) { translations { key locale outdated } userErrors { field message } }
+r10: translationsRegister(resourceId: $id10, translations: $values10) { translations { key locale outdated } userErrors { field message } }
+r11: translationsRegister(resourceId: $id11, translations: $values11) { translations { key locale outdated } userErrors { field message } }
+r12: translationsRegister(resourceId: $id12, translations: $values12) { translations { key locale outdated } userErrors { field message } }
+r13: translationsRegister(resourceId: $id13, translations: $values13) { translations { key locale outdated } userErrors { field message } }
+r14: translationsRegister(resourceId: $id14, translations: $values14) { translations { key locale outdated } userErrors { field message } }
+r15: translationsRegister(resourceId: $id15, translations: $values15) { translations { key locale outdated } userErrors { field message } }
+r16: translationsRegister(resourceId: $id16, translations: $values16) { translations { key locale outdated } userErrors { field message } }
+r17: translationsRegister(resourceId: $id17, translations: $values17) { translations { key locale outdated } userErrors { field message } }
+r18: translationsRegister(resourceId: $id18, translations: $values18) { translations { key locale outdated } userErrors { field message } }
+r19: translationsRegister(resourceId: $id19, translations: $values19) { translations { key locale outdated } userErrors { field message } }
+}

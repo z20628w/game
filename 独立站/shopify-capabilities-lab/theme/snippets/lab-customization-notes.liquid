@@ -1,0 +1,99 @@
+{% comment %}
+  页面可定制范围的说明面板。context 参数区分页眉、页脚、页面、购物车等调用位置。
+  页面分支继续读取 request.page_type 和 template.suffix，显示当前模板对应的编辑器、代码与后台职责说明。
+  此片段用于展示说明，实际的配置项由各区块 schema、主题设置与店铺后台提供。
+{% endcomment %}
+{%- comment -%}调用方通过 context 区分页头、页脚、抽屉等位置。页面说明再按资源类型及模板后缀选择。{%- endcomment -%}
+{%- if settings.lab_show_customization -%}
+  {%- case context -%}
+    {%- when 'header' -%}
+      {%- assign title = '全站页头与导航' -%}
+      {%- assign rows = '主题编辑器｜公告、标志、导航布局、吸顶效果；后台配置｜菜单内容、搜索数据、登录与市场入口' -%}
+    {%- when 'footer' -%}
+      {%- assign title = '全站页脚' -%}
+      {%- assign rows = '主题编辑器｜订阅模块、链接栏目、社交图标与支付图标；后台配置｜政策正文、营销订阅和可用支付方式' -%}
+    {%- when 'drawer' -%}
+      {%- assign title = '购物车抽屉' -%}
+      {%- assign rows = '主题代码｜抽屉样式、商品行、数量按钮、定制信息与空状态；平台处理｜购物车数据、库存校验、实际价格与结账' -%}
+    {%- when 'password' -%}
+      {%- assign title = '店面访问密码页' -%}
+      {%- assign rows = '主题编辑器｜页头、引导文案、背景图和订阅入口；后台配置｜访问密码、公开状态与访客提示' -%}
+    {%- when 'page' -%}
+      {%- case request.page_type -%}
+        {%- when 'index' -%}
+          {%- case template.suffix -%}
+            {%- when 'lab-data' -%}
+              {%- assign title = '自定义数据实验' -%}
+              {%- assign rows = '主题编辑器｜选择展示用商品；主题代码｜数据卡片、字段绑定与空状态；后台配置｜元字段定义、元对象结构和条目' -%}
+            {%- when 'lab-api' -%}
+              {%- assign title = '接口实验' -%}
+              {%- assign rows = '主题代码｜交互控件、请求时机、加载状态、结果展示与重试；平台处理｜接口响应、搜索索引、购物车会话与访问权限' -%}
+            {%- when 'lab-components' -%}
+              {%- assign title = '组件实验' -%}
+              {%- assign rows = '主题编辑器｜增删与重排区块，编辑卡片和折叠内容；主题代码｜组件结构、响应式布局与交互效果；应用扩展｜已安装的应用可提供应用区块' -%}
+            {%- when 'lab-saved' -%}
+              {%- assign title = '收藏与对比' -%}
+              {%- assign rows = '主题代码｜收藏入口、对比字段、数量上限和本机存储；应用扩展｜跨设备同步、账户收藏与分享需要持久存储' -%}
+            {%- when 'lab-boundaries' -%}
+              {%- assign title = '能力边界' -%}
+              {%- assign rows = '主题代码｜分类、标签、边界说明与示例链接；平台处理｜结账、账户及支付使用专用配置或扩展机制' -%}
+            {%- when 'lab-markets' -%}
+              {%- assign title = '海外市场要求' -%}
+              {%- assign rows = '主题代码｜市场目录、规则展示、反馈与售后入口；业务与合规｜核对销售市场、法规适用条件和处理流程' -%}
+            {%- when 'lab-ui' -%}
+              {%- assign title = '界面设计自由度' -%}
+              {%- assign rows = '主题代码｜布局、入口位置与交互方式；平台处理｜价格、库存校验、结账与支付' -%}
+            {%- else -%}
+              {%- assign title = '首页' -%}
+              {%- assign rows = '主题编辑器｜首屏标题、简介、区块顺序、精选集合；主题代码｜能力卡片、筛选、响应式布局与交互；后台配置｜精选集合包含的商品' -%}
+          {%- endcase -%}
+        {%- when 'product' -%}
+          {%- assign title = '商品详情' -%}
+          {%- assign rows = '主题编辑器｜媒体位置、详情区块、规格选择样式和推荐模块；主题代码｜定制文字、收藏按钮、信息展示与空状态；后台配置｜商品图片、说明、规格、价格、库存和自定义数据' -%}
+        {%- when 'collection', 'list-collections' -%}
+          {%- assign title = '商品集合' -%}
+          {%- assign rows = '主题编辑器｜商品卡片、列数、排序与筛选入口；主题代码｜标签、列表布局、筛选交互与空状态；后台配置｜集合规则、商品归属和筛选项' -%}
+        {%- when 'search' -%}
+          {%- assign title = '搜索结果与预测搜索' -%}
+          {%- assign rows = '主题编辑器｜搜索结果布局、筛选、排序、预测搜索开关；主题代码｜搜索弹层、建议与无结果状态；平台处理｜搜索索引与匹配结果' -%}
+        {%- when 'cart' -%}
+          {%- assign title = '购物车页面' -%}
+          {%- assign rows = '主题编辑器｜购物车类型、订单备注和区块样式；主题代码｜商品行、定制属性、空状态与操作反馈；平台处理｜库存校验、折扣、结算价格与结账' -%}
+        {%- when 'page' -%}
+          {%- if template.suffix == 'contact' -%}
+            {%- assign title = '联系页面' -%}
+            {%- assign rows = '主题编辑器｜页面区块、表单标题和间距；主题代码｜输入字段、布局、校验反馈；后台配置｜页面正文和联系表单通知' -%}
+          {%- else -%}
+            {%- assign title = '内容页面' -%}
+            {%- assign rows = '主题编辑器｜页面模板与图文区块；主题代码｜排版、目录和交互；后台配置｜页面标题、正文和页面模板分配' -%}
+          {%- endif -%}
+        {%- when 'blog', 'article' -%}
+          {%- assign title = '博客与文章' -%}
+          {%- assign rows = '主题编辑器｜文章列表、封面、作者和日期开关；主题代码｜阅读排版、推荐区块和分享入口；后台配置｜博客分类、文章内容和评论设置' -%}
+        {%- when '404' -%}
+          {%- assign title = '未找到页面' -%}
+          {%- assign rows = '主题代码｜提示文案、插图、搜索与返回入口；平台处理｜未匹配地址与页面响应状态' -%}
+        {%- when 'policy' -%}
+          {%- assign title = '店铺政策' -%}
+          {%- assign rows = '主题代码｜政策页面外围布局和文字样式；后台配置｜各类政策的正文' -%}
+      {%- endcase -%}
+  {%- endcase -%}
+  {%- if title != blank -%}
+    <details class="lab-customization{% if context == 'drawer' %} lab-customization--drawer{% endif %}">
+      <summary>
+        <span class="lab-badge lab-badge--theme">可自定义</span>
+        {{ title | escape }}
+      </summary>
+      <ul role="list">
+        {%- assign items = rows | split: '；' -%}
+        {%- for item in items -%}
+          {%- assign parts = item | split: '｜' -%}
+          <li>
+            <strong>{{ parts[0] | escape }}</strong>
+            <span>{{ parts[1] | escape }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </details>
+  {%- endif -%}
+{%- endif -%}

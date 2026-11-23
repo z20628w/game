@@ -1,0 +1,9 @@
+fragment Copy on TranslatableResource {
+  resourceId
+  translatableContent { key value }
+  translations(locale: "zh-CN") { key value outdated }
+}
+query {
+  articles(first: 10) { nodes { id handle title isPublished body image { url } } }
+  localized: translatableResources(first: 15, resourceType: ARTICLE) { nodes { ...Copy } }
+}

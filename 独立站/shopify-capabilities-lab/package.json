@@ -1,0 +1,26 @@
+{
+  "name": "shopify-capabilities-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "面向 UI 与产品的 Shopify 主题能力演示项目",
+  "type": "module",
+  "scripts": {
+    "guide": "node scripts/build-guide.mjs",
+    "dev": "shopify theme dev --path theme --store 0e80cm-rd.myshopify.com",
+    "check": "shopify theme check --path theme --fail-level error",
+    "test": "node --test tests/*.test.mjs",
+    "push": "node scripts/deploy.mjs",
+    "package": "shopify theme package --path theme",
+    "themes": "shopify theme list --store 0e80cm-rd.myshopify.com",
+    "seed": "node scripts/seed-demo.mjs",
+    "inspect": "node scripts/inspect-store.mjs",
+    "verify:store": "node scripts/verify-store.mjs",
+    "seed:media": "node scripts/upload-demo-media.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "@shopify/cli": "5.0.0"
+  }
+}

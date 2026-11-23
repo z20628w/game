@@ -1,0 +1,41 @@
+{% comment %}
+能力地图入口，对应首页模板。标题和说明来自 section.settings。
+lab-capability-cards 以 overview 输出概览、以 matrix 输出功能明细，内容由 config 下的定义生成。
+lab-catalog 元素由 lab.js 注册，按 data-decision、data-category 及文本执行前端筛选。
+{% endcomment %}
+<section class="lab-shell">
+  <lab-catalog id="lab-catalog">
+    <header class="lab-review-heading">
+      <p class="lab-eyebrow">开发 · 产品 · UI 评审</p>
+      <h1>{{ section.settings.heading | escape }}</h1>
+      <p class="lab-lead">{{ section.settings.description | escape }}</p>
+      <a class="lab-market-entry" href="{{ routes.root_url }}?view=lab-markets">查看各市场必须提供的功能与限制 <span aria-hidden="true">↗</span></a>
+      <a class="lab-market-entry" href="{{ routes.root_url }}?view=lab-ui">购物车必须右侧打开吗？查看设计选项 <span aria-hidden="true">↗</span></a>
+    </header>
+    <div class="lab-decision-grid">{% render 'lab-capability-cards', mode: 'overview' %}</div>
+    <div class="lab-section-heading" id="lab-results">
+      <h2>功能对照表</h2>
+      <a href="{{ routes.collections_url }}/lab-demo-collection">进入商品演示 <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="lab-filters">
+      <div><label for="LabQuery-{{ section.id }}">搜索功能</label><input id="LabQuery-{{ section.id }}" type="search" placeholder="搜索商品、元对象、结账……" data-query></div>
+      <div><label for="LabLevel-{{ section.id }}">评审结论</label><select id="LabLevel-{{ section.id }}" data-level-filter><option value="">全部结论</option><option value="direct">主题能直接做</option><option value="special">需要特殊方法</option><option value="blocked">主题做不了</option></select></div>
+      <div><label for="LabCategory-{{ section.id }}">功能分类</label><select id="LabCategory-{{ section.id }}" data-category-filter><option value="">全部分类</option><option>页面与设计</option><option>商品与发现</option><option>购物与结账</option><option>自定义数据</option><option>内容与增长</option><option>账号与扩展</option><option>平台边界</option><option>开发流程</option></select></div>
+    </div>
+    <p class="lab-muted" data-result-count role="status">正在展示全部能力。可按条件筛选。</p>
+    <noscript><p>筛选需要 JavaScript。下方已按评审结论列出全部功能。</p></noscript>
+    {% render 'lab-capability-cards', mode: 'matrix' %}
+  </lab-catalog>
+  {% render 'lab-customization-notes', context: 'page' %}
+  <div id="lab-products"></div>
+</section>
+{% schema %}
+{
+  "name": "实验室 · 能力地图",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "标题", "default": "Shopify 主题能力速查" },
+    { "type": "textarea", "id": "description", "label": "说明", "default": "评审需求时，先看能不能做、要用什么方法，再打开对应示例。" }
+  ],
+  "presets": [{ "name": "实验室 · 能力地图" }]
+}
+{% endschema %}

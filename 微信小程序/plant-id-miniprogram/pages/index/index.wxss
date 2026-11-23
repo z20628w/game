@@ -1,0 +1,81 @@
+.page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+.camera {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+/* 检测框：绿色描边，位置/尺寸由内联 style 动态控制 */
+.box {
+  position: absolute;
+  border: 3px solid #2f9e57;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+/* 框左上角的物种标签 */
+.tag {
+  position: absolute;
+  background: #2f9e57;
+  color: #fff;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 6px 6px 0 0;
+  white-space: nowrap;
+}
+/* 框旁的植物信息卡 */
+.info {
+  position: absolute;
+  background: #ffffff;
+  color: #222;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+/* 信息卡标题：物种名 */
+.info-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2f9e57;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+/* 百科描述：最多显示 3 行 */
+.info-desc {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #555;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.status {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  background: #2f9e57;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  background: #333;
+  padding: 6px 0;
+}

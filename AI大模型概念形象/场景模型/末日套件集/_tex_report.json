@@ -1,0 +1,62 @@
+[
+  {
+    "original": "Post_apocalypse_city_color_dark.png",
+    "name": "city_color_dark.png",
+    "size_4k": 28.6,
+    "size_1k": 1.8,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "original": "Post_apocalypse_city_color_light.png",
+    "name": "city_color_light.png",
+    "size_4k": 28.9,
+    "size_1k": 1.8,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "original": "Post_apocalypse_city_metalness.png",
+    "name": "city_metalness.png",
+    "size_4k": 16.1,
+    "size_1k": 0.9,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "original": "Post_apocalypse_city_normal.png",
+    "name": "city_normal.png",
+    "size_4k": 30.5,
+    "size_1k": 1.2,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "original": "Post_apocalypse_city_opacity.png",
+    "name": "city_opacity.png",
+    "size_4k": 1.0,
+    "size_1k": 0.1,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  },
+  {
+    "original": "Post_apocalypse_city_roughness.png",
+    "name": "city_roughness.png",
+    "size_4k": 13.7,
+    "size_1k": 1.0,
+    "dim_1k": [
+      1024,
+      1024
+    ]
+  }
+]

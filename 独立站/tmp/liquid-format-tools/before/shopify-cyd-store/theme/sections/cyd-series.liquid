@@ -1,0 +1,64 @@
+{% comment %}
+首页系列入口，对应 templates/index.json 中的 series。
+优先使用编辑器选择的系列，未选时遍历店铺系列。跳过 all、frontpage 和演示总目录，避免重复入口。
+系列名称、链接和封面读取 Shopify collection 对象，卡片数量由 section.settings.limit 限制。
+{% endcomment %}
+{% comment %}系列对应 Shopify 商品系列；未手选时展示已公开的系列，跳过用于汇总的 all。{% endcomment %}
+{%- liquid
+  assign series = section.settings.collections
+  if series == blank
+    assign series = collections
+  endif
+  assign series_count = 0
+-%}
+{% comment %}
+先收集有效系列卡片并统计数量，最后决定是否显示整个区块。编辑器模式会保留无数据提示，方便配置。
+{% endcomment %}
+{%- capture series_cards -%}
+  {%- for item in series -%}
+    {%- unless item.handle == 'all' or item.handle == 'frontpage' or item.handle == 'cyd-preview-catalog' -%}
+      {%- assign series_count = series_count | plus: 1 -%}
+      <a class="cyd-series-card" href="{{ item.url }}">
+        <div class="cyd-series-card__image">
+          {%- if item.featured_image != blank -%}
+            {{ item.featured_image | image_url: width: 780 | image_tag: widths: '280, 390, 560, 780', sizes: '(min-width: 990px) 29vw, (min-width: 750px) 40vw, 66vw', loading: 'lazy', alt: '' }}
+          {%- else -%}
+            <img src="{{ 'cyd-world-art.png' | asset_url }}" class="cyd-series-card__brand" width="420" height="254" alt="" loading="lazy">
+          {%- endif -%}
+        </div>
+        <div class="cyd-series-card__name"><span>{{ item.title | escape }}</span><span aria-hidden="true">↗</span></div>
+      </a>
+      {%- if series_count >= section.settings.limit -%}{%- break -%}{%- endif -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if series_count > 0 or request.design_mode -%}
+  <section class="cyd-home-section page-width" aria-labelledby="CydSeries-{{ section.id }}">
+    <div class="cyd-section-head">
+      <div>
+        <p class="cyd-eyebrow">{{ section.settings.kicker | escape }}</p>
+        <h2 id="CydSeries-{{ section.id }}">{{ section.settings.title | escape }}</h2>
+      </div>
+      <a class="cyd-text-link" href="{{ routes.collections_url }}">{{ 'cyd.home.view_collections' | t }} <span aria-hidden="true">↗</span></a>
+    </div>
+    {%- if series_count > 0 -%}
+      <div class="cyd-series-grid">{{ series_cards }}</div>
+    {%- else -%}
+      <p>{{ 'cyd.home.collections_empty' | t }}</p>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "CYD 最新系列",
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    { "type": "text", "id": "title", "label": "标题", "default": "最新系列" },
+    { "type": "text", "id": "kicker", "label": "上方文字", "default": "NEW ARRIVALS" },
+    { "type": "collection_list", "id": "collections", "label": "指定系列", "limit": 9 },
+    { "type": "range", "id": "limit", "label": "显示数量", "min": 2, "max": 9, "step": 1, "default": 3 }
+  ],
+  "presets": [{ "name": "CYD 最新系列" }]
+}
+{% endschema %}

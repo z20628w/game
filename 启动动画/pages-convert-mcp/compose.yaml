@@ -1,0 +1,17 @@
+services:
+  converter:
+    build: .
+    env_file: .env
+    environment:
+      BIND_HOST: 0.0.0.0
+      DATA_DIR: /app/data
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - converted-data:/app/data
+    restart: unless-stopped
+    init: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+volumes:
+  converted-data:

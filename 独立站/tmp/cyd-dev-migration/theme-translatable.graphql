@@ -1,0 +1,14 @@
+fragment Fields on TranslatableResource {
+  resourceId translatableContent { key value digest }
+  translations(locale: "zh-CN") { key value outdated }
+}
+query {
+  theme: translatableResource(resourceId: "gid://shopify/OnlineStoreTheme/155681554510") {
+    resourceId
+    templates: nestedTranslatableResources(first: 30, resourceType: ONLINE_STORE_THEME_JSON_TEMPLATE) { nodes { ...Fields } pageInfo { hasNextPage } }
+    groups: nestedTranslatableResources(first: 10, resourceType: ONLINE_STORE_THEME_SECTION_GROUP) { nodes { ...Fields } pageInfo { hasNextPage } }
+  }
+  shopPolicies: translatableResources(first: 15, resourceType: SHOP_POLICY) { nodes { ...Fields } }
+  shopContent: translatableResources(first: 5, resourceType: SHOP) { nodes { ...Fields } }
+  menus: translatableResources(first: 30, resourceType: LINK) { nodes { ...Fields } }
+}

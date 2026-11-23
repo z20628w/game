@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "植物识别",
+    "navigationBarBackgroundColor": "#2f9e57",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#000000"
+  },
+  "permission": {
+    "scope.camera": {
+      "desc": "用于实时识别植物"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

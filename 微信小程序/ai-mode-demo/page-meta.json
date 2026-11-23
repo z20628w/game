@@ -1,0 +1,24 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "name": "WeStoreCafe 点单首页",
+      "description": "饮品商城首页，展示点单入口，用户可通过 Agent 对话完成饮品推荐、规格选择与下单支付"
+    },
+    {
+      "path": "packageDetail/pages/more-drinks",
+      "name": "全部饮品浏览",
+      "description": "半屏页面：浏览全部饮品列表，点击选择某款饮品后返回"
+    },
+    {
+      "path": "packageDetail/pages/sku-picker",
+      "name": "规格选择",
+      "description": "半屏页面：选择饮品的温度、糖度、杯型、加料等规格"
+    },
+    {
+      "path": "packageDetail/pages/address-edit",
+      "name": "地址编辑",
+      "description": "半屏页面：填写或编辑收货地址（降级方案）"
+    }
+  ]
+}

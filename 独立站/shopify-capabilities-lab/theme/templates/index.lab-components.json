@@ -1,0 +1,77 @@
+{
+  "sections": {
+    "main": {
+      "type": "lab-flex",
+      "blocks": {
+        "design": {
+          "type": "lab-note",
+          "settings": {
+            "label": "01 / 设计",
+            "title": "内容与样式可分别调整",
+            "body": "<p>标题、正文、颜色和间距可以由主题设置提供。UI 高保真设计仍是开发的重要输入。</p>"
+          }
+        },
+        "product": {
+          "type": "lab-note",
+          "settings": {
+            "label": "02 / 产品",
+            "title": "一个模块可服务多个页面",
+            "body": "<p>独立的主题块可以在不同容器复用。应用块需要安装提供该扩展的应用后才能添加。</p>"
+          }
+        }
+      },
+      "block_order": [
+        "design",
+        "product"
+      ],
+      "settings": {}
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "first": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "可以完全控制前台布局吗？",
+            "row_content": "<p>可以通过 Liquid、CSS 和 JavaScript 自定义主题页面，同时遵循 Shopify 模板与路由规则。</p>",
+            "icon": "none"
+          }
+        },
+        "second": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "这里的内容必须由开发修改吗？",
+            "row_content": "<p>接入主题设置的文字与图片可在主题编辑器修改；商品与元对象内容在后台维护。</p>",
+            "icon": "none"
+          }
+        },
+        "third": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "视频、图文、轮播如何体验？",
+            "row_content": "<p>在主题编辑器中添加 Dawn 的视频、图文或幻灯片区块并选择素材。本页面不假装已配置媒体素材。</p>",
+            "icon": "none"
+          }
+        }
+      },
+      "block_order": [
+        "first",
+        "second",
+        "third"
+      ],
+      "settings": {
+        "heading": "折叠内容，也是一个可编辑区块",
+        "heading_size": "h1",
+        "layout": "none",
+        "color_scheme": "scheme-1",
+        "open_first_collapsible_row": true,
+        "padding_top": 36,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "plants": [
+    {"name": "月季", "aliases": ["月月红", "玫瑰", "现代月季"], "family": "蔷薇科蔷薇属", "bloom": "5–11月（多季开花）", "light": "喜阳·全日照"},
+    {"name": "绿萝", "aliases": ["黄金葛"], "family": "天南星科麒麟叶属", "bloom": "室内极少见花", "light": "耐阴·散射光"},
+    {"name": "玉露", "aliases": ["多肉玉露"], "family": "阿福花科十二卷属", "bloom": "夏季", "light": "散射光·忌暴晒"},
+    {"name": "薄荷", "aliases": ["留兰香"], "family": "唇形科薄荷属", "bloom": "7–9月", "light": "喜阳"},
+    {"name": "吊兰", "aliases": ["垂盆草"], "family": "天门冬科吊兰属", "bloom": "春夏季", "light": "半阴·忌强光"},
+    {"name": "虎皮兰", "aliases": ["虎尾兰", "千岁兰"], "family": "天门冬科虎尾兰属", "bloom": "少见（冬春）", "light": "耐阴耐旱·喜光"},
+    {"name": "仙人掌", "aliases": ["仙人球"], "family": "仙人掌科", "bloom": "春夏季（因种而异）", "light": "喜阳·强光照"},
+    {"name": "芦荟", "aliases": ["库拉索芦荟"], "family": "阿福花科芦荟属", "bloom": "夏秋季", "light": "喜阳耐半阴"},
+    {"name": "龟背竹", "aliases": ["蓬莱蕉"], "family": "天南星科龟背竹属", "bloom": "8–9月（极少）", "light": "半阴·忌暴晒"},
+    {"name": "富贵竹", "aliases": ["万年竹"], "family": "天门冬科龙血树属", "bloom": "室内少见", "light": "散射光"},
+    {"name": "文竹", "aliases": ["云片松"], "family": "天门冬科天门冬属", "bloom": "9–10月", "light": "半阴·喜湿润"},
+    {"name": "茉莉", "aliases": ["茉莉花"], "family": "木樨科素馨属", "bloom": "5–8月", "light": "喜阳·全日照"},
+    {"name": "栀子花", "aliases": ["栀子"], "family": "茜草科栀子属", "bloom": "5–7月", "light": "喜阳·散射光"},
+    {"name": "君子兰", "aliases": ["大花君子兰"], "family": "石蒜科君子兰属", "bloom": "冬春（1–4月）", "light": "半阴·忌强光"},
+    {"name": "发财树", "aliases": ["瓜栗"], "family": "锦葵科瓜栗属", "bloom": "室内少见", "light": "喜阳耐阴"},
+    {"name": "橡皮树", "aliases": ["印度榕"], "family": "桑科榕属", "bloom": "室内少见", "light": "喜阳·耐半阴"},
+    {"name": "多肉植物", "aliases": ["多肉", "肉肉"], "family": "多种（景天科/番杏科等）", "bloom": "因种而异（多在春冬）", "light": "喜阳·多光照"},
+    {"name": "铜钱草", "aliases": ["香菇草"], "family": "伞形科天胡荽属", "bloom": "春夏季", "light": "半阴·喜水湿"},
+    {"name": "常春藤", "aliases": ["洋常春藤"], "family": "五加科常春藤属", "bloom": "秋季", "light": "耐阴·忌暴晒"},
+    {"name": "兰花", "aliases": ["兰", "国兰"], "family": "兰科", "bloom": "因种而异（多春冬）", "light": "散射光·忌直射"},
+    {"name": "菊花", "aliases": ["秋菊"], "family": "菊科菊属", "bloom": "9–11月", "light": "喜阳"},
+    {"name": "向日葵", "aliases": ["太阳花"], "family": "菊科向日葵属", "bloom": "7–9月", "light": "喜阳·强光照"},
+    {"name": "滴水观音", "aliases": ["海芋"], "family": "天南星科海芋属", "bloom": "少见", "light": "半阴·喜湿"},
+    {"name": "波斯顿蕨", "aliases": ["蕨类"], "family": "肾蕨科肾蕨属", "bloom": "无花", "light": "耐阴·喜湿"}
+  ]
+}

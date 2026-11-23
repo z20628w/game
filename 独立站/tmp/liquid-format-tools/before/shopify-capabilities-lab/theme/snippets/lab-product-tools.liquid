@@ -1,0 +1,20 @@
+{% comment %}
+演示商品的扩展区域，由 main-product.liquid 的购买按钮分支调用。
+只为带 shopify-capabilities-lab-v1 标签的商品显示，product_form_id 必须对应原有商品购买表单。
+properties 输入会作为商品行属性一起加入购物车，LabSaveButton 负责本机收藏，保养指南读取元对象引用。
+{% endcomment %}
+{% comment %}
+  接收 product 和 product_form_id，仅对带演示标签的商品输出。
+  输入框通过 form 属性归属原有购买表单，Dawn 加购时会一起提交商品行属性。
+{% endcomment %}
+{% if product.tags contains 'shopify-capabilities-lab-v1' %}
+  <div class="lab-product-tools">
+    <p class="lab-eyebrow">主题扩展示例</p>
+    <label for="LabEngraving-{{ product_form_id }}">定制文字（演示，不加价）</label>
+    <input id="LabEngraving-{{ product_form_id }}" form="{{ product_form_id }}" type="text" name="properties[演示定制文字]" maxlength="40" placeholder="例如：送给未来的自己">
+    <lab-save-button data-handle="{{ product.handle | escape }}"><button type="button" class="lab-save" data-save>加入本机收藏</button><span role="status" data-save-status></span></lab-save-button>
+    <p>材质：{{ product.metafields.lab_demo.material.value | escape }}</p>
+    {% assign care = product.metafields.lab_demo.guide.value %}
+    {% if care != blank %}<details><summary>{{ care.title.value | escape }}</summary><p>{{ care.body.value | escape | newline_to_br }}</p></details>{% endif %}
+  </div>
+{% endif %}

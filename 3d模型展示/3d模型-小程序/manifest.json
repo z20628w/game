@@ -1,0 +1,72 @@
+[
+  {
+    "base": "双层葫芦",
+    "whiteSize": 0.24,
+    "newTris": 60000,
+    "textures": {
+      "normal": "normal.webp",
+      "baseColor": "baseColor.webp",
+      "metalRough": "metalRough.webp"
+    }
+  },
+  {
+    "base": "向日葵",
+    "whiteSize": 0.26,
+    "newTris": 60000,
+    "textures": {
+      "normal": "normal.webp",
+      "baseColor": "baseColor.webp",
+      "metalRough": "metalRough.webp"
+    }
+  },
+  {
+    "base": "小怪兽",
+    "whiteSize": 0.05,
+    "newTris": 12934,
+    "textures": {
+      "normal": "normal.webp",
+      "baseColor": "baseColor.webp",
+      "metalRough": "metalRough.webp"
+    }
+  },
+  {
+    "base": "痰盂",
+    "whiteSize": 0.27,
+    "newTris": 60000,
+    "textures": {
+      "normal": "normal.webp",
+      "baseColor": "baseColor.webp",
+      "metalRough": "metalRough.webp"
+    }
+  },
+  {
+    "base": "碗",
+    "whiteSize": 0.25,
+    "newTris": 60000,
+    "textures": {
+      "normal": "normal.webp",
+      "baseColor": "baseColor.webp",
+      "metalRough": "metalRough.webp"
+    }
+  },
+  {
+    "base": "小怪兽-2",
+    "whiteSize": 0.11,
+    "newTris": 60000,
+    "textures": {
+      "baseColor": null,
+      "normal": null,
+      "metalRough": null
+    }
+  },
+  {
+    "base": "小怪兽2",
+    "whiteSize": 0.26,
+    "newTris": 60000,
+    "textures": {
+      "baseColor": null,
+      "normal": null,
+      "metalRough": null
+    }
+  }
+]

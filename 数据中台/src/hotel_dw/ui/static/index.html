@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>酒店经营数据自动化 · 控制台</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div class="brand-text">
+      <h1>酒店经营数据自动化</h1>
+      <p>轻量数据中台 · DuckDB 单引擎</p>
+    </div>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="topbar-end">
+    <label class="field field-inline">
+      <span>角色</span>
+      <select id="role-select"></select>
+    </label>
+    <button class="btn btn-quiet" id="btn-refresh" type="button">刷新</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <aside class="rail">
+    <section class="rail-block">
+      <h2>自动阶段</h2>
+      <p class="rail-note">一次运行可以无人值守跑完这些步骤</p>
+      <ol class="steps" id="steps-auto"></ol>
+    </section>
+
+    <section class="rail-block rail-block-gate">
+      <h2>人工闸门</h2>
+      <p class="rail-note">脚本到此为止，必须有人签字才能交付</p>
+      <ol class="steps" id="steps-human"></ol>
+    </section>
+
+    <section class="rail-block">
+      <h2>数据源</h2>
+      <ul class="sources" id="sources"></ul>
+    </section>
+  </aside>
+
+  <section class="work">
+    <nav class="tabs" id="tabs">
+      <button type="button" data-tab="scene" class="active">3D 全景</button>
+      <button type="button" data-tab="log">运行日志</button>
+      <button type="button" data-tab="findings">校验结果</button>
+      <button type="button" data-tab="reports">报表预览</button>
+      <button type="button" data-tab="review">待复核清单</button>
+      <button type="button" data-tab="audit">审计日志</button>
+      <button type="button" data-tab="tables">数据表</button>
+    </nav>
+
+    <div class="panels">
+
+      <section class="panel panel-scene active" data-panel="scene">
+        <div class="scene-wrap">
+          <canvas id="scene-canvas"></canvas>
+          <div class="scene-hud">
+
+            <div class="scene-legend" id="scene-legend"></div>
+
+            <div class="scene-tools">
+              <button class="btn btn-quiet" id="scene-rotate" type="button"
+                      aria-pressed="false" title="快捷键 空格">自转</button>
+              <button class="btn btn-quiet" id="scene-filter" type="button"
+                      aria-pressed="false" title="只留非通过项（含阻断/提示/无规则覆盖），隐去已通过的表">只看异常</button>
+              <button class="btn btn-quiet" id="scene-reset" type="button"
+                      title="快捷键 R">重置视角</button>
+              <p class="scene-hint">拖拽旋转 · 滚轮缩放 · Shift/右键拖拽平移<br>点工位看这一步 · 双击聚焦</p>
+            </div>
+
+            <div class="scene-stats" id="scene-stats"></div>
+            <div class="scene-detail" id="scene-detail"></div>
+            <div class="scene-tip" id="scene-tip"></div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="log">
+        <div class="panel-head">
+          <h2>运行日志</h2>
+          <div class="panel-head-end">
+            <label class="toggle">
+              <input type="checkbox" id="autoscroll" checked>
+              <span>自动滚动</span>
+            </label>
+          </div>
+        </div>
+        <div class="jobbar" id="jobbar"></div>
+        <pre class="term" id="term"><span class="term-idle">选择左侧任一阶段并点击「运行」，输出会实时出现在这里。</span></pre>
+      </section>
+
+      <section class="panel" data-panel="findings">
+        <div class="panel-head">
+          <h2>校验结果</h2>
+          <div class="panel-head-end" id="findings-date"></div>
+        </div>
+        <div class="cards" id="finding-cards"></div>
+        <div class="filters" id="finding-filters"></div>
+        <div class="scroll" id="findings-body"></div>
+      </section>
+
+      <section class="panel" data-panel="reports">
+        <div class="panel-head">
+          <h2>报表预览</h2>
+          <div class="panel-head-end" id="report-note"></div>
+        </div>
+        <div class="picker" id="report-picker"></div>
+        <div class="scroll" id="report-body"></div>
+      </section>
+
+      <section class="panel" data-panel="review">
+        <div class="panel-head">
+          <h2>待复核清单</h2>
+          <div class="panel-head-end" id="review-note"></div>
+        </div>
+        <div class="scroll md" id="review-body"></div>
+      </section>
+
+      <section class="panel" data-panel="audit">
+        <div class="panel-head">
+          <h2>审计日志</h2>
+          <div class="panel-head-end" id="audit-note"></div>
+        </div>
+        <div class="scroll" id="audit-body"></div>
+      </section>
+
+      <section class="panel" data-panel="tables">
+        <div class="panel-head">
+          <h2>数据表</h2>
+          <div class="panel-head-end" id="tables-note"></div>
+        </div>
+        <div class="picker" id="table-picker"></div>
+        <div class="scroll" id="table-body"></div>
+      </section>
+
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/scene3d.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
