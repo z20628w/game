@@ -4,7 +4,7 @@
 统一返回格式：{"name","confidence","category","description","baike_url","image_url"}。
 
 密钥获取：https://ai.baidu.com → 控制台 → 图像识别 → 创建应用。
-填到同目录 config.py 或环境变量 BAIDU_API_KEY / BAIDU_SECRET_KEY。
+启动服务前设置环境变量 BAIDU_API_KEY 和 BAIDU_SECRET_KEY。
 """
 import base64
 import json

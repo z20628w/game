@@ -55,3 +55,11 @@ temp_sse.txt
 *.mov
 *.pdf
 *.docx
+
+# 本地预览记录和导出数据
+*.bak
+/独立站/tmp/cyd-dev-migration/**/*.json
+/独立站/tmp/cyd-news-demo/*.json
+/独立站/shopify-capabilities-lab/reports/*.json
+/独立站/codex-gpt-appearance/preview/*.json
+/启动动画/tmp/pages-convert/extracted.txt

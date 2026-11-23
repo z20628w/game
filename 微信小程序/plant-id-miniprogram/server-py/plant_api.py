@@ -4,7 +4,7 @@
 然后调用植物识别接口，返回置信度最高的物种中文名。
 
 密钥获取：登录 https://ai.baidu.com → 控制台 → 图像识别 → 创建应用 → 拿到 API Key / Secret Key。
-然后把它们填到同目录的 config.py（或设置环境变量 BAIDU_API_KEY / BAIDU_SECRET_KEY）。
+启动服务前设置环境变量 BAIDU_API_KEY 和 BAIDU_SECRET_KEY。
 """
 import base64
 import json
